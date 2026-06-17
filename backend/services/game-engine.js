@@ -145,6 +145,7 @@ class GameEngine {
                 nation_code: data.playerNationCode,
                 nation_name: nations[data.playerNationCode]?.name || 'Unknown',
                 current_date: data.currentDate,
+                turn_number: data.turnNumber || 1,
                 updated_at: data.created_at
             };
         });
@@ -332,20 +333,27 @@ class GameEngine {
 
     calculateNewDate(currentDate, timeJump) {
         const newDate = new Date(currentDate);
-        switch (timeJump) {
-            case '1_week': newDate.setDate(newDate.getDate() + 7); break;
-            case '1_month': newDate.setMonth(newDate.getMonth() + 1); break;
-            case '3_months': newDate.setMonth(newDate.getMonth() + 3); break;
-            case '6_months': newDate.setMonth(newDate.getMonth() + 6); break;
-            case '1_year': newDate.setFullYear(newDate.getFullYear() + 1); break;
-            default:
-                // Handle arbitrary numeric days if passed or fallback to 1 day
-                const days = parseInt(timeJump);
-                if (!isNaN(days)) {
-                    newDate.setDate(newDate.getDate() + days);
-                } else {
-                    newDate.setDate(newDate.getDate() + 1);
-                }
+
+        // Parse N_unit patterns (e.g., '10_days', '2_weeks', '4_months', '1_year')
+        const match = timeJump.match(/^(\d+)_(days?|weeks?|months?|years?)$/i);
+        if (match) {
+            const amount = parseInt(match[1]);
+            const unit = match[2].toLowerCase().replace(/s$/, ''); // normalize plural
+            switch (unit) {
+                case 'day':   newDate.setDate(newDate.getDate() + amount); break;
+                case 'week':  newDate.setDate(newDate.getDate() + amount * 7); break;
+                case 'month': newDate.setMonth(newDate.getMonth() + amount); break;
+                case 'year':  newDate.setFullYear(newDate.getFullYear() + amount); break;
+                default:      newDate.setDate(newDate.getDate() + amount); break;
+            }
+        } else {
+            // Fallback: try parsing as raw number of days
+            const days = parseInt(timeJump);
+            if (!isNaN(days)) {
+                newDate.setDate(newDate.getDate() + days);
+            } else {
+                newDate.setDate(newDate.getDate() + 1);
+            }
         }
         return newDate;
     }
@@ -373,6 +381,26 @@ class GameEngine {
             worldContext: gameState.world_context,
             simulationRules: gameState.simulation_rules,
             turnNumber: gameState.turnNumber || 1
+        };
+    }
+
+    /**
+     * Get game context/state for API consumption
+     */
+    async getGameContext(saveId) {
+        const gameState = await this.loadGame(saveId);
+        const nations = this.getNations();
+
+        return {
+            saveId: saveId,
+            currentDate: gameState.currentDate,
+            turnNumber: gameState.turnNumber,
+            playerNationCode: gameState.playerNationCode,
+            playerNation: nations[gameState.playerNationCode] || null,
+            nationStates: gameState.nations,
+            eventCount: (gameState.events || []).length,
+            pendingActionCount: (gameState.actions || []).filter(a => a.status === 'pending').length,
+            worldContext: gameState.world_context
         };
     }
 

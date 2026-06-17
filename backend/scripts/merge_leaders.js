@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const NATIONS_PATH = path.join(__dirname, '../../data/nations_v2.json');
-const LEADERS_TEXT_PATH = path.join(__dirname, '../../country_leaders.txt');
+const LEADERS_TEXT_PATH = path.join(__dirname, '../../data/country_leaders.txt');
 
 // Predefined leaders for major powers and well-known nations
 const LEADER_SEEDS = {

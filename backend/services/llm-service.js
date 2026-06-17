@@ -347,9 +347,34 @@ THE SOVEREIGN'S QUESTION: "${question}"`
     }
 }
 
+/**
+ * Test LLM connection by sending a minimal request
+ */
+async function testConnection() {
+    try {
+        const response = await openai.chat.completions.create({
+            model: process.env.LLM_MODEL || 'qwen3-vl-8b',
+            messages: [{ role: 'user', content: 'Hello' }],
+            max_tokens: 10
+        });
+        return {
+            success: true,
+            model: response.model || 'unknown',
+            message: 'LLM connection successful'
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.message,
+            message: 'LLM connection failed'
+        };
+    }
+}
+
 module.exports = {
     generateEvents,
     diplomaticChat,
     getAdvisorResponse,
+    testConnection,
     PROMPTS
 };

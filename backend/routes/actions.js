@@ -42,14 +42,13 @@ router.post('/', async (req, res) => {
 router.post('/brainstorm', async (req, res) => {
     try {
         const { saveId } = req.body;
-        const llmService = require('../services/llm-service');
-        const gameState = await engine.loadGame(saveId);
+        const advContext = await engine.getAdvisorContext(saveId);
 
         const suggestion = await llmService.getAdvisorResponse(
             `Suggest 5 possible strategic actions I could take right now.
              Consider the geopolitical situation, my position, and my objectives.
              For each action, briefly explain why it could be advantageous.`,
-            gameState.playerNation
+            advContext
         );
 
         res.json({ suggestions: suggestion });
