@@ -41,13 +41,13 @@ async function restore() {
         `);
 
         const nationsSeed = [
-            { code: 'ITA', name: 'Italia', color: '#ff4d4d', leader: 'Benito Mussolini', title: 'Duce', ideology: 'fascist', major: true },
-            { code: 'GER', name: 'Germania', color: '#4d4d4d', leader: 'Adolf Hitler', title: 'Führer', ideology: 'fascist', major: true },
-            { code: 'SOV', name: 'Unione Sovietica', color: '#cc0000', leader: 'Iosif Stalin', title: 'Segretario Generale', ideology: 'communist', major: true },
-            { code: 'GBR', name: 'Regno Unito', color: '#ff9900', leader: 'Stanley Baldwin', title: 'Primo Ministro', ideology: 'democratic', major: true },
-            { code: 'FRA', name: 'Francia', color: '#33ccff', leader: 'Albert Lebrun', title: 'Presidente', ideology: 'democratic', major: true },
-            { code: 'USA', name: 'Stati Uniti', color: '#3333ff', leader: 'Franklin D. Roosevelt', title: 'Presidente', ideology: 'democratic', major: true },
-            { code: 'JAP', name: 'Giappone', color: '#ffffff', leader: 'Hirohito', title: 'Imperatore', ideology: 'fascist', major: true }
+            { code: 'ITA', name: 'Italy', color: '#ff4d4d', leader: 'Benito Mussolini', title: 'Il Duce', ideology: 'fascist', major: true },
+            { code: 'GER', name: 'Germany', color: '#4d4d4d', leader: 'Adolf Hitler', title: 'Führer', ideology: 'fascist', major: true },
+            { code: 'SOV', name: 'Soviet Union', color: '#cc0000', leader: 'Iosif Stalin', title: 'General Secretary', ideology: 'communist', major: true },
+            { code: 'GBR', name: 'United Kingdom', color: '#ff9900', leader: 'Stanley Baldwin', title: 'Prime Minister', ideology: 'democratic', major: true },
+            { code: 'FRA', name: 'France', color: '#33ccff', leader: 'Albert Lebrun', title: 'President', ideology: 'democratic', major: true },
+            { code: 'USA', name: 'United States', color: '#3333ff', leader: 'Franklin D. Roosevelt', title: 'President', ideology: 'democratic', major: true },
+            { code: 'JAP', name: 'Japan', color: '#ffffff', leader: 'Hirohito', title: 'Emperor', ideology: 'fascist', major: true }
         ];
 
         console.log('Seeding nations...');

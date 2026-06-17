@@ -72,7 +72,7 @@ class GameMap {
             this.renderSVGMap(mapData);
         } catch (error) {
             console.error('Failed to load map data:', error);
-            app.showToast('Errore nel caricamento della mappa', 'error');
+            app.showToast('Error loading map', 'error');
         }
     }
 
@@ -343,11 +343,11 @@ class GameMap {
      */
     formatIdeology(ideology) {
         const map = {
-            'fascist': 'Fascista',
-            'democratic': 'Democratica',
-            'communist': 'Comunista',
-            'authoritarian': 'Autoritaria',
-            'monarchy': 'Monarchia'
+            'fascist': 'Fascist',
+            'democratic': 'Democratic',
+            'communist': 'Communist',
+            'authoritarian': 'Authoritarian',
+            'monarchy': 'Monarchy'
         };
         return map[ideology] || ideology;
     }
@@ -358,10 +358,10 @@ class GameMap {
     formatPopulation(pop) {
         if (!pop) return 'N/A';
         if (pop >= 1000000000) {
-            return (pop / 1000000000).toFixed(1) + ' miliardi';
+            return (pop / 1000000000).toFixed(1) + ' billion';
         }
         if (pop >= 1000000) {
-            return (pop / 1000000).toFixed(1) + ' milioni';
+            return (pop / 1000000).toFixed(1) + ' million';
         }
         return pop.toLocaleString();
     }
@@ -463,7 +463,7 @@ class GameMap {
         container.innerHTML = '';
 
         if (results.length === 0) {
-            container.innerHTML = '<div class="search-result">Nessun risultato</div>';
+            container.innerHTML = '<div class="search-result">No results</div>';
             container.classList.remove('hidden');
             return;
         }

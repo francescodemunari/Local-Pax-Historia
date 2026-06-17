@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
         res.json({
             success: true,
             action: action,
-            validation: { feasible: true, reason: 'Azione accettata dal comando supremo' }
+            validation: { feasible: true, reason: 'Action accepted by the high command' }
         });
     } catch (error) {
         console.error('Error processing action:', error);
@@ -46,9 +46,9 @@ router.post('/brainstorm', async (req, res) => {
         const gameState = await engine.loadGame(saveId);
 
         const suggestion = await llmService.getAdvisorResponse(
-            `Suggeriscimi 5 possibili azioni strategiche che potrei intraprendere in questo momento. 
-             Considera la situazione geopolitica, la mia posizione e i miei obiettivi.
-             Per ogni azione, spiega brevemente perché potrebbe essere vantaggiosa.`,
+            `Suggest 5 possible strategic actions I could take right now.
+             Consider the geopolitical situation, my position, and my objectives.
+             For each action, briefly explain why it could be advantageous.`,
             gameState.playerNation
         );
 

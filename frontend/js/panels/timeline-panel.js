@@ -83,11 +83,11 @@ const timelinePanel = {
 
     showCustomTimeInput() {
         // For now, just show a prompt. Could be improved with a custom modal.
-        const input = prompt('Inserisci il salto temporale (es: 10_days, 2_weeks, 4_months):');
+        const input = prompt('Enter the time jump (e.g., 10_days, 2_weeks, 4_months):');
         if (input && input.match(/^\d+_(days?|weeks?|months?|years?)$/i)) {
             this.advanceTime(input.toLowerCase());
         } else if (input) {
-            app.showToast('Formato non valido. Usa: numero_unità (es: 10_days)', 'error');
+            app.showToast('Invalid format. Use: number_unit (e.g., 10_days)', 'error');
         }
     },
 
@@ -101,9 +101,9 @@ const timelinePanel = {
         const btn = document.getElementById('btn-advance-time');
         btn.disabled = true;
         btn.innerHTML = '⏳';
-        document.getElementById('current-date').textContent = 'Simulando...';
+        document.getElementById('current-date').textContent = 'Simulating...';
 
-        app.showToast('Simulando eventi mondiali...', 'info');
+        app.showToast('Simulating world events...', 'info');
 
         try {
             const result = await api.advanceTime(app.currentGame.saveId, timeJump);
@@ -118,12 +118,12 @@ const timelinePanel = {
             // Show new events
             if (result.events && result.events.length > 0) {
                 eventsPanel.addEvents(result.events);
-                app.showToast(`${result.events.length} nuovi eventi!`, 'success');
+                app.showToast(`${result.events.length} new events!`, 'success');
 
                 // Automatically show events panel
                 eventsPanel.show();
             } else {
-                app.showToast('Tempo avanzato. Nessun evento significativo.', 'info');
+                app.showToast('Time advanced. No significant events.', 'info');
             }
 
             // Reload pending actions
@@ -131,7 +131,7 @@ const timelinePanel = {
 
         } catch (error) {
             console.error('Failed to advance time:', error);
-            app.showToast('Errore nell\'avanzamento del tempo', 'error');
+            app.showToast('Error advancing time', 'error');
 
             // Restore date display
             this.updateDateDisplay();
@@ -151,11 +151,11 @@ const timelinePanel = {
 
     formatTimeJump(jump) {
         const formats = {
-            '1_week': '1 settimana',
-            '1_month': '1 mese',
-            '3_months': '3 mesi',
-            '6_months': '6 mesi',
-            '1_year': '1 anno'
+            '1_week': '1 week',
+            '1_month': '1 month',
+            '3_months': '3 months',
+            '6_months': '6 months',
+            '1_year': '1 year'
         };
         return formats[jump] || jump;
     }

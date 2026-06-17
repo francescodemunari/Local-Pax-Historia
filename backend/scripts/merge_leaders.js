@@ -6,38 +6,38 @@ const LEADERS_TEXT_PATH = path.join(__dirname, '../../country_leaders.txt');
 
 // Predefined leaders for major powers and well-known nations
 const LEADER_SEEDS = {
-    'ITA': { name: 'Benito Mussolini', title: 'Duce' },
+    'ITA': { name: 'Benito Mussolini', title: 'Il Duce' },
     'GER': { name: 'Adolf Hitler', title: 'Führer' },
-    'SOV': { name: 'Iosif Stalin', title: 'Segretario Generale' },
-    'ENG': { name: 'Stanley Baldwin', title: 'Primo Ministro' },
-    'FRA': { name: 'Albert Lebrun', title: 'Presidente' },
-    'USA': { name: 'Franklin D. Roosevelt', title: 'Presidente' },
-    'JAP': { name: 'Hirohito', title: 'Imperatore' },
+    'SOV': { name: 'Iosif Stalin', title: 'General Secretary' },
+    'ENG': { name: 'Stanley Baldwin', title: 'Prime Minister' },
+    'FRA': { name: 'Albert Lebrun', title: 'President' },
+    'USA': { name: 'Franklin D. Roosevelt', title: 'President' },
+    'JAP': { name: 'Hirohito', title: 'Emperor' },
     'CHI': { name: 'Chiang Kai-shek', title: 'Generalissimo' },
-    'ETH': { name: 'Haile Selassie I', title: 'Imperatore' },
-    'AUS': { name: 'Kurt Schuschnigg', title: 'Cancelliere' },
-    'HUN': { name: 'Miklós Horthy', title: 'Reggente' },
-    'POL': { name: 'Ignacy Mościcki', title: 'Presidente' },
-    'ESP': { name: 'Manuel Azaña', title: 'Presidente' },
-    'SPR': { name: 'Manuel Azaña', title: 'Presidente' },
-    'TUR': { name: 'Mustafa Kemal Atatürk', title: 'Presidente' },
-    'GRE': { name: 'Giorgio II', title: 'Re' },
-    'YUG': { name: 'Pietro II', title: 'Re' },
-    'ROM': { name: 'Carlo II', title: 'Re' },
-    'BUL': { name: 'Boris III', title: 'Zar' },
-    'BEL': { name: 'Leopoldo III', title: 'Re' },
-    'HOL': { name: 'Guglielmina', title: 'Regina' },
-    'NOR': { name: 'Haakon VII', title: 'Re' },
-    'SWE': { name: 'Gustavo V', title: 'Re' },
-    'DEN': { name: 'Cristiano X', title: 'Re' },
-    'FIN': { name: 'Kyösti Kallio', title: 'Presidente' },
-    'BRA': { name: 'Getúlio Vargas', title: 'Presidente' },
-    'MEX': { name: 'Lázaro Cárdenas', title: 'Presidente' },
-    'CAN': { name: 'W. L. Mackenzie King', title: 'Primo Ministro' },
-    'AST': { name: 'Joseph Lyons', title: 'Primo Ministro' },
-    'NZL': { name: 'Michael Joseph Savage', title: 'Primo Ministro' },
-    'SAF': { name: 'J. B. M. Hertzog', title: 'Primo Ministro' },
-    'RAJ': { name: 'Victor Hope', title: 'Viceré' }
+    'ETH': { name: 'Haile Selassie I', title: 'Emperor' },
+    'AUS': { name: 'Kurt Schuschnigg', title: 'Chancellor' },
+    'HUN': { name: 'Miklós Horthy', title: 'Regent' },
+    'POL': { name: 'Ignacy Mościcki', title: 'President' },
+    'ESP': { name: 'Manuel Azaña', title: 'President' },
+    'SPR': { name: 'Manuel Azaña', title: 'President' },
+    'TUR': { name: 'Mustafa Kemal Atatürk', title: 'President' },
+    'GRE': { name: 'George II', title: 'King' },
+    'YUG': { name: 'Peter II', title: 'King' },
+    'ROM': { name: 'Carol II', title: 'King' },
+    'BUL': { name: 'Boris III', title: 'Tsar' },
+    'BEL': { name: 'Leopold III', title: 'King' },
+    'HOL': { name: 'Wilhelmina', title: 'Queen' },
+    'NOR': { name: 'Haakon VII', title: 'King' },
+    'SWE': { name: 'Gustav V', title: 'King' },
+    'DEN': { name: 'Christian X', title: 'King' },
+    'FIN': { name: 'Kyösti Kallio', title: 'President' },
+    'BRA': { name: 'Getúlio Vargas', title: 'President' },
+    'MEX': { name: 'Lázaro Cárdenas', title: 'President' },
+    'CAN': { name: 'W. L. Mackenzie King', title: 'Prime Minister' },
+    'AST': { name: 'Joseph Lyons', title: 'Prime Minister' },
+    'NZL': { name: 'Michael Joseph Savage', title: 'Prime Minister' },
+    'SAF': { name: 'J. B. M. Hertzog', title: 'Prime Minister' },
+    'RAJ': { name: 'Victor Hope', title: 'Viceroy' }
 };
 
 async function mergeLeaders() {
@@ -50,7 +50,7 @@ async function mergeLeaders() {
 
     const nations = JSON.parse(fs.readFileSync(NATIONS_PATH, 'utf8'));
 
-    // Parse country_leaders.txt (Tag,Nazione,Note)
+    // Parse country_leaders.txt (Tag,Nation,Note)
     if (fs.existsSync(LEADERS_TEXT_PATH)) {
         const text = fs.readFileSync(LEADERS_TEXT_PATH, 'utf8');
         const lines = text.split('\n');
@@ -75,9 +75,9 @@ async function mergeLeaders() {
                     } else if (nations[tag].leader_name === 'Unknown Leader') {
                         // Fallback title based on note
                         if (note.includes('Kingdom')) {
-                            nations[tag].leader_title = 'Re';
+                            nations[tag].leader_title = 'King';
                         } else if (note.includes('Republic')) {
-                            nations[tag].leader_title = 'Presidente';
+                            nations[tag].leader_title = 'President';
                         } else {
                             nations[tag].leader_title = 'Leader';
                         }

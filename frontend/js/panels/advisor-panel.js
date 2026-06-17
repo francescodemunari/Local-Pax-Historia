@@ -100,7 +100,7 @@ const advisorPanel = {
         if (!question) return;
 
         if (!app.currentGame) {
-            app.showToast('Nessuna partita in corso', 'error');
+            app.showToast('No game in progress', 'error');
             return;
         }
 
@@ -118,26 +118,26 @@ const advisorPanel = {
         } catch (error) {
             this.hideTyping();
             console.error('Advisor error:', error);
-            this.addMessage('Mi scuso, ma al momento non riesco a rispondere. Riprova più tardi.', 'system');
+            this.addMessage('I apologize, but I am unable to respond at the moment. Please try again later.', 'system');
         }
     },
 
     async quickAction(action) {
         if (!app.currentGame) {
-            app.showToast('Nessuna partita in corso', 'error');
+            app.showToast('No game in progress', 'error');
             return;
         }
 
         let question = '';
         switch (action) {
             case 'summary':
-                question = 'Dammi un riassunto completo della situazione attuale: politica interna, situazione internazionale, minacce e opportunità.';
+                question = 'Give me a complete summary of the current situation: domestic politics, international situation, threats, and opportunities.';
                 break;
             case 'strategic':
-                question = 'Dammi un consiglio strategico generale. Cosa dovrei fare come prossima mossa?';
+                question = 'Give me general strategic advice. What should be my next move?';
                 break;
             case 'threats':
-                question = 'Quali sono le principali minacce che la nostra nazione deve affrontare? Da chi dovremmo difenderci?';
+                question = 'What are the main threats our nation faces? Who should we defend against?';
                 break;
             default:
                 return;
@@ -162,7 +162,7 @@ const advisorPanel = {
         } catch (error) {
             this.hideTyping();
             console.error('Quick action error:', error);
-            this.addMessage('Errore nel recupero delle informazioni.', 'system');
+            this.addMessage('Error retrieving information.', 'system');
         }
     },
 

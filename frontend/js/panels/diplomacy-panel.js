@@ -106,7 +106,7 @@ const diplomacyPanel = {
             this.renderChatsList();
         } catch (error) {
             console.error('Failed to load chats:', error);
-            app.showToast('Errore nel caricamento delle chat', 'error');
+            app.showToast('Error loading chats', 'error');
         }
     },
 
@@ -115,7 +115,7 @@ const diplomacyPanel = {
         container.innerHTML = '';
 
         if (this.chats.length === 0) {
-            container.innerHTML = '<p class="panel-hint">Nessuna conversazione attiva. Inizia una nuova chat diplomatica!</p>';
+            container.innerHTML = '<p class="panel-hint">No active conversations. Start a new diplomatic chat!</p>';
             return;
         }
 
@@ -129,8 +129,8 @@ const diplomacyPanel = {
 
             div.innerHTML = `
                 <div class="chat-item-info">
-                    <div class="chat-item-title">${chat.topic || 'Negoziazione con ' + participantsText}</div>
-                    <div class="chat-item-last-msg">${chat.last_message || 'Nessun messaggio'}</div>
+                    <div class="chat-item-title">${chat.topic || 'Negotiation with ' + participantsText}</div>
+                    <div class="chat-item-last-msg">${chat.last_message || 'No messages'}</div>
                 </div>
                 <div class="chat-item-meta">
                     <span class="chat-msg-count">${chat.message_count}</span>
@@ -138,7 +138,7 @@ const diplomacyPanel = {
             `;
 
             div.addEventListener('click', () => {
-                this.openChat(chat.id, chat.topic || 'Chat con ' + participantsText);
+                this.openChat(chat.id, chat.topic || 'Chat with ' + participantsText);
             });
 
             container.appendChild(div);
@@ -228,10 +228,10 @@ const diplomacyPanel = {
             
             this.hideNewChatModal();
             this.loadChats();
-            this.openChat(chat.id, 'Nuova Conversazione');
+            this.openChat(chat.id, 'New Conversation');
         } catch (error) {
             console.error('Failed to start chat:', error);
-            app.showToast('Errore nell\'apertura della chat', 'error');
+            app.showToast('Error opening chat', 'error');
         }
     },
 
@@ -246,7 +246,7 @@ const diplomacyPanel = {
             this.renderMessages(messages);
         } catch (error) {
             console.error('Failed to load messages:', error);
-            app.showToast('Errore nel caricamento dei messaggi', 'error');
+            app.showToast('Error loading messages', 'error');
         }
     },
 
@@ -260,7 +260,7 @@ const diplomacyPanel = {
         container.innerHTML = '';
 
         if (messages.length === 0) {
-            container.innerHTML = '<div class="chat-message system"><p>Inizia la conversazione diplomatica.</p></div>';
+            container.innerHTML = '<div class="chat-message system"><p>Start the diplomatic conversation.</p></div>';
             return;
         }
 
@@ -321,7 +321,7 @@ const diplomacyPanel = {
             }
         } catch (error) {
             console.error('Failed to send message:', error);
-            app.showToast('Errore nell\'invio del messaggio', 'error');
+            app.showToast('Error sending message', 'error');
         } finally {
             sendBtn.disabled = false;
         }

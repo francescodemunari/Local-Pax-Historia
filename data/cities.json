@@ -1,7 +1,7 @@
 [
     {
         "id": "rome",
-        "name": "Roma",
+        "name": "Rome",
         "nation_code": "ITA",
         "type": "capital",
         "coords": [
@@ -11,7 +11,7 @@
     },
     {
         "id": "milan",
-        "name": "Milano",
+        "name": "Milan",
         "nation_code": "ITA",
         "type": "major_city",
         "coords": [

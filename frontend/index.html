@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pax Historia - WW2 Grand Strategy</title>
     <meta name="description"
-        content="Un gioco di grande strategia ambientato nella Seconda Guerra Mondiale, con AI generativa per eventi e diplomazia.">
+        content="A grand strategy game set in World War II, featuring generative AI for events and diplomacy.">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -27,9 +27,9 @@
     <div id="loading-screen" class="loading-screen">
         <div class="loading-content">
             <h1 class="loading-title">Pax Historia</h1>
-            <p class="loading-subtitle">Seconda Guerra Mondiale</p>
+            <p class="loading-subtitle">World War II</p>
             <div class="loading-spinner"></div>
-            <p class="loading-text">Caricamento...</p>
+            <p class="loading-text">Loading...</p>
         </div>
     </div>
 
@@ -38,16 +38,16 @@
         <div class="menu-background"></div>
         <div class="menu-content">
             <h1 class="menu-title">Pax Historia</h1>
-            <p class="menu-subtitle">Seconda Guerra Mondiale • 1935-1945</p>
+            <p class="menu-subtitle">World War II • 1935-1945</p>
 
             <div class="menu-buttons">
                 <button id="btn-new-game" class="menu-btn primary">
                     <span class="btn-icon">🌍</span>
-                    Nuova Partita
+                    New Game
                 </button>
                 <button id="btn-load-game" class="menu-btn">
                     <span class="btn-icon">📂</span>
-                    Carica Partita
+                    Load Game
                 </button>
             </div>
 
@@ -61,18 +61,18 @@
     <div id="nation-select-modal" class="modal hidden">
         <div class="modal-content large">
             <div class="modal-header">
-                <h2>Scegli la Tua Nazione</h2>
+                <h2>Choose Your Nation</h2>
                 <button class="modal-close">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="nation-filters">
-                    <input type="text" id="nation-search" placeholder="Cerca nazione..." class="search-input">
+                    <input type="text" id="nation-search" placeholder="Search nation..." class="search-input">
                     <div class="filter-buttons">
-                        <button class="filter-btn active" data-filter="all">Tutte</button>
-                        <button class="filter-btn" data-filter="major">Grandi Potenze</button>
-                        <button class="filter-btn" data-filter="fascist">Fasciste</button>
-                        <button class="filter-btn" data-filter="democratic">Democratiche</button>
-                        <button class="filter-btn" data-filter="communist">Comuniste</button>
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="major">Great Powers</button>
+                        <button class="filter-btn" data-filter="fascist">Fascist</button>
+                        <button class="filter-btn" data-filter="democratic">Democratic</button>
+                        <button class="filter-btn" data-filter="communist">Communist</button>
                     </div>
                 </div>
                 <div id="nation-grid" class="nation-grid">
@@ -81,10 +81,10 @@
             </div>
             <div class="modal-footer">
                 <div class="start-date-picker">
-                    <label>Data di inizio:</label>
+                    <label>Start date:</label>
                     <input type="date" id="start-date" value="1935-12-01" min="1935-01-01" max="1939-09-01">
                 </div>
-                <button id="btn-start-game" class="btn primary" disabled>Inizia Partita</button>
+                <button id="btn-start-game" class="btn primary" disabled>Start Game</button>
             </div>
         </div>
     </div>
@@ -93,7 +93,7 @@
     <div id="load-game-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Carica Partita</h2>
+                <h2>Load Game</h2>
                 <button class="modal-close">&times;</button>
             </div>
             <div class="modal-body">
@@ -116,29 +116,29 @@
             </div>
 
             <nav class="header-nav">
-                <button class="nav-btn" data-panel="actions" title="Azioni">
+                <button class="nav-btn" data-panel="actions" title="Actions">
                     <span class="icon">⚡</span>
-                    <span class="label">Azioni</span>
+                    <span class="label">Actions</span>
                 </button>
-                <button class="nav-btn" data-panel="diplomacy" title="Diplomazia">
+                <button class="nav-btn" data-panel="diplomacy" title="Diplomacy">
                     <span class="icon">🤝</span>
-                    <span class="label">Diplomazia</span>
+                    <span class="label">Diplomacy</span>
                 </button>
-                <button class="nav-btn" data-panel="advisor" title="Consigliere">
+                <button class="nav-btn" data-panel="advisor" title="Advisor">
                     <span class="icon">📜</span>
-                    <span class="label">Consigliere</span>
+                    <span class="label">Advisor</span>
                 </button>
-                <button class="nav-btn" data-panel="events" title="Eventi">
+                <button class="nav-btn" data-panel="events" title="Events">
                     <span class="icon">📰</span>
-                    <span class="label">Eventi</span>
+                    <span class="label">Events</span>
                 </button>
             </nav>
 
             <div class="header-right">
                 <div class="date-display">
                     <button id="btn-prev-turn" class="date-btn" disabled>&lt;</button>
-                    <span id="current-date">1 Dicembre 1935</span>
-                    <button id="btn-advance-time" class="date-btn advance" title="Avanza nel tempo">≫</button>
+                    <span id="current-date">December 1, 1935</span>
+                    <button id="btn-advance-time" class="date-btn advance" title="Advance time">≫</button>
                 </div>
             </div>
         </header>
@@ -146,28 +146,28 @@
         <!-- Side Menu -->
         <aside id="side-menu" class="side-menu hidden">
             <div class="menu-header">
-                <span id="scenario-name">Seconda Guerra Mondiale</span>
-                <span id="player-nation-name">Giocando come: Italia</span>
+                <span id="scenario-name">World War II</span>
+                <span id="player-nation-name">Playing as: Italy</span>
             </div>
             <nav class="menu-nav">
                 <button class="menu-item" id="menu-tutorial">
                     <span class="icon">📖</span> Tutorial
                 </button>
                 <button class="menu-item" id="menu-events">
-                    <span class="icon">📰</span> Eventi
+                    <span class="icon">📰</span> Events
                 </button>
                 <button class="menu-item" id="menu-map-settings">
-                    <span class="icon">🗺️</span> Impostazioni Mappa
+                    <span class="icon">🗺️</span> Map Settings
                 </button>
                 <hr>
                 <button class="menu-item" id="menu-save">
-                    <span class="icon">💾</span> Salva Partita
+                    <span class="icon">💾</span> Save Game
                 </button>
                 <button class="menu-item" id="menu-load">
-                    <span class="icon">📂</span> Carica Partita
+                    <span class="icon">📂</span> Load Game
                 </button>
                 <button class="menu-item danger" id="menu-quit">
-                    <span class="icon">🚪</span> Esci al Menu
+                    <span class="icon">🚪</span> Exit to Menu
                 </button>
             </nav>
         </aside>
@@ -185,7 +185,7 @@
 
             <!-- Map Search -->
             <div class="map-search">
-                <input type="text" id="map-search-input" placeholder="Cerca paesi, regioni...">
+                <input type="text" id="map-search-input" placeholder="Search countries, regions...">
                 <div id="map-search-results" class="search-results hidden"></div>
             </div>
         </main>
@@ -195,16 +195,16 @@
             <!-- Actions Panel -->
             <div id="actions-panel" class="panel hidden">
                 <div class="panel-header">
-                    <h2>Azioni</h2>
+                    <h2>Actions</h2>
                     <button class="panel-close">&times;</button>
                 </div>
                 <div class="panel-body">
-                    <p class="panel-info">Invia azioni per <span id="actions-nation">Italia</span> per il giorno <span
-                            id="actions-date">1 Dicembre 1935</span>.</p>
-                    <p class="panel-hint">Le tue azioni influenzeranno gli eventi del mondo.</p>
+                    <p class="panel-info">Issue actions for <span id="actions-nation">Italy</span> for the day <span
+                            id="actions-date">December 1, 1935</span>.</p>
+                    <p class="panel-hint">Your actions will influence world events.</p>
 
                     <button id="btn-brainstorm" class="btn secondary full-width">
-                        ✨ Aiutami a pianificare azioni
+                        ✨ Help me plan actions
                     </button>
 
                     <div id="pending-actions" class="pending-actions">
@@ -214,16 +214,16 @@
                     <div class="action-input-container">
                         <div class="search-map-toggle">
                             <button id="btn-toggle-map-search" class="btn-icon-only">🔍</button>
-                            <span>Cerca sulla mappa</span>
+                            <span>Search on map</span>
                         </div>
                         <div id="actions-map-search" class="mini-search hidden">
-                            <input type="text" placeholder="Cerca paesi, regioni...">
+                            <input type="text" placeholder="Search countries, regions...">
                             <div class="mini-search-results"></div>
                         </div>
-                        <textarea id="action-input" placeholder="Inserisci la tua azione..." rows="3"></textarea>
+                        <textarea id="action-input" placeholder="Enter your action..." rows="3"></textarea>
                         <div class="action-buttons">
                             <button id="btn-send-action" class="btn primary">
-                                <span class="icon">➤</span> Invia Azione
+                                <span class="icon">➤</span> Send Action
                             </button>
                         </div>
                     </div>
@@ -233,24 +233,24 @@
             <!-- Advisor Panel -->
             <div id="advisor-panel" class="panel hidden">
                 <div class="panel-header">
-                    <h2>Consigliere</h2>
+                    <h2>Advisor</h2>
                     <button class="panel-close">&times;</button>
                 </div>
                 <div class="panel-body">
                     <div id="advisor-messages" class="chat-messages">
                         <div class="chat-message system">
-                            <p>Chiedi consiglio al tuo consigliere.</p>
+                            <p>Ask your advisor for advice.</p>
                         </div>
                     </div>
 
                     <div class="quick-actions">
-                        <button class="quick-btn" data-action="summary">Riassunto</button>
-                        <button class="quick-btn" data-action="strategic">Consiglio Strategico</button>
-                        <button class="quick-btn" data-action="threats">Minacce</button>
+                        <button class="quick-btn" data-action="summary">Summary</button>
+                        <button class="quick-btn" data-action="strategic">Strategic Advice</button>
+                        <button class="quick-btn" data-action="threats">Threats</button>
                     </div>
 
                     <div class="chat-input-container">
-                        <textarea id="advisor-input" placeholder="Chiedi al tuo consigliere..." rows="2"></textarea>
+                        <textarea id="advisor-input" placeholder="Ask your advisor..." rows="2"></textarea>
                         <button id="btn-ask-advisor" class="btn primary">
                             <span class="icon">➤</span>
                         </button>
@@ -261,7 +261,7 @@
             <!-- Diplomacy Panel -->
             <div id="diplomacy-panel" class="panel hidden">
                 <div class="panel-header">
-                    <h2>Chat Diplomatiche</h2>
+                    <h2>Diplomatic Chats</h2>
                     <button class="panel-close">&times;</button>
                 </div>
                 <div class="panel-body">
@@ -270,7 +270,7 @@
                     </div>
 
                     <button id="btn-new-chat" class="btn secondary full-width">
-                        <span class="icon">+</span> Nuova Conversazione
+                        <span class="icon">+</span> New Conversation
                     </button>
                 </div>
             </div>
@@ -278,15 +278,15 @@
             <!-- Events Panel -->
             <div id="events-panel" class="panel hidden">
                 <div class="panel-header">
-                    <h2>Eventi</h2>
+                    <h2>Events</h2>
                     <button class="panel-close">&times;</button>
                 </div>
                 <div class="panel-body">
                     <div class="events-filters">
-                        <button class="filter-btn active" data-type="all">Tutti</button>
-                        <button class="filter-btn" data-type="military">Militari</button>
-                        <button class="filter-btn" data-type="political">Politici</button>
-                        <button class="filter-btn" data-type="economic">Economici</button>
+                        <button class="filter-btn active" data-type="all">All</button>
+                        <button class="filter-btn" data-type="military">Military</button>
+                        <button class="filter-btn" data-type="political">Political</button>
+                        <button class="filter-btn" data-type="economic">Economic</button>
                     </div>
                     <div id="events-list" class="events-list">
                         <!-- Events will appear here -->
@@ -298,7 +298,7 @@
             <div id="chat-modal" class="panel chat-panel hidden">
                 <div class="panel-header">
                     <button class="btn-back">←</button>
-                    <h2 id="chat-title">Chat con Germania</h2>
+                    <h2 id="chat-title">Chat with Germany</h2>
                     <button class="panel-close">&times;</button>
                 </div>
                 <div class="panel-body">
@@ -306,7 +306,7 @@
                         <!-- Chat messages will appear here -->
                     </div>
                     <div class="chat-input-container">
-                        <textarea id="chat-input" placeholder="Scrivi un messaggio diplomatico..." rows="2"></textarea>
+                        <textarea id="chat-input" placeholder="Write a diplomatic message..." rows="2"></textarea>
                         <button id="btn-send-chat" class="btn primary">
                             <span class="icon">➤</span>
                         </button>
@@ -318,20 +318,20 @@
             <div id="new-chat-modal" class="panel hidden">
                 <div class="panel-header">
                     <button class="btn-back">←</button>
-                    <h2>Nuova Conversazione</h2>
+                    <h2>New Conversation</h2>
                     <button class="panel-close">&times;</button>
                 </div>
                 <div class="panel-body">
-                    <p>Seleziona le nazioni con cui vuoi comunicare:</p>
+                    <p>Select the nations you want to communicate with:</p>
                     <div class="nations-select">
-                        <p class="selected-count">Nazioni selezionate: <span id="selected-nations-count">0</span></p>
-                        <input type="text" id="nations-search" placeholder="Cerca nazioni..." class="search-input">
+                        <p class="selected-count">Selected nations: <span id="selected-nations-count">0</span></p>
+                        <input type="text" id="nations-search" placeholder="Search nations..." class="search-input">
                         <div id="nations-list" class="nations-select-list">
                             <!-- Nations will be loaded here -->
                         </div>
                     </div>
                     <button id="btn-start-chat" class="btn primary full-width" disabled>
-                        Inizia Chat
+                        Start Chat
                     </button>
                 </div>
             </div>
@@ -341,34 +341,34 @@
         <div id="time-modal" class="modal hidden">
             <div class="modal-content compact">
                 <div class="modal-header">
-                    <h2>Avanza nel Tempo</h2>
+                    <h2>Advance Time</h2>
                     <button class="modal-close">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p class="modal-info">Da: <span id="time-from-date">1 Dicembre 1935</span></p>
+                    <p class="modal-info">From: <span id="time-from-date">December 1, 1935</span></p>
                     <div class="time-options">
                         <button class="time-btn" data-jump="1_week">
                             <span class="time-date" id="time-1week"></span>
-                            <span class="time-label">1 Settimana</span>
+                            <span class="time-label">1 Week</span>
                         </button>
                         <button class="time-btn" data-jump="1_month">
                             <span class="time-date" id="time-1month"></span>
-                            <span class="time-label">1 Mese</span>
+                            <span class="time-label">1 Month</span>
                         </button>
                         <button class="time-btn" data-jump="3_months">
                             <span class="time-date" id="time-3months"></span>
-                            <span class="time-label">3 Mesi</span>
+                            <span class="time-label">3 Months</span>
                         </button>
                         <button class="time-btn" data-jump="6_months">
                             <span class="time-date" id="time-6months"></span>
-                            <span class="time-label">6 Mesi</span>
+                            <span class="time-label">6 Months</span>
                         </button>
                         <button class="time-btn" data-jump="1_year">
                             <span class="time-date" id="time-1year"></span>
-                            <span class="time-label">1 Anno</span>
+                            <span class="time-label">1 Year</span>
                         </button>
                         <button class="time-btn custom" data-jump="custom">
-                            <span class="time-label">Personalizzato</span>
+                            <span class="time-label">Custom</span>
                         </button>
                     </div>
                 </div>
@@ -380,8 +380,8 @@
             <div class="popup-header">
                 <div class="popup-flag" id="popup-flag"></div>
                 <div class="popup-title">
-                    <h3 id="popup-nation-name">Germania</h3>
-                    <span id="popup-nation-type">Reich Tedesco</span>
+                    <h3 id="popup-nation-name">Germany</h3>
+                    <span id="popup-nation-type">German Reich</span>
                 </div>
                 <button class="popup-close">&times;</button>
             </div>
@@ -392,21 +392,21 @@
                         <span class="stat-value" id="popup-leader">Adolf Hitler</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-label">Ideologia</span>
-                        <span class="stat-value" id="popup-ideology">Fascista</span>
+                        <span class="stat-label">Ideology</span>
+                        <span class="stat-value" id="popup-ideology">Fascist</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-label">Popolazione</span>
-                        <span class="stat-value" id="popup-population">67.000.000</span>
+                        <span class="stat-label">Population</span>
+                        <span class="stat-value" id="popup-population">67,000,000</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-label">Forza Militare</span>
+                        <span class="stat-label">Military Strength</span>
                         <span class="stat-value" id="popup-military">85/100</span>
                     </div>
                 </div>
                 <div class="popup-actions">
-                    <button class="btn secondary" id="nation-popup-btn-chat">💬 Apri Chat</button>
-                    <button class="btn secondary" id="nation-popup-btn-info">📊 Dettagli</button>
+                    <button class="btn secondary" id="nation-popup-btn-chat">💬 Open Chat</button>
+                    <button class="btn secondary" id="nation-popup-btn-info">📊 Details</button>
                 </div>
             </div>
         </div>
@@ -465,11 +465,11 @@
                 <div class="popup-section hidden">
                     <div class="popup-stats">
                         <div class="stat">
-                            <span class="stat-label">Capacità</span>
+                            <span class="stat-label">Capacity</span>
                             <span class="stat-value" id="popup-region-capacity">15</span>
                         </div>
                         <div class="stat">
-                            <span class="stat-label">Infrastruttura</span>
+                            <span class="stat-label">Infrastructure</span>
                             <span class="stat-value" id="popup-region-infra">5/10</span>
                         </div>
                     </div>
@@ -480,7 +480,7 @@
 
                 <div class="popup-footer-actions">
                     <button class="btn secondary" id="region-popup-btn-advisor">Advisor Report</button>
-                    <button class="btn info" id="region-popup-btn-info">Info Stato</button>
+                    <button class="btn info" id="region-popup-btn-info">State Info</button>
                     <button class="btn primary" id="region-popup-btn-defend">Defend</button>
                 </div>
             </div>

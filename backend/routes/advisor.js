@@ -33,7 +33,7 @@ router.get('/summary/:saveId', async (req, res) => {
     const { saveId } = req.params;
     try {
         const advContext = await engine.getAdvisorContext(saveId);
-        const summaryQuestion = "Fornisci un riassunto strategico della situazione attuale della mia nazione e del mondo.";
+        const summaryQuestion = "Provide a strategic summary of the current situation of my nation and the world.";
         const response = await llmService.getAdvisorResponse(summaryQuestion, advContext);
 
         res.json({
@@ -56,7 +56,7 @@ router.post('/strategic', async (req, res) => {
     try {
         const { saveId, focus } = req.body;
         const advContext = await engine.getAdvisorContext(saveId);
-        const strategicQuestion = `Fornisci consigli strategici focalizzati su: ${focus || 'generale'}.`;
+        const strategicQuestion = `Provide strategic advice focused on: ${focus || 'general'}.`;
         const response = await llmService.getAdvisorResponse(strategicQuestion, advContext);
 
         res.json({
@@ -88,7 +88,7 @@ router.get('/suggestions/:saveId', async (req, res) => {
         const advContext = await engine.getAdvisorContext(saveId);
 
         const response = await llmService.getAdvisorResponse(
-            `Suggeriscimi 3 azioni immediate che potrei intraprendere oggi. Sii conciso, una riga per azione.`,
+            `Suggest 3 immediate actions I could take today. Be concise, one line per action.`,
             advContext
         );
 

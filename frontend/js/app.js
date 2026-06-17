@@ -50,7 +50,7 @@ const app = {
 
         } catch (error) {
             console.error('Initialization error:', error);
-            this.showError('Impossibile connettersi al server. Assicurati che il backend sia in esecuzione.');
+            this.showError('Unable to connect to the server. Make sure the backend is running.');
         }
     },
 
@@ -94,12 +94,12 @@ const app = {
                 // Show toast for most important event
                 const major = data.data.events.find(e => ['major', 'critical'].includes(e.severity));
                 if (major) {
-                    this.showToast(`EVENTO MONDIALE: ${major.title}`, 'warning');
+                    this.showToast(`WORLD EVENT: ${major.title}`, 'warning');
                 } else {
-                    this.showToast('Tempo avanzato. Nuovi eventi disponibili.', 'success');
+                    this.showToast('Time advanced. New events available.', 'success');
                 }
             } else {
-                this.showToast('Tempo avanzato. Nessun evento significativo.', 'info');
+                this.showToast('Time advanced. No significant events.', 'info');
             }
 
             // 3. Refresh Map Ownership
@@ -199,13 +199,13 @@ const app = {
 
         // Side menu items
         document.getElementById('menu-quit').addEventListener('click', () => {
-            if (confirm('Vuoi davvero uscire al menu principale?')) {
+            if (confirm('Do you really want to exit to the main menu?')) {
                 this.quitToMenu();
             }
         });
 
         document.getElementById('menu-save').addEventListener('click', () => {
-            this.showToast('La partita viene salvata automaticamente', 'info');
+            this.showToast('The game is saved automatically', 'info');
         });
 
         document.getElementById('menu-events').addEventListener('click', () => {
@@ -358,13 +358,13 @@ const app = {
         const startDate = document.getElementById('start-date').value;
 
         if (!nationCode) {
-            this.showToast('Seleziona una nazione', 'error');
+            this.showToast('Select a nation', 'error');
             return;
         }
 
         const btn = document.getElementById('btn-start-game');
         btn.disabled = true;
-        btn.textContent = 'Creando partita...';
+        btn.textContent = 'Creating game...';
 
         try {
             const game = await api.createGame(nationCode, startDate);
@@ -381,10 +381,10 @@ const app = {
 
         } catch (error) {
             console.error('Failed to create game:', error);
-            this.showToast('Errore nella creazione della partita: ' + error.message, 'error');
+            this.showToast('Error creating game: ' + error.message, 'error');
         } finally {
             btn.disabled = false;
-            btn.textContent = 'Inizia Partita';
+            btn.textContent = 'Start Game';
         }
     },
 
@@ -412,7 +412,7 @@ const app = {
         container.innerHTML = '';
 
         if (saves.length === 0) {
-            container.innerHTML = '<div class="no-saves">Nessuna partita salvata</div>';
+            container.innerHTML = '<div class="no-saves">No saved games</div>';
             return;
         }
 
@@ -423,11 +423,11 @@ const app = {
                 <div class="save-info">
                     <div class="save-name">${save.name}</div>
                     <div class="save-details">
-                        ${save.nation_name} • ${this.formatDate(save.current_date)} • Turno ${save.turn_number}
+                        ${save.nation_name} • ${this.formatDate(save.current_date)} • Turn ${save.turn_number}
                     </div>
                 </div>
                 <div class="save-actions">
-                    <button class="save-delete" title="Elimina">🗑️</button>
+                    <button class="save-delete" title="Delete">🗑️</button>
                 </div>
             `;
 
@@ -439,7 +439,7 @@ const app = {
 
             div.querySelector('.save-delete').addEventListener('click', async (e) => {
                 e.stopPropagation();
-                if (confirm('Eliminare questa partita?')) {
+                if (confirm('Delete this save?')) {
                     await api.deleteSave(save.id);
                     this.showLoadGame();
                 }
@@ -471,7 +471,7 @@ const app = {
 
         } catch (error) {
             console.error('Failed to load game:', error);
-            this.showToast('Errore nel caricamento della partita', 'error');
+            this.showToast('Error loading game', 'error');
         }
     },
 
@@ -483,8 +483,8 @@ const app = {
         document.getElementById('game-container').classList.remove('hidden');
 
         // Update UI with game info
-        document.getElementById('scenario-name').textContent = 'Seconda Guerra Mondiale';
-        document.getElementById('player-nation-name').textContent = `Giocando come: ${this.currentGame.playerNation.name}`;
+        document.getElementById('scenario-name').textContent = 'World War II';
+        document.getElementById('player-nation-name').textContent = `Playing as: ${this.currentGame.playerNation.name}`;
         document.getElementById('current-date').textContent = this.formatDate(this.currentGame.currentDate);
 
         // Update action panel info
@@ -525,7 +525,7 @@ const app = {
         // Load cities and units
         await this.loadWorldObjects();
 
-        this.showToast(`Iniziata partita come ${this.currentGame.playerNation.name}`, 'success');
+        this.showToast(`Game started as ${this.currentGame.playerNation.name}`, 'success');
     },
 
     /**
@@ -675,14 +675,14 @@ const app = {
 
         if (advisorBtn) {
             advisorBtn.onclick = () => {
-                this.showToast(`Chiedendo consiglio per ${region.name}...`, 'info');
+                this.showToast(`Requesting advice for ${region.name}...`, 'info');
                 this.togglePanel('advisor');
             };
         }
 
         if (defendBtn) {
             defendBtn.onclick = () => {
-                this.showToast(`Ordine di difesa inviato per ${region.name}`, 'success');
+                this.showToast(`Defense order sent for ${region.name}`, 'success');
             };
         }
 
@@ -718,8 +718,8 @@ const app = {
     formatDate(dateString) {
         const date = new Date(dateString);
         const months = [
-            'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
-            'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
         ];
         return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
     },

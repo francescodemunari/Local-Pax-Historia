@@ -48,7 +48,7 @@ class RegionManager {
             if (this.popupElements.moveBtn) {
                 this.popupElements.moveBtn.onclick = () => {
                     console.log(`Moving unit to region: ${this.selectedRegion}`);
-                    alert(`Commando ricevuto: Spostamento unità in ${this.popupElements.name.textContent}`);
+                    alert(`Command received: Moving unit to ${this.popupElements.name.textContent}`);
                 };
             }
         }

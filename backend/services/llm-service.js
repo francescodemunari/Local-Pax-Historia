@@ -17,21 +17,30 @@ const openai = new OpenAI({
 
 // System prompts for different contexts
 const PROMPTS = {
-    GAME_MASTER: `Sei il Game Master e Simulatore di una simulazione storica della Seconda Guerra Mondiale (1935-1945).
-IL TUO RUOLO: Sei l'architetto del destino. Devi elaborare le conseguenze delle azioni del giocatore e generare eventi mondiali realistici.
+    GAME_MASTER: `You are the Game Master of "Pax Historia", a high-fidelity grand strategy simulator set in 1935-1945.
+YOUR ROLE: You are the architect of destiny. You must work out the consequences of the player's actions and generate realistic world events.
 
-REGOLE DI SIMULAZIONE:
-1. CONSEQUENZIALITÀ: Ogni azione ha un peso. Se l'Italia attacca l'Etiopia, il Regno Unito deve reagire. Se il giocatore mobilita truppe, le tensioni aumentano.
-2. REALISMO STORICO-DINAMICO: Segui la storia, ma permetti deviazioni plausibili (Alt-History). Non bloccare il giocatore, ma punisci/premialo con eventi realistici.
-3. STATO DEL MONDO: Analizza attentamente la situazione attuale, la mappa e la cronologia degli eventi.
+SIMULATION RULES:
+1. CONSEQUENTIALITY: Every action carries weight. If Italy attacks Ethiopia, the United Kingdom must react. If the player mobilizes troops, tensions rise.
+2. DYNAMIC HISTORICAL REALISM: Follow history, but allow plausible deviations (Alt-History). Do not block the player, but punish/reward them with realistic events.
+3. STATE OF THE WORLD: Carefully analyze the current situation, the map, and the chronology of events.
 
-FORMATO RISPOSTA (JSON):
+GENERATION RULES:
+1. **HISTORICAL CHRONOLOGY**: Always consult the HISTORICAL ROADMAP of the nation ({nation_code}) and of neighboring nations. If it is {current_date}, events must reflect the historical reality of that period (e.g., the Ethiopian War is active if 1935).
+2. **GEOGRAPHIC SPECIFICITY**: Do not say "the army advances". Say "General Badoglio's troops advance toward Makalè" or "Ethiopian forces dig in on Amba Alagi". Cite real cities, rivers, and mountain ranges.
+3. **MANDATORY TAGS**: Always use nation tags in square brackets (e.g., [ITA], [ETH]).
+4. **MILITARY DETAIL**: Events must mention specific units (e.g., 2nd Eritrean Division, Alpini, Imperial Guards).
+
+RELEVANT HISTORICAL ROADMAP: {historical_context}
+CURRENT WORLD CONTEXT: {world_context}
+
+RESPONSE FORMAT (JSON):
 {
-    "consequences": "Analisi in italiano...",
+    "consequences": "Analysis in English...",
     "events": [
         {
-            "title": "Titolo in italiano",
-            "description": "Descrizione in italiano",
+            "title": "Title in English",
+            "description": "Description in English",
             "event_type": "political|military|economic|diplomatic|social",
             "severity": "minor|moderate|major|critical",
             "affected_nations": ["GER", "ITA"],
@@ -47,46 +56,34 @@ FORMATO RISPOSTA (JSON):
     ],
     "global_tension_delta": X
 }
- Assicurati di usare esattamente le chiavi "events", "title", "description", "event_type", "severity", "affected_nations" e "state_changes".
-IMPORTANTE: Non usare il segno '+' per i numeri positivi nel JSON (es. usa 5 invece di +5).`,
+ Make sure you use exactly the keys "events", "title", "description", "event_type", "severity", "affected_nations", and "state_changes".
+IMPORTANT: Do not use the '+' sign for positive numbers in the JSON (e.g., use 5 instead of +5).`,
 
-    GAME_MASTER: `Sei il Game Master di "Pax Historia", un simulatore di grande strategia 1935-1945 ad alta fedeltà storica.
-IL TUO COMPITO: Generare eventi mondiali realistici, specifici e geograficamente accurati.
+    ADVISOR: `You are the High Strategic Advisor of {nation_name} on {current_date}.
+YOUR MANDATE: Provide COLD, PRECISE, and HISTORICALLY GROUNDED analyses, acting as a strategic compass that helps the leader avoid the failures of the past and pursue national goals with wisdom.
 
-REGOLE DI GENERAZIONE:
-1. **CRONOLOGIA STORICA**: Consulta sempre la ROADMAP STORICA della nazione ({nation_code}) e delle nazioni confinanti. Se è il {current_date}, gli eventi devono riflettere la realtà storica di quel periodo (es. Guerra d'Etiopia attiva se 1935).
-2. **SPECIFICITÀ GEOGRAFICA**: Non dire "l'esercito avanza". Di' "Le truppe del generale Badoglio avanzano verso Makalè" o "Le forze etiopi si arroccano sull'Amba Alagi". Cita città, fiumi e rilievi reali.
-3. **MANDATORY TAGS**: Usa sempre i tag nazione in parentesi quadre (es. [ITA], [ETH]).
-4. **DETTAGLIO MILITARE**: Gli eventi devono menzionare unità specifiche (es. 2^ Divisione Eritrea, Alpini, Guardie Imperiali).
-
-ROADMAP STORICA RILEVANTE: {historical_context}
-CONTESTO MONDIALE ATTUALE: {world_context}`,
-
-    ADVISOR: `Sei l'Alto Consigliere Strategico di {nation_name} nel {current_date}. 
-IL TUO MANDATO: Fornire analisi FREDDE, PRECISE e STORICAMENTE FONDATE, agendo come una bussola strategica che aiuta il leader a evitare i fallimenti del passato e a perseguire gli obiettivi nazionali con saggezza.
-
-ROADMAP E STORIA NAZIONALE:
+NATIONAL ROADMAP AND HISTORY:
 {historical_context_specific}
 
-REGOLE DI FERRO:
-1. **STORIA COMPLETA E PSICHE**: Usa la sezione "STORIA E PSICHE NAZIONALE" per capire a fondo le motivazioni, i traumi e le ambizioni della nazione. I tuoi consigli devono riflettere questa identità nazionale.
-2. **MISTAKE PREVENTION**: Usa la sezione "ERRORI STORICI DA EVITARE" per mettere in guardia il giocatore. Se il giocatore sta prendendo una strada che storicamente ha portato al disastro, intervieni con fermezza.
-2. **DILEMMI STRATEGICI**: Considera i dilemmi storici reali della nazione nell'offrire i tuoi consigli.
-3. **GEOGRAFIA REALE**: Ogni consiglio deve essere ancorato a località reali (es. "Fortificare il passo di Mai Ceu", "Proteggere i rifornimenti verso Massaua").
-4. **TAGS**: Usa sempre [TAG] per le nazioni.
-5. **CONCISE MODE**: Se il giocatore invia SOLO un messaggio breve e informale (es. "OK", "Ciao", "Capito", "Bene", "Va bene"), rispondi con UNA SOLA FRASE MOLTO BREVE (massimo 10-15 parole). NON usare il formato completo con sezioni. Esempi: "Eccellente. Attendo i vostri ordini, Eccellenza." o "Ai vostri ordini, mio signore."
+IRON RULES:
+1. **FULL HISTORY AND PSYCHE**: Use the "NATIONAL HISTORY AND PSYCHE" section to deeply understand the nation's motivations, traumas, and ambitions. Your advice must reflect this national identity.
+2. **MISTAKE PREVENTION**: Use the "HISTORICAL MISTAKES TO AVOID" section to warn the player. If the player is taking a path that historically led to disaster, intervene firmly.
+3. **STRATEGIC DILEMMAS**: Consider the nation's real historical dilemmas when offering your advice.
+4. **REAL GEOGRAPHY**: Every piece of advice must be anchored to real locations (e.g., "Fortify the Mai Ceu pass", "Protect the supply lines to Massawa").
+5. **TAGS**: Always use [TAG] for nations.
+6. **CONCISE MODE**: If the player sends ONLY a short, informal message (e.g., "OK", "Hi", "Understood", "Good", "Fine"), respond with ONE VERY SHORT SENTENCE (maximum 10-15 words). DO NOT use the full sectioned format. Examples: "Excellent. I await your orders, Excellency." or "At your command, my lord."
 
-RISPONDI SEMPRE SEGUENDO QUESTO SCHEMA (ECCETTO per messaggi brevi, vedi regola 5):
+ALWAYS RESPOND FOLLOWING THIS SCHEMA (EXCEPT for short messages, see rule 6):
 ---
-### 📊 ANALISI STORICO-STRATEGICA
-[Analisi basata sulla roadmap reale, i dilemmi storici e la situazione attuale. Cita eventi specifici.]
+### 📊 HISTORICAL-STRATEGIC ANALYSIS
+[Analysis based on the real roadmap, historical dilemmas, and the current situation. Cite specific events.]
 
-### 🎯 ORDINI MILITARI E DIPLOMATICI
-1. [Azione specifica con Luogo e TAG]
-2. [Azione specifica con Luogo e TAG]
+### 🎯 MILITARY AND DIPLOMATIC ORDERS
+1. [Specific action with Location and TAG]
+2. [Specific action with Location and TAG]
 
-### ⚠️ INTELLIGENCE E PREVENZIONE ERRORI
-- [Fornisci un avvertimento basato specificamente sugli errori storici della nazione se applicabile, o su rischi reali del periodo]
+### ⚠️ INTELLIGENCE AND MISTAKE PREVENTION
+- [Provide a warning based specifically on the nation's historical mistakes if applicable, or on real risks of the period]
 ---`,
 
     DIPLOMACY: `We are making a turn-based strategy game where the player can engage in diplomacy. We need you to simulate this diplomacy by roleplaying as all of the polities in this chat.
@@ -142,8 +139,8 @@ function getHistoricalRoadmapContext(nationCode) {
     const data = roadmaps[nationCode];
 
     if (!data) {
-        return `Non ci sono milestone specifiche per la nazione ${nationCode} in questo archivio. 
-Mantieni comunque un tono realistico coerente con il periodo 1935-1945.`;
+        return `There are no specific milestones for the nation ${nationCode} in this archive.
+Keep a realistic tone consistent with the 1935-1945 period regardless.`;
     }
 
     if (Array.isArray(data)) {
@@ -151,23 +148,23 @@ Mantieni comunque un tono realistico coerente con il periodo 1935-1945.`;
         return data.join('\n');
     }
 
-    let context = `--- PROFILO E STORIA NAZIONALE (${nationCode}) ---\n`;
-    context += `PROFILO: ${data.profile || 'Nessuno'}\n\n`;
+    let context = `--- NATIONAL PROFILE AND HISTORY (${nationCode}) ---\n`;
+    context += `PROFILE: ${data.profile || 'None'}\n\n`;
 
     if (data.narrative_history) {
-        context += `STORIA E PSICHE NAZIONALE:\n${data.narrative_history}\n\n`;
+        context += `NATIONAL HISTORY AND PSYCHE:\n${data.narrative_history}\n\n`;
     }
 
     if (data.strategic_dilemmas && data.strategic_dilemmas.length > 0) {
-        context += `DILEMMI STRATEGICI:\n- ${data.strategic_dilemmas.join('\n- ')}\n\n`;
+        context += `STRATEGIC DILEMMAS:\n- ${data.strategic_dilemmas.join('\n- ')}\n\n`;
     }
 
     if (data.historical_mistakes && data.historical_mistakes.length > 0) {
-        context += `ERRORI STORICI DA EVITARE:\n- ${data.historical_mistakes.join('\n- ')}\n\n`;
+        context += `HISTORICAL MISTAKES TO AVOID:\n- ${data.historical_mistakes.join('\n- ')}\n\n`;
     }
 
     if (data.milestones && data.milestones.length > 0) {
-        context += `ROADMAP CRONOLOGICA:\n- ${data.milestones.join('\n- ')}`;
+        context += `CHRONOLOGICAL ROADMAP:\n- ${data.milestones.join('\n- ')}`;
     }
 
     return context;
@@ -184,32 +181,32 @@ async function generateEvents(timeJump, gameContext) {
         .replace(/{nation_code}/g, nationCode)
         .replace(/{current_date}/g, gameContext.currentDate)
         .replace(/{historical_context}/g, historicalContext)
-        .replace(/{world_context}/g, gameContext.worldContext || 'Nessuno');
+        .replace(/{world_context}/g, gameContext.worldContext || 'None');
 
     const messages = [
         { role: 'system', content: systemPrompt },
         {
             role: 'user',
-            content: `SIMULAZIONE TURNO:
-Salto temporale: ${timeJump}
-Data di inizio: ${gameContext.currentDate}
-Nazione Giocatore: ${gameContext.playerNation.name}
+            content: `TURN SIMULATION:
+Time jump: ${timeJump}
+Start date: ${gameContext.currentDate}
+Player Nation: ${gameContext.playerNation.name}
 
-AZIONI PENDENTI DEL GIOCATORE:
+PLAYER'S PENDING ACTIONS:
 ${JSON.stringify(gameContext.actions, null, 2)}
 
-STORICO EVENTI RECENTI:
+RECENT EVENT HISTORY:
 ${JSON.stringify(gameContext.recentEvents, null, 2)}
 
-STATO MONDIALE:
+WORLD STATE:
 ${JSON.stringify(gameContext.worldState, null, 2)}
 
-REGOLE DI SIMULAZIONE (Simulation Rules):
-${gameContext.simulationRules || 'Nessuna'}
+SIMULATION RULES:
+${gameContext.simulationRules || 'None'}
 
-Genera almeno 3-6 eventi significativi e le conseguenze per questo periodo (${timeJump}). 
-Ogni evento DEVE essere realistico, impattante e coerente con la situazione attuale.
-Rispondi SOLO in JSON conforme al formato richiesto.`
+Generate at least 3-6 significant events and the consequences for this period (${timeJump}).
+Every event MUST be realistic, impactful, and consistent with the current situation.
+Respond ONLY in JSON conforming to the required format.`
         }
     ];
 
@@ -318,21 +315,21 @@ async function getAdvisorResponse(question, advContext) {
         { role: 'system', content: systemPrompt },
         {
             role: 'user',
-            content: `SITUAZIONE ATTUALE (${advContext.currentDate}):
-Nazione: ${nation.name} (${nation.code})
-Guerre in corso: ${nation.atWar ? 'Sì' : 'No'}
-Regioni Occupate: ${nation.occupied_regions?.join(', ') || 'Nessuna'}
+            content: `CURRENT SITUATION (${advContext.currentDate}):
+Nation: ${nation.name} (${nation.code})
+Ongoing wars: ${nation.atWar ? 'Yes' : 'No'}
+Occupied regions: ${nation.occupied_regions?.join(', ') || 'None'}
 
-STATO DEL MONDO (Nazioni Rilevanti):
+WORLD STATE (Relevant Nations):
 ${JSON.stringify(advContext.worldState, null, 2)}
 
-ULTIMI EVENTI MONDIALI:
+LATEST WORLD EVENTS:
 ${JSON.stringify(advContext.recentEvents, null, 2)}
 
-AZIONI GIOCATORE IN CORSO:
+PLAYER ACTIONS IN PROGRESS:
 ${JSON.stringify(advContext.pendingActions, null, 2)}
 
-DOMANDA DEL SOVRANO: "${question}"`
+THE SOVEREIGN'S QUESTION: "${question}"`
         }
     ];
 
@@ -346,7 +343,7 @@ DOMANDA DEL SOVRANO: "${question}"`
         return response.choices[0].message.content;
     } catch (error) {
         console.error('Advisor Error:', error);
-        return `Errore consigliere: ${error.message}`;
+        return `Advisor error: ${error.message}`;
     }
 }
 

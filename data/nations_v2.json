@@ -14,7 +14,7 @@
     "name": "United Kingdom",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\United Kingdom.txt",
     "leader_name": "Stanley Baldwin",
-    "leader_title": "Primo Ministro",
+    "leader_title": "Prime Minister",
     "ideology": "neutral",
     "is_major_power": true,
     "color": "#c9385d"
@@ -24,7 +24,7 @@
     "name": "Soviet Union",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Soviet Union.txt",
     "leader_name": "Iosif Stalin",
-    "leader_title": "Segretario Generale",
+    "leader_title": "General Secretary",
     "ideology": "neutral",
     "is_major_power": true,
     "color": "#7d0d18"
@@ -34,7 +34,7 @@
     "name": "Sweden",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Sweden.txt",
     "leader_name": "Gustavo V",
-    "leader_title": "Re",
+    "leader_title": "King",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#2484f7"
@@ -44,7 +44,7 @@
     "name": "France",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\France.txt",
     "leader_name": "Albert Lebrun",
-    "leader_title": "Presidente",
+    "leader_title": "President",
     "ideology": "neutral",
     "is_major_power": true,
     "color": "#3971e4"
@@ -64,7 +64,7 @@
     "name": "Belgium",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Belgium.txt",
     "leader_name": "Leopoldo III",
-    "leader_title": "Re",
+    "leader_title": "King",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#c1ab08"
@@ -74,7 +74,7 @@
     "name": "Holland",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Holland.txt",
     "leader_name": "Guglielmina",
-    "leader_title": "Regina",
+    "leader_title": "Queen",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#cb8a4a"
@@ -94,7 +94,7 @@
     "name": "Poland",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Poland.txt",
     "leader_name": "Ignacy Mościcki",
-    "leader_title": "Presidente",
+    "leader_title": "President",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#961717"
@@ -104,7 +104,7 @@
     "name": "Austria",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Austria.txt",
     "leader_name": "Kurt Schuschnigg",
-    "leader_title": "Cancelliere",
+    "leader_title": "Chancellor",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#e0e4ff"
@@ -144,7 +144,7 @@
     "name": "Spain",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Spain.txt",
     "leader_name": "Manuel Azaña",
-    "leader_title": "Presidente",
+    "leader_title": "President",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#f2cd5e"
@@ -154,7 +154,7 @@
     "name": "Italy",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Italy.txt",
     "leader_name": "Benito Mussolini",
-    "leader_title": "Duce",
+    "leader_title": "Il Duce",
     "ideology": "neutral",
     "is_major_power": true,
     "color": "#437f3f"
@@ -164,7 +164,7 @@
     "name": "Romania",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Romania.txt",
     "leader_name": "Carlo II",
-    "leader_title": "Re",
+    "leader_title": "King",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#ebd85c"
@@ -174,7 +174,7 @@
     "name": "Yugoslavia",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Yugoslavia.txt",
     "leader_name": "Pietro II",
-    "leader_title": "Re",
+    "leader_title": "King",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#48497e"
@@ -203,7 +203,7 @@
     "name": "Turkey",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Turkey.txt",
     "leader_name": "Mustafa Kemal Atatürk",
-    "leader_title": "Presidente",
+    "leader_title": "President",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#abbe98"
@@ -213,7 +213,7 @@
     "name": "Greece",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Greece.txt",
     "leader_name": "Giorgio II",
-    "leader_title": "Re",
+    "leader_title": "King",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#5db5e3"
@@ -233,7 +233,7 @@
     "name": "Norway",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Norway.txt",
     "leader_name": "Haakon VII",
-    "leader_title": "Re",
+    "leader_title": "King",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#6f4747"
@@ -243,7 +243,7 @@
     "name": "Denmark",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Denmark.txt",
     "leader_name": "Cristiano X",
-    "leader_title": "Re",
+    "leader_title": "King",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#99745d"
@@ -273,7 +273,7 @@
     "name": "Finland",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Finland.txt",
     "leader_name": "Kyösti Kallio",
-    "leader_title": "Presidente",
+    "leader_title": "President",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#cdd4e4"
@@ -293,7 +293,7 @@
     "name": "Hungary",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Hungary.txt",
     "leader_name": "Miklós Horthy",
-    "leader_title": "Reggente",
+    "leader_title": "Regent",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#f97e62"
@@ -323,7 +323,7 @@
     "name": "Australia",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Australia.txt",
     "leader_name": "Joseph Lyons",
-    "leader_title": "Primo Ministro",
+    "leader_title": "Prime Minister",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#398f61"
@@ -353,7 +353,7 @@
     "name": "Brazil",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Brazil.txt",
     "leader_name": "Getúlio Vargas",
-    "leader_title": "Presidente",
+    "leader_title": "President",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#4c913f"
@@ -363,7 +363,7 @@
     "name": "Canada",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Canada.txt",
     "leader_name": "W. L. Mackenzie King",
-    "leader_title": "Primo Ministro",
+    "leader_title": "Prime Minister",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#e93b3b"
@@ -433,7 +433,7 @@
     "name": "Ethiopia",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Ethiopia.txt",
     "leader_name": "Haile Selassie I",
-    "leader_title": "Imperatore",
+    "leader_title": "Emperor",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#9882bf"
@@ -473,7 +473,7 @@
     "name": "Japan",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Japan.txt",
     "leader_name": "Hirohito",
-    "leader_title": "Imperatore",
+    "leader_title": "Emperor",
     "ideology": "neutral",
     "is_major_power": true,
     "color": "#ffbfbf"
@@ -503,7 +503,7 @@
     "name": "Mexico",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\Mexico.txt",
     "leader_name": "Lázaro Cárdenas",
-    "leader_title": "Presidente",
+    "leader_title": "President",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#689853"
@@ -543,7 +543,7 @@
     "name": "New Zealand",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\New Zealand.txt",
     "leader_name": "Michael Joseph Savage",
-    "leader_title": "Primo Ministro",
+    "leader_title": "Prime Minister",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#9882bf"
@@ -593,7 +593,7 @@
     "name": "South Africa",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\South Africa.txt",
     "leader_name": "J. B. M. Hertzog",
-    "leader_title": "Primo Ministro",
+    "leader_title": "Prime Minister",
     "ideology": "neutral",
     "is_major_power": false
   },
@@ -672,7 +672,7 @@
     "name": "United States",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\USA.txt",
     "leader_name": "Franklin D. Roosevelt",
-    "leader_title": "Presidente",
+    "leader_title": "President",
     "ideology": "neutral",
     "is_major_power": true,
     "color": "#437bed"
@@ -772,7 +772,7 @@
     "name": "British Raj",
     "filePath": "C:\\Users\\Francesco\\Videos\\agenti_ai\\giochi\\PaxHistoria\\countries\\British Raj.txt",
     "leader_name": "Victor Hope",
-    "leader_title": "Viceré",
+    "leader_title": "Viceroy",
     "ideology": "neutral",
     "is_major_power": false,
     "color": "#aa0a0a"

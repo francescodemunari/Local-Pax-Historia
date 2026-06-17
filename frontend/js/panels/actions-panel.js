@@ -77,7 +77,7 @@ const actionsPanel = {
         container.innerHTML = '';
 
         if (this.pendingActions.length === 0) {
-            container.innerHTML = '<p class="panel-hint">Nessuna azione in attesa. Scrivi la tua prima azione!</p>';
+            container.innerHTML = '<p class="panel-hint">No pending actions. Write your first action!</p>';
             return;
         }
 
@@ -87,9 +87,9 @@ const actionsPanel = {
             div.innerHTML = `
                 <p class="pending-action-text">${action.action_text}</p>
                 <p class="pending-action-status">
-                    ${action.status === 'pending' ? '⏳ In attesa' :
-                    action.status === 'rejected' ? '❌ Rifiutata: ' + (action.ai_response || 'Azione non fattibile') :
-                        '✅ Processata'}
+                    ${action.status === 'pending' ? '⏳ Pending' :
+                    action.status === 'rejected' ? '❌ Rejected: ' + (action.ai_response || 'Action not feasible') :
+                        '✅ Processed'}
                 </p>
             `;
 
@@ -111,18 +111,18 @@ const actionsPanel = {
         const actionText = input.value.trim();
 
         if (!actionText) {
-            app.showToast('Scrivi un\'azione prima di inviare', 'error');
+            app.showToast('Write an action before sending', 'error');
             return;
         }
 
         if (!app.currentGame) {
-            app.showToast('Nessuna partita in corso', 'error');
+            app.showToast('No game in progress', 'error');
             return;
         }
 
         const btn = document.getElementById('btn-send-action');
         btn.disabled = true;
-        btn.innerHTML = '<span class="icon">⏳</span> Validando...';
+        btn.innerHTML = '<span class="icon">⏳</span> Validating...';
 
         try {
             const result = await api.submitAction(
@@ -131,30 +131,30 @@ const actionsPanel = {
             );
 
             if (result.success) {
-                app.showToast('Azione inviata!', 'success');
+                app.showToast('Action sent!', 'success');
                 input.value = '';
                 this.loadPendingActions();
             } else {
-                app.showToast(`Azione rifiutata: ${result.validation.reason}`, 'error');
+                app.showToast(`Action rejected: ${result.validation.reason}`, 'error');
                 this.loadPendingActions();
             }
         } catch (error) {
             console.error('Failed to submit action:', error);
-            app.showToast('Errore nell\'invio dell\'azione', 'error');
+            app.showToast('Error sending action', 'error');
         } finally {
             btn.disabled = false;
-            btn.innerHTML = '<span class="icon">➤</span> Invia Azione';
+            btn.innerHTML = '<span class="icon">➤</span> Send Action';
         }
     },
 
     async deleteAction(actionId) {
         try {
             await api.deleteAction(actionId);
-            app.showToast('Azione eliminata', 'info');
+            app.showToast('Action deleted', 'info');
             this.loadPendingActions();
         } catch (error) {
             console.error('Failed to delete action:', error);
-            app.showToast('Errore nell\'eliminazione dell\'azione', 'error');
+            app.showToast('Error deleting action', 'error');
         }
     },
 
@@ -163,19 +163,19 @@ const actionsPanel = {
 
         const btn = document.getElementById('btn-brainstorm');
         btn.disabled = true;
-        btn.textContent = '⏳ Pensando...';
+        btn.textContent = '⏳ Thinking...';
 
         try {
             const result = await api.brainstormActions(app.currentGame.saveId);
 
             // Show suggestions in a modal or insert into chat
-            app.showToast('Suggerimenti ricevuti! Controlla il pannello.', 'success');
+            app.showToast('Suggestions received! Check the panel.', 'success');
 
             // Insert suggestions into the actions panel
             const suggestionsDiv = document.createElement('div');
             suggestionsDiv.className = 'brainstorm-suggestions';
             suggestionsDiv.innerHTML = `
-                <h4>💡 Suggerimenti del Consigliere:</h4>
+                <h4>💡 Advisor Suggestions:</h4>
                 <div class="suggestions-content">${this.formatSuggestions(result.suggestions)}</div>
             `;
 
@@ -184,10 +184,10 @@ const actionsPanel = {
 
         } catch (error) {
             console.error('Failed to brainstorm:', error);
-            app.showToast('Errore nel brainstorming', 'error');
+            app.showToast('Error during brainstorming', 'error');
         } finally {
             btn.disabled = false;
-            btn.textContent = '✨ Aiutami a pianificare azioni';
+            btn.textContent = '✨ Help me plan actions';
         }
     },
 

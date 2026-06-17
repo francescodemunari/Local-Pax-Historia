@@ -71,7 +71,7 @@ const eventsPanel = {
         }
 
         if (filtered.length === 0) {
-            container.innerHTML = '<p class="panel-hint">Nessun evento da mostrare.</p>';
+            container.innerHTML = '<p class="panel-hint">No events to display.</p>';
             return;
         }
 
@@ -108,21 +108,21 @@ const eventsPanel = {
 
     formatEventType(type) {
         const types = {
-            military: 'Militare',
-            political: 'Politico',
-            economic: 'Economico',
-            diplomatic: 'Diplomatico',
-            social: 'Sociale'
+            military: 'Military',
+            political: 'Political',
+            economic: 'Economic',
+            diplomatic: 'Diplomatic',
+            social: 'Social'
         };
         return types[type] || type;
     },
 
     formatSeverity(severity) {
         const severities = {
-            minor: 'Minore',
-            moderate: 'Moderato',
-            major: 'Importante',
-            critical: 'Critico'
+            minor: 'Minor',
+            moderate: 'Moderate',
+            major: 'Major',
+            critical: 'Critical'
         };
         return severities[severity] || severity;
     },
@@ -135,7 +135,7 @@ const eventsPanel = {
         // Show notification for critical events
         const critical = newEvents.filter(e => e.severity === 'critical' || e.severity === 'major');
         if (critical.length > 0) {
-            app.showToast(`${critical.length} eventi importanti!`, 'info');
+            app.showToast(`${critical.length} important events!`, 'info');
         }
     },
 

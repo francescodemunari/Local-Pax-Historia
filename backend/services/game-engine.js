@@ -165,23 +165,23 @@ class GameEngine {
     createStartingUnits(gameState) {
         const startingUnits = [
             // ITALY
-            { name: "1a Divisione Eritrea", type: "infantry", nation: "ITA", region: "Asmara", coords: [860, 460] },
-            { name: "2a Divisione Eritrea", type: "infantry", nation: "ITA", region: "Massaua", coords: [870, 450] },
-            { name: "Corpo d'Armata Indigeno", type: "infantry", nation: "ITA", region: "Eritrea", coords: [850, 470] },
-            { name: "Divisione Gavinana", type: "infantry", nation: "ITA", region: "Adigrat", coords: [880, 490] },
+            { name: "1st Eritrean Division", type: "infantry", nation: "ITA", region: "Asmara", coords: [860, 460] },
+            { name: "2nd Eritrean Division", type: "infantry", nation: "ITA", region: "Massawa", coords: [870, 450] },
+            { name: "Native Army Corps", type: "infantry", nation: "ITA", region: "Eritrea", coords: [850, 470] },
+            { name: "Granatieri Division", type: "infantry", nation: "ITA", region: "Adigrat", coords: [880, 490] },
 
             // ETHIOPIA
-            { name: "Guardia Imperiale Kebur Zabagna", type: "infantry", nation: "ETH", region: "Addis Abeba", coords: [880, 480] },
-            { name: "Armata dell'Ogaden", type: "infantry", nation: "ETH", region: "Ogaden", coords: [920, 500] },
-            { name: "Armata del Nord", type: "infantry", nation: "ETH", region: "Amhara", coords: [860, 490] },
+            { name: "Imperial Guard Kebur Zabagna", type: "infantry", nation: "ETH", region: "Addis Ababa", coords: [880, 480] },
+            { name: "Ogaden Army", type: "infantry", nation: "ETH", region: "Ogaden", coords: [920, 500] },
+            { name: "Northern Army", type: "infantry", nation: "ETH", region: "Amhara", coords: [860, 490] },
 
             // GERMANY
-            { name: "1. Panzer-Division", type: "armor", nation: "GER", region: "Berlin", coords: [750, 120] },
-            { name: "1. Infanterie-Division", type: "infantry", nation: "GER", region: "East Prussia", coords: [800, 100] },
+            { name: "1st Panzer Division", type: "armor", nation: "GER", region: "Berlin", coords: [750, 120] },
+            { name: "1st Infantry Division", type: "infantry", nation: "GER", region: "East Prussia", coords: [800, 100] },
 
             // FRANCE
-            { name: "1ère Division Blindée", type: "armor", nation: "FRA", region: "Paris", coords: [660, 150] },
-            { name: "7ème Armée", type: "infantry", nation: "FRA", region: "Metz", coords: [690, 140] },
+            { name: "1st Armored Division", type: "armor", nation: "FRA", region: "Paris", coords: [660, 150] },
+            { name: "7th Army", type: "infantry", nation: "FRA", region: "Metz", coords: [690, 140] },
 
             // UK
             { name: "Home Fleet", type: "naval", nation: "ENG", region: "Scapa Flow", coords: [620, 80] },

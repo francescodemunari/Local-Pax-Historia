@@ -1,171 +1,171 @@
 {
     "ITA": {
-        "profile": "L'Italia nel 1935 è una nazione in cerca di prestigio imperiale per consolidare il regime fascista. Nonostante le apparenze, l'apparato industriale è fragile e le forze armate sono in fase di transizione tecnologica non completata.",
-        "narrative_history": "Dalla fine della Grande Guerra, l'Italia ha vissuto nel mito della 'Vittoria Mutilata'. Nonostante il sacrificio di 600.000 uomini, le promesse di Londra furono solo parzialmente mantenute, lasciando un senso di profonda amarezza sociale e politica. Il Fascismo è nato da questo scontento, promettendo di riportare l'Italia ai fasti dell'Impero Romano. Sotto Mussolini, il paese ha cercato di modernizzarsi attraverso le 'Battaglie' (del grano, della palude), ma la realtà economica rimane precaria. La politica estera è diventata sempre più aggressiva nel Mediterraneo, considerato il 'Mare Nostrum'. L'invasione dell'Etiopia non è solo una conquista coloniale, ma un atto di affermazione contro le 'vecchie democrazie plutocratiche' (Francia e UK) che hanno cercato di ostacolare l'ascesa italiana. Il popolo è spinto da un mix di nazionalismo fervente e desiderio di riscatto economico, ignorando spesso le fragilità logistiche e tecnologiche che si nascondono dietro le grandi parate militari.",
+        "profile": "Italy in 1935 is a nation in search of imperial prestige to consolidate the fascist regime. Despite appearances, the industrial apparatus is fragile and the armed forces are in an incomplete state of technological transition.",
+        "narrative_history": "Since the end of the Great War, Italy lived in the myth of the 'Mutilated Victory'. Despite the sacrifice of 600,000 men, the promises of London were only partially kept, leaving a sense of deep social and political bitterness. Fascism was born from this discontent, promising to return Italy to the glories of the Roman Empire. Under Mussolini, the country sought to modernize through the 'Battles' (for grain, land reclamation), but the economic reality remained precarious. Foreign policy became increasingly aggressive in the Mediterranean, considered 'Mare Nostrum'. The invasion of Ethiopia is not just a colonial conquest, but an act of assertion against the 'old plutocratic democracies' (France and UK) that tried to hinder the Italian rise. The people are driven by a mix of fervent nationalism and a desire for economic redemption, often ignoring the logistical and technological weaknesses hidden behind the grand military parades.",
         "strategic_dilemmas": [
-            "L'espansione coloniale in Africa rischia di alienare la Gran Bretagna e la Francia, spingendo l'Italia verso un'alleanza scomoda con la Germania.",
-            "La necessità di modernizzare l'esercito e la marina si scontra con la carenza di materie prime e valuta estera."
+            "Colonial expansion in Africa risks alienating Great Britain and France, pushing Italy towards an uncomfortable alliance with Germany.",
+            "The need to modernize the army and navy clashes with the shortage of raw materials and foreign currency."
         ],
         "historical_mistakes": [
-            "Sottovalutazione dei tempi necessari per la guerra d'attrito: Mussolini sperava in un successo rapido e diplomatico invece di una guerra coloniale prolungata.",
-            "Mancanza di coordinamento tra le forze armate: Marina ed Esercito operavano spesso senza una visione strategica unica (es. logistica verso l'Africa)."
+            "Underestimating the time needed for a war of attrition: Mussolini hoped for a quick diplomatic success instead of a prolonged colonial war.",
+            "Lack of coordination between the armed forces: Navy and Army often operated without a single strategic vision (e.g., logistics towards Africa)."
         ],
         "milestones": [
-            "1935-10: Invasione dell'Etiopia (Inizio ostilità).",
-            "1935-12: Battaglia di Amba Aradam e Passo Uarieu.",
-            "1936-05: Conquista di Addis Abeba; Proclamazione dell'Impero.",
-            "1936-10: Asse Roma-Berlino.",
-            "1939-04: Invasione dell'Albania.",
-            "1940-06: Ingresso in guerra contro Francia e UK."
+            "1935-10: Invasion of Ethiopia (Start of hostilities).",
+            "1935-12: Battle of Amba Aradam and Uarieu Pass.",
+            "1936-05: Conquest of Addis Ababa; Proclamation of the Empire.",
+            "1936-10: Rome-Berlin Axis.",
+            "1939-04: Invasion of Albania.",
+            "1940-06: Entry into war against France and the UK."
         ]
     },
     "ETH": {
-        "profile": "L'Etiopia è l'unico stato africano rimasto indipendente, ma è tecnologicamente arretrato. Il sistema feudale rallenta la mobilitazione di un esercito moderno, affidandosi a leve locali (i Ras) non sempre coordinate.",
-        "narrative_history": "L'Etiopia (Abissinia) vanta tremila anni di indipendenza, un'isola cristiana in un continente colonizzato. La nostra identità è forgiata dalla vittoria di Adua nel 1896, dove i nostri padri umiliarono gli invasori italiani, dimostrando che un popolo africano può sconfiggere una potenza europea. Hailé Selassié, il Negus Neghesti (Re dei Re), ha cercato di modernizzare lo stato contro le resistenze dei Ras locali, centralizzando il potere e costruendo scuole e ospedali. Tuttavia, siamo circondati da colonie ostili e il nostro esercito è composto in gran parte da guerrieri valorosi ma armati con vecchi fucili e spade, contro i moderni aerei e gas degli italiani. Sentiamo che il mondo civilizzato ci ha traditi: la Società delle Nazioni parla di pace ma permette all'aggressore di strangolarci. La nostra lotta è per la sopravvivenza stessa della nostra antica civiltà e dei valori di libertà in Africa.",
+        "profile": "Ethiopia is the only remaining independent African state, but it is technologically backward. The feudal system slows the mobilization of a modern army, relying on local levies (the Ras) that are not always coordinated.",
+        "narrative_history": "Ethiopia (Abyssinia) boasts three thousand years of independence, a Christian island in a colonized continent. Our identity is forged by the victory of Adwa in 1896, where our fathers humiliated the Italian invaders, demonstrating that an African people can defeat a European power. Haile Selassie, the Negus Neghesti (King of Kings), has tried to modernize the state against resistance from local Ras, centralizing power and building schools and hospitals. However, we are surrounded by hostile colonies and our army is largely composed of brave warriors armed with old rifles and swords, against the modern planes and gas of the Italians. We feel that the civilized world has betrayed us: the League of Nations talks of peace but allows the aggressor to strangle us. Our struggle is for the very survival of our ancient civilization and the values of freedom in Africa.",
         "strategic_dilemmas": [
-            "Scegliere tra una difesa frontale (che favorisce l'artiglieria italiana) o una guerriglia prolungata nelle montagne (che però devasta il territorio).",
-            "Confidare nella Società delle Nazioni per ottenere sanzioni economiche contro l'Italia."
+            "Choosing between a frontal defense (which favors Italian artillery) or a prolonged guerrilla war in the mountains (which, however, devastates the territory).",
+            "Relying on the League of Nations to obtain economic sanctions against Italy."
         ],
         "historical_mistakes": [
-            "Battaglia di Mai Ceu: Hailé Selassié decise un attacco frontale invece di ritirarsi nell'entroterra per dissanguare la logistica italiana.",
-            "Mancanza di unità tra i Ras: Alcuni nobili etiopi cercarono accordi separati con gli italiani, minando la resistenza nazionale."
+            "Battle of Maychew: Haile Selassie decided on a frontal attack instead of retreating inland to bleed the Italian logistics.",
+            "Lack of unity among the Ras: Some Ethiopian nobles sought separate agreements with the Italians, undermining national resistance."
         ],
         "milestones": [
-            "1935-10: Invasione italiana; Appello di Hailé Selassié alla Società delle Nazioni.",
-            "1935-12: Controffensiva etiope nel Tembien.",
-            "1936-03: Battaglia di Mai Ceu (ultima grande difesa).",
-            "1936-05: Occupazione di Addis Abeba.",
-            "1936-06: Discorso di Hailé Selassié a Ginevra (esilio)."
+            "1935-10: Italian invasion; Haile Selassie's appeal to the League of Nations.",
+            "1935-12: Ethiopian counteroffensive in the Tembien.",
+            "1936-03: Battle of Maychew (last major defense).",
+            "1936-05: Occupation of Addis Ababa.",
+            "1936-06: Haile Selassie's speech in Geneva (exile)."
         ]
     },
     "GER": {
-        "profile": "La Germania nazista è in piena fase di riarmo segreto e palese. L'obiettivo è la revisione totale dei trattati di pace dopo la WW1 e l'espansione ad est (Lebensraum). L'economia è drogata dalla produzione bellica.",
-        "narrative_history": "La Germania è emersa dalle ceneri del 1918 come una nazione tradita. Il Trattato di Versailles non è stata una pace, ma un 'Diktat' volto a schiavizzare il popolo tedesco, amputando territori sacri e imponendo riparazioni impossibili. L'umiliante occupazione della Ruhr e l'iperinflazione che ha distrutto i risparmi della classe media hanno preparato il terreno per la rivoluzione nazionalsocialista. Adolf Hitler ha promesso stabilità, lavoro e onore. In pochi anni, abbiamo abbattuto le catene di Versailles, rioccupato la Renania e avviato un riarmo senza precedenti. Crediamo nel nostro destino di nazione guida dell'Europa e nella necessità di uno 'Spazio Vitale' (Lebensraum) ad est per garantire la sopravvivenza del popolo ariano. La nostra economia è ora focalizzata sulla potenza militare, ma il mondo esterno ci guarda con timore e odio. Non ci fermeremo finché il Reich non avrà ripristinato i confini storici e assicurato la sua egemonia continentale contro i nemici interni ed esterni.",
+        "profile": "Nazi Germany is in a full phase of secret and overt rearmament. The goal is the total revision of the peace treaties after WW1 and expansion to the east (Lebensraum). The economy is boosted by war production.",
+        "narrative_history": "Germany emerged from the ashes of 1918 as a betrayed nation. The Treaty of Versailles was not a peace, but a 'Diktat' aimed at enslaving the German people, amputating sacred territories and imposing impossible reparations. The humiliating occupation of the Ruhr and the hyperinflation that destroyed the savings of the middle class paved the way for the National Socialist revolution. Adolf Hitler promised stability, work, and honor. In a few years, we have broken the chains of Versailles, reoccupied the Rhineland, and started an unprecedented rearmament. We believe in our destiny as the leading nation of Europe and in the need for 'Living Space' (Lebensraum) in the east to ensure the survival of the Aryan people. Our economy is now focused on military power, but the outside world looks at us with fear and hatred. We will not stop until the Reich has restored its historical borders and secured its continental hegemony against internal and external enemies.",
         "strategic_dilemmas": [
-            "Fino a che punto spingersi nel violare i trattati senza scatenare un intervento preventivo di Francia e UK?",
-            "Bilanciare l'economia tra 'burro e cannoni' per evitare il malcontento popolare."
+            "How far to go in violating treaties without triggering a preventive intervention by France and the UK?",
+            "Balancing the economy between 'butter and guns' to avoid popular discontent."
         ],
         "historical_mistakes": [
-            "Sottovalutazione della capacità industriale degli USA e delle riserve umane dell'URSS.",
-            "Interferenza politica nel comando militare: Hitler prese decisioni tattiche che spesso ignoravano la realtà logistica (es. Stalingrado, ma già visibile nelle prime fasi)."
+            "Underestimating the industrial capacity of the USA and the human reserves of the USSR.",
+            "Political interference in military command: Hitler made tactical decisions that often ignored logistical reality (e.g., Stalingrad, but already visible in the early phases)."
         ],
         "milestones": [
-            "1935-03: Reintroduzione della coscrizione (Violazione Versailles).",
-            "1936-03: Rimilitarizzazione della Renania.",
-            "1938-03: Anschluss dell'Austria.",
-            "1938-09: Accordi di Monaco (Sudeti).",
-            "1939-09: Invasione della Polonia (Inizio WW2)."
+            "1935-03: Reintroduction of conscription (Violation of Versailles).",
+            "1936-03: Remilitarization of the Rhineland.",
+            "1938-03: Anschluss of Austria.",
+            "1938-09: Munich Agreement (Sudetenland).",
+            "1939-09: Invasion of Poland (Start of WW2)."
         ]
     },
     "ENG": {
-        "profile": "L'Impero Britannico è la potenza egemone, ma è stanco e i suoi domini (Commonwealth) spingono per maggiore autonomia. La politica ufficiale è l'Appeasement (pacificazione) per evitare un nuovo massacro come la WW1.",
-        "narrative_history": "Siamo i custodi del più vasto impero che il mondo abbia mai visto, ma il peso di tale gloria è immenso. La Grande Guerra ha lasciato una ferita purulenta nell'anima della nazione: un'intera generazione è andata perduta nelle trincee e la nostra economia non si è mai ripresa completamente. La nostra strategia mondiale si basa sulla supremazia navale e sul mantenimento dell'equilibrio di potere in Europa. Tuttavia, l'ascesa di nuovi regimi aggressivi in Germania, Italia e Giappone mette a dura prova la nostra capacità di reazione. Il popolo britannico non desidera un'altra guerra; l'orrore del 1914-1918 è ancora troppo fresco. Per questo cerchiamo di negoziare, di mediare, di 'pacificare' gli aggressori (Appeasement), sperando che le loro richieste siano limitate. Nel frattempo, i nostri Dominions chiedono sempre più indipendenza e le tensioni in India e Palestina minacciano la stabilità imperiale. Dobbiamo navigare con cautela estrema per evitare un collasso globale che segnerebbe la fine dell'Impero.",
+        "profile": "The British Empire is the hegemonic power, but it is tired and its domains (Commonwealth) push for greater autonomy. The official policy is Appeasement to avoid a new massacre like WW1.",
+        "narrative_history": "We are the guardians of the largest empire the world has ever seen, but the weight of such glory is immense. The Great War left a festering wound in the soul of the nation: an entire generation was lost in the trenches and our economy has never fully recovered. Our global strategy is based on naval supremacy and maintaining the balance of power in Europe. However, the rise of new aggressive regimes in Germany, Italy, and Japan puts our ability to react to a severe test. The British people do not want another war; the horror of 1914-1918 is still too fresh. For this reason, we try to negotiate, to mediate, to 'pacify' the aggressors (Appeasement), hoping that their demands are limited. Meanwhile, our Dominions demand increasingly more independence, and tensions in India and Palestine threaten imperial stability. We must navigate with extreme caution to avoid a global collapse that would mark the end of the Empire.",
         "strategic_dilemmas": [
-            "Come contenere la Germania e l'Italia senza impegnare risorse che servirebbero a difendere l'Estremo Oriente dal Giappone?",
-            "Riuscire a convincere l'opinione pubblica interna della necessità del riarmo prima che sia troppo tardi."
+            "How to contain Germany and Italy without committing resources that would be needed to defend the Far East from Japan?",
+            "Succeeding in convincing domestic public opinion of the need for rearmament before it is too late."
         ],
         "historical_mistakes": [
-            "Eccessiva fiducia nella diplomazia di Chamberlain: gli Accordi di Monaco diedero alla Germania il tempo di armarsi ulteriormente e distrussero la fiducia degli alleati minori (Cecoslovacchia).",
-            "Sottovalutazione del pericolo sottomarino (U-Boot) e della guerra aerea nelle prime fasi dello scontro."
+            "Excessive trust in Chamberlain's diplomacy: the Munich Agreement gave Germany time to arm itself further and destroyed the trust of minor allies (Czechoslovakia).",
+            "Underestimating the submarine danger (U-Boats) and aerial warfare in the early stages of the conflict."
         ],
         "milestones": [
-            "1935-06: Stanley Baldwin diventa Primo Ministro.",
-            "1935-06: Accordo Navale Anglo-Tedesco.",
-            "1938-09: Accordi di Monaco ('Peace for our time').",
-            "1939-09: Dichiarazione di guerra alla Germania."
+            "1935-06: Stanley Baldwin becomes Prime Minister.",
+            "1935-06: Anglo-German Naval Agreement.",
+            "1938-09: Munich Agreement ('Peace for our time').",
+            "1939-09: Declaration of war on Germany."
         ]
     },
     "FRA": {
-        "profile": "La Francia è profondamente divisa internamente tra destra e sinistra. Militarmente si affida alla Linea Maginot, una visione difensiva statica che ignora l'evoluzione della guerra meccanizzata.",
-        "narrative_history": "La Francia è una nazione che vive nell'ombra della vittoria del 1918, una vittoria che ci ha lasciati dissanguati e con un calo demografico catastrofico. Ogni famiglia francese ha un lutto da onorare. La nostra politica è paralizzata da scontri violenti tra il Fronte Popolare di sinistra e i movimenti reazionari di destra, un clima che rasenta la guerra civile. La nostra principale ossessione è la sicurezza contro il risorgente militarismo tedesco. Abbiamo costruito la Linea Maginot, un capolavoro di ingegneria difensiva, perché non possiamo permetterci un altro scontro in campo aperto nei nostri campi di grano. Tuttavia, i nostri alleati sono deboli o lontani e la Gran Bretagna sembra più interessata ai suoi commerci che alla nostra difesa. Esitiamo a intervenire militarmente per non essere accusati di bellicismo, ma sappiamo che se la Germania riuscirà a armarsi completamente, la nostra sopravvivenza sarà in pericolo. Siamo una democrazia fragile che cerca di proteggere i suoi valori in un'Europa che sta diventando sempre più autoritaria.",
+        "profile": "France is deeply divided internally between right and left. Militarily it relies on the Maginot Line, a static defensive vision that ignores the evolution of mechanized warfare.",
+        "narrative_history": "France is a nation living in the shadow of the 1918 victory, a victory that left us bled dry and with a catastrophic demographic decline. Every French family has a loss to honor. Our politics are paralyzed by violent clashes between the leftist Popular Front and right-wing reactionary movements, a climate bordering on civil war. Our main obsession is security against rising German militarism. We built the Maginot Line, a masterpiece of defensive engineering, because we cannot afford another open-field clash in our wheat fields. However, our allies are weak or far away, and Great Britain seems more interested in its trade than in our defense. We hesitate to intervene militarily to avoid being accused of warmongering, but we know that if Germany manages to fully arm itself, our survival will be in danger. We are a fragile democracy trying to protect its values in an Europe that is becoming increasingly authoritarian.",
         "strategic_dilemmas": [
-            "Intervenire preventivamente contro la Germania (violando la Renania) rischiando di essere visti come aggressori, o aspettare?",
-            "Come gestire l'alleanza con l'URSS senza spaventare i conservatori interni e la Gran Bretagna."
+            "Intervene preventively against Germany (violating the Rhineland) risking being seen as aggressors, or wait?",
+            "How to manage the alliance with the USSR without frightening domestic conservatives and Great Britain."
         ],
         "historical_mistakes": [
-            "Dottrina di difesa statica: l'aver ignorato le teorie sui carri armati (es. de Gaulle) portò al disastro del 1940 quando i tedeschi aggirarono le fortificazioni.",
-            "Instabilità politica cronica: la frequente caduta dei governi impedì una pianificazione militare e industriale a lungo termine."
+            "Static defense doctrine: having ignored the theories on tanks (e.g., de Gaulle) led to the disaster of 1940 when the Germans bypassed the fortifications.",
+            "Chronic political instability: the frequent fall of governments prevented long-term military and industrial planning."
         ],
         "milestones": [
-            "1936-05: Vittoria del Fronte Popolare (Léon Blum).",
-            "1938-09: Accordi di Monaco.",
-            "1939-09: Dichiarazione di guerra alla Germania.",
-            "1940-05: Inizio della Battaglia di Francia."
+            "1936-05: Popular Front victory (Léon Blum).",
+            "1938-09: Munich Agreement.",
+            "1939-09: Declaration of war on Germany.",
+            "1940-05: Start of the Battle of France."
         ]
     },
     "SOV": {
-        "profile": "L'URSS è un gigante in trasformazione forzata. Stalin sta industrializzando il paese a tappe forzate, ma il clima di terrore delle Grandi Purghe sta distruggendo la leadership militare.",
-        "narrative_history": "L'Unione Sovietica è l'unica fortezza del socialismo in un mondo capitale ostile. Siamo nati dal sangue della rivoluzione e della guerra civile, dove abbiamo dovuto combattere contro le potenze straniere che hanno cercato di soffocarci nella culla. Sotto la guida d'acciaio del compagno Stalin, stiamo trasformando una nazione di contadini analfabeti in una potenza industriale moderna attraverso i Piani Quinquennali. Ma il nemico è ovunque: sabotatori, spie trotzkiste e potenze fasciste complottano per distruggerci. Abbiamo bisogno di tempo per prepararci allo scontro inevitabile. La nostra sicurezza dipende dalla distruzione degli elementi inaffidabili all'interno e dalla creazione di una zona cuscinetto ai nostri confini. Diffidiamo profondamente delle 'democrazie' occidentali, che vorrebbero vedere Hitler marciare verso est contro di noi. Siamo pronti a fare qualunque accordo necessario per guadagnare tempo e rafforzare l'Armata Rossa, il braccio armato del proletariato mondiale.",
+        "profile": "The USSR is a giant in forced transformation. Stalin is industrializing the country at a forced pace, but the climate of terror of the Great Purges is destroying the military leadership.",
+        "narrative_history": "The Soviet Union is the only fortress of socialism in a hostile capitalist world. We were born from the blood of the revolution and the civil war, where we had to fight against foreign powers that tried to suffocate us in the cradle. Under the steel leadership of Comrade Stalin, we are transforming a nation of illiterate peasants into a modern industrial power through the Five-Year Plans. But the enemy is everywhere: saboteurs, Trotskyist spies, and fascist powers plot to destroy us. We need time to prepare for the inevitable clash. Our security depends on destroying unreliable elements within and creating a buffer zone at our borders. We deeply distrust the Western 'democracies', who would like to see Hitler march east against us. We are ready to make whatever agreement is necessary to gain time and strengthen the Red Army, the armed arm of the world proletariat.",
         "strategic_dilemmas": [
-            "Cercare un'alleanza antifascista con le democrazie occidentali (che diffidano del comunismo) o un accordo temporaneo con la Germania per guadagnare tempo?",
-            "Modernizzare l'esercito mentre si eliminano i generali considerati politicamente inaffidabili."
+            "Seek an anti-fascist alliance with Western democracies (who distrust communism) or a temporary agreement with Germany to gain time?",
+            "Modernize the army while eliminating generals considered politically unreliable."
         ],
         "historical_mistakes": [
-            "Grandi Purghe (1937-1938): l'eliminazione dei migliori ufficiali rese l'Armata Rossa inefficiente durante la Guerra d'Inverno e le fasi iniziali dell'Operazione Barbarossa.",
-            "Sottovalutazione dell'intelligence: Stalin ignorò i ripetuti avvertimenti sull'imminenza dell'invasione tedesca nel 1941."
+            "Great Purges (1937-1938): the elimination of the best officers made the Red Army inefficient during the Winter War and the initial phases of Operation Barbarossa.",
+            "Underestimating intelligence: Stalin ignored repeated warnings of the imminence of the German invasion in 1941."
         ],
         "milestones": [
-            "1936-08: Inizio delle Grandi Purghe.",
-            "1939-08: Patto Molotov-Ribbentrop.",
-            "1939-11: Guerra d'Inverno contro la Finlandia.",
-            "1941-06: Inizio Invasione Tedesca (Barbarossa)."
+            "1936-08: Start of the Great Purges.",
+            "1939-08: Molotov-Ribbentrop Pact.",
+            "1939-11: Winter War against Finland.",
+            "1941-06: Start of German Invasion (Barbarossa)."
         ]
     },
     "USA": {
-        "profile": "Gli Stati Uniti sono nel bel mezzo del New Deal di Roosevelt per uscire dalla Grande Depressione. L'opinione pubblica è fortemente isolazionista.",
-        "narrative_history": "Dopo gli orrori della Prima Guerra Mondiale, in cui siamo stati trascinati per interessi che molti americani considerano estranei, la nostra nazione ha giurato di non farsi più coinvolgere nelle 'eterne liti' europee. La Grande Depressione ha devastato le nostre città e le nostre campagne; la priorità assoluta di Franklin D. Roosevelt è il New Deal, la ricostruzione interna. I Neutrality Acts riflettono il desiderio del popolo di rimanere protetti dai due grandi oceani che ci separano dal resto del mondo turbolento. Guardiamo con preoccupazione all'espansionismo giapponese nel Pacifico e all'ascesa dei dittatori in Europa, ma crediamo che il libero mercato e la democrazia americana possano sopravvivere anche nell'isolamento. Tuttavia, c'è chi comincia a capire che un mondo dominato da tiranni non lascerebbe spazio alla nostra libertà di commercio e ai nostri valori. Siamo un gigante che dorme, ancora riluttante a svegliarsi dal sogno dell'isolazionismo.",
+        "profile": "The United States is in the midst of Roosevelt's New Deal to emerge from the Great Depression. Public opinion is strongly isolationist.",
+        "narrative_history": "After the horrors of the First World War, into which we were dragged for interests that many Americans consider foreign, our nation swore never again to get involved in European 'eternal quarrels'. The Great Depression devastated our cities and our countryside; the absolute priority of Franklin D. Roosevelt is the New Deal, domestic reconstruction. The Neutrality Acts reflect the desire of the people to remain protected by the two great oceans that separate us from the rest of the turbulent world. We look with concern at Japanese expansionism in the Pacific and the rise of dictators in Europe, but we believe that the free market and American democracy can survive even in isolation. However, some are beginning to understand that a world dominated by tyrants would leave no room for our freedom of trade and our values. We are a sleeping giant, still reluctant to wake up from the dream of isolationism.",
         "strategic_dilemmas": [
-            "Mantenere la neutralità per evitare conflitti o supportare indirettamente le democrazie per proteggere gli interessi americani?",
-            "Contrastare l'espansionismo giapponese senza scatenare una guerra navale nel Pacifico."
+            "Maintain neutrality to avoid conflicts or indirectly support democracies to protect American interests?",
+            "Counter Japanese expansionism without triggering a naval war in the Pacific."
         ],
         "historical_mistakes": [
-            "Isolazionismo eccessivo che ha incoraggiato gli aggressori a credere che gli USA non sarebbero mai intervenuti.",
-            "Mancata preparazione militare iniziale: nel 1939 l'esercito americano era più piccolo di quello di alcune potenze minori europee."
+            "Excessive isolationism that encouraged aggressors to believe the USA would never intervene.",
+            "Lack of initial military preparation: in 1939 the American army was smaller than that of some minor European powers."
         ],
         "milestones": [
-            "1935-08: Primo Neutrality Act.",
-            "1936-11: Rielezione di Roosevelt.",
-            "1937-10: Discorso della Quarantena.",
+            "1935-08: First Neutrality Act.",
+            "1936-11: Roosevelt's reelection.",
+            "1937-10: Quarantine Speech.",
             "1941-03: Lend-Lease Act.",
-            "1941-12: Attacco di Pearl Harbor."
+            "1941-12: Attack on Pearl Harbor."
         ]
     },
     "JAP": {
-        "profile": "Il Giappone è guidato da correnti militari radicali che cercano l'egemonia in Asia e l'autosufficienza di risorse.",
-        "narrative_history": "Il Giappone è il solo impero moderno dell'Asia che è riuscito a sfuggire all'umiliazione del colonialismo occidentale. Ma siamo un'isola povera di materie prime, circondata da potenze che ci negano l'uguaglianza razziale e commerciale. La nostra sopravvivenza dipende dalla creazione di una 'Sfera di Co-prosperità della Grande Asia Orientale', liberando il continente dall'influenza europea sotto la guida del nostro Divino Imperatore. Le democrazie occidentali, guidate dagli Stati Uniti, cercano di strangolarci economicamente con sanzioni e trattati navali iniqui. I nostri ufficiali più radicati credono che solo l'espansione e lo spirito del Bushido possano salvare la nazione. La Cina è nel caos e spetta a noi portarvi l'ordine, anche se questo significa scontrarsi con l'occidente. Non permetteremo più che il Giappone sia trattato come un cittadino di seconda classe nel panorama mondiale.",
+        "profile": "Japan is led by radical military factions seeking hegemony in Asia and resource self-sufficiency.",
+        "narrative_history": "Japan is the only modern empire in Asia that managed to escape the humiliation of Western colonialism. But we are an island poor in raw materials, surrounded by powers that deny us racial and commercial equality. Our survival depends on the creation of a 'Greater East Asia Co-Prosperity Sphere', freeing the continent from European influence under the leadership of our Divine Emperor. The Western democracies, led by the United States, try to strangle us economically with unfair sanctions and naval treaties. Our most radical officers believe that only expansion and the spirit of Bushido can save the nation. China is in chaos and it is up to us to bring order there, even if it means clashing with the West. We will no longer allow Japan to be treated as a second-class citizen on the world stage.",
         "strategic_dilemmas": [
-            "Espansione a Nord contro l'URSS (Siberia) o a Sud verso le risorse del Pacifico (Indocina, Indonesia)?",
-            "Come gestire la guerra in Cina che sta drenando risorse immense senza una fine chiara."
+            "Expansion North against the USSR (Siberia) or South towards the resources of the Pacific (Indochina, Indonesia)?",
+            "How to manage the war in China which is draining immense resources without a clear end."
         ],
         "historical_mistakes": [
-            "Sottovalutazione della determinazione e della capacità di recupero degli Stati Uniti.",
-            "Incidente di Marco Polo: aver permesso che scontri locali si trasformassero in una guerra totale non pianificata contro la Cina."
+            "Underestimating the determination and recovery capacity of the United States.",
+            "Marco Polo Bridge Incident: allowing local clashes to turn into an unplanned total war against China."
         ],
         "milestones": [
-            "1936-11: Patto Anticomintern.",
-            "1937-07: Inizio Seconda Guerra Sino-Giapponese.",
-            "1937-12: Massacro di Nanchino.",
-            "1940-09: Patto Tripartito.",
-            "1941-12: Attacco di Pearl Harbor."
+            "1936-11: Anti-Comintern Pact.",
+            "1937-07: Start of the Second Sino-Japanese War.",
+            "1937-12: Nanking Massacre.",
+            "1940-09: Tripartite Pact.",
+            "1941-12: Attack on Pearl Harbor."
         ]
     },
     "CHI": {
-        "profile": "La Cina è divisa internamente tra il Kuomintang (Nazionalisti) e il Partito Comunista, mentre subisce l'aggressione giapponese.",
-        "narrative_history": "La nostra amata Cina è stata per un secolo la vittima dei 'Trattati Iniqui' e dell'imperialismo straniero. Dopo la caduta dell'Impero, siamo stati dilaniati dai signori della guerra e dalle lotte intestine tra il Generalissimo Chiang Kai-shek e i comunisti di Mao Zedong. Ma ora, una minaccia esistenziale ancora più grande incombe dal mare: il Giappone vuole trasformare la Cina in una colonia senza anima. Siamo costretti a combattere su più fronti: modernizzare il paese, unificare le province ribelli e fermare l'invasione brutale che ha già occupato la Manciuria. Abbiamo bisogno del supporto internazionale, ma sappiamo che alla fine solo il sacrificio del popolo cinese potrà salvare la nostra antica terra. Siamo consapevoli che la vittoria richiederà anni di sofferenza e distruzione, ma il nostro spirito è antico di cinquemila anni e non sarà spezzato dai cannoni nipponici.",
+        "profile": "China is internally divided between the Kuomintang (Nationalists) and the Communist Party, while undergoing Japanese aggression.",
+        "narrative_history": "Our beloved China has been the victim of 'Unequal Treaties' and foreign imperialism for a century. After the fall of the Empire, we were torn apart by warlords and internal struggles between Generalissimo Chiang Kai-shek and Mao Zedong's communists. But now, an even greater existential threat looms from the sea: Japan wants to turn China into a colony without a soul. We are forced to fight on multiple fronts: modernizing the country, unifying rebel provinces, and stopping the brutal invasion that has already occupied Manchuria. We need international support, but we know that in the end, only the sacrifice of the Chinese people can save our ancient land. We are aware that victory will require years of suffering and destruction, but our spirit is five thousand years old and will not be broken by Japanese cannons.",
         "strategic_dilemmas": [
-            "Privilegiare la lotta contro i comunisti o formare un fronte unito contro il Giappone?",
-            "Cedere territori per guadagnare tempo (strategia dello 'spazio per tempo') o difendere ogni città eroicamente?"
+            "Prioritize the fight against the communists or form a united front against Japan?",
+            "Cede territories to gain time ('space for time' strategy) or defend every city heroically?"
         ],
         "historical_mistakes": [
-            "Corruzione profonda all'interno dell'amministrazione nazionalista che ha minato lo sforzo bellico.",
-            "Mancato coordinamento dei signori della guerra locali che spesso hanno anteposto i propri interessi alla difesa nazionale."
+            "Deep corruption within the Nationalist administration that undermined the war effort.",
+            "Lack of coordination among local warlords who often put their own interests before national defense."
         ],
         "milestones": [
-            "1936-12: Incidente di Xi'an (Fronte Unito).",
-            "1937-07: Incidente del Ponte di Marco Polo.",
-            "1937-12: Battaglia di Nanchino.",
-            "1938-04: Vittoria di Taierzhuang.",
-            "1938-10: Caduta di Wuhan."
+            "1936-12: Xi'an Incident (United Front).",
+            "1937-07: Marco Polo Bridge Incident.",
+            "1937-12: Battle of Nanking.",
+            "1938-04: Victory of Taierzhuang.",
+            "1938-10: Fall of Wuhan."
         ]
     }
 }
