@@ -1,14 +1,14 @@
 
 # Pax Historia - WW2 Grand Strategy Game
 
-🎮 A historically accurate grand strategy game set in the 1935-1945 period, featuring local generative AI powered by LM Studio.
+A historically accurate grand strategy game set in the 1935-1945 period, featuring local generative AI powered by LM Studio.
 
 ![Version](https://img.shields.io/badge/Version-2.0.0-blue)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green)
 ![LM Studio](https://img.shields.io/badge/LM%20Studio-Required-orange)
 ![Storage](https://img.shields.io/badge/Storage-JSON-yellow)
 
-## ✨ Features
+## Features
 
 - **Interactive World Map**: Historical 1936 HOI4 boundaries with SVG rendering.
 - **Three Specialized AI Agents**: Game Master, Strategic Advisor, and Diplomacy Agent.
@@ -18,13 +18,13 @@
 - **JSON Architecture**: No database required - everything is stored in JSON files for maximum simplicity.
 - **City & Unit Visualization**: Markers for world capitals and historical military units.
 
-## 📋 Requirements
+## Requirements
 
 - **Node.js** 18+
 - **LM Studio** with a local model loaded
 - **Modern Browser** (Chrome, Firefox, Edge)
 
-## 🚀 Installation
+## Installation
 
 ### 1. LM Studio Setup
 
@@ -49,7 +49,7 @@ LLM_MODEL=your-model-name-here
 PORT=3000
 ```
 
-> ⚠️ **IMPORTANT**: Ensure that `LLM_MODEL` exactly matches the identifier of the model loaded in LM Studio.
+> **IMPORTANT**: Ensure that `LLM_MODEL` exactly matches the identifier of the model loaded in LM Studio.
 
 ### 4. Start the Server
 
@@ -64,7 +64,7 @@ Open your browser and go to: **http://localhost:3000**
 
 ---
 
-## 🎯 How to Play
+## How to Play
 
 ### Initial Setup
 1. **New Game**: Choose from one of the 35+ playable nations.
@@ -113,7 +113,7 @@ The AI will generate realistic events based on the time period and your actions.
 
 ---
 
-## 🤖 AI Agents
+## AI Agents
 
 Pax Historia uses **three specialized AI agents** with optimized prompts for specific roles:
 
@@ -150,7 +150,7 @@ Pax Historia uses **three specialized AI agents** with optimized prompts for spe
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 PaxHistoria/
@@ -180,7 +180,7 @@ PaxHistoria/
 
 ---
 
-## 📊 JSON Data Examples
+## JSON Data Examples
 
 ### `nations_v2.json`
 Defines all playable nations:
@@ -212,7 +212,7 @@ Provides context for the AI Advisor:
 
 ---
 
-## 🛠️ Development
+## Development
 
 ### Adding a New Nation
 1. Add an entry in `data/nations_v2.json`.
@@ -228,12 +228,10 @@ Edit the `PROMPTS` object in `backend/service/llm-service.js`.
 
 ---
 
-## 📄 License
+## License
 
 This is a personal/educational project. The original Pax Historia is a separate product.
 
-## 🤝 Credits
+## Credits
 
 - Inspired by [Pax Historia](https://paxhistoria.co)
-- Map Data: World War II historical boundaries
-- AI: LM Studio + Local LLM deployment
