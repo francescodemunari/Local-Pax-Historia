@@ -1,30 +1,42 @@
 
 # Pax Historia - WW2 Grand Strategy Game
 
-A historically accurate grand strategy game set in the 1935-1945 period, featuring local generative AI powered by LM Studio.
+A historically accurate grand strategy game set in the 1935-1945 period, featuring local generative AI for events, diplomacy, and strategic advising.
 
-![Version](https://img.shields.io/badge/Version-2.0.0-blue)
+![Version](https://img.shields.io/badge/Version-2.1.0-blue)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green)
-![LM Studio](https://img.shields.io/badge/LM%20Studio-Required-orange)
+![LLM](https://img.shields.io/badge/LLM-Multi--Provider-orange)
 ![Storage](https://img.shields.io/badge/Storage-JSON-yellow)
 
 ## Features
 
-- **Interactive World Map**: Historical 1936 HOI4 boundaries with SVG rendering.
+- **Interactive World Map**: Historical 1936 HOI4 boundaries with SVG rendering via Leaflet.
+- **Dynamic Nation Labels**: HOI4-style nation names that rotate diagonally, vertically, and dynamically along territory shapes.
+- **Capital Markers**: Golden star (★) markers for world capitals, always visible on the map.
 - **Three Specialized AI Agents**: Game Master, Strategic Advisor, and Diplomacy Agent.
+- **Multi-Provider LLM Support**: Works with LM Studio, llama.cpp, Ollama, vLLM, OpenAI, and Google — switchable from the in-game settings panel.
 - **Action System**: Issue diplomatic, military, and economic orders.
 - **Dynamic Events**: The world reacts to your actions with realistic consequences.
 - **Historical Roadmaps**: 35+ nations with detailed timelines, strategic dilemmas, and "mistakes to avoid."
-- **JSON Architecture**: No database required - everything is stored in JSON files for maximum simplicity.
-- **City & Unit Visualization**: Markers for world capitals and historical military units.
+- **JSON Architecture**: No database required — everything is stored in JSON files for maximum simplicity.
+- **City & Unit Visualization**: Markers for world capitals, major cities, fortresses, and historical military units.
 
 ## Installation
 
-### 1. LM Studio Setup
+### 1. LLM Provider Setup
 
-1. Download and install [LM Studio](https://lmstudio.ai).
-2. Download a compatible model (e.g., Llama 3 or Mistral).
-3. Load the model and start the Local Server (port 1234).
+Pax Historia supports multiple LLM providers. Choose one:
+
+| Provider | Setup | Default Port |
+|----------|-------|-------------|
+| **LM Studio** | Download from [lmstudio.ai](https://lmstudio.ai), load a model, start the local server | `1234` |
+| **llama.cpp** | Run `llama-server` with your GGUF model | `8080` |
+| **Ollama** | Install from [ollama.com](https://ollama.com), pull a model (e.g. `ollama pull llama3`) | `11434` |
+| **vLLM** | Install via pip, run `vllm serve <model>` | `8000` |
+| **OpenAI** | Provide your API key in the settings panel | N/A |
+| **Google** | Provide your API key in the settings panel | N/A |
+
+> **TIP**: You can switch providers at runtime from the in-game **LLM Settings** panel — no restart required.
 
 ### 2. Install Backend Dependencies
 
@@ -35,7 +47,7 @@ npm install
 
 ### 3. Configure Environment Variables
 
-The `.env` file is pre-configured with default values:
+The `.env` file provides fallback defaults (used if no `llm_settings.json` exists):
 
 ```env
 LLM_API_URL=http://127.0.0.1:1234/v1
@@ -43,13 +55,19 @@ LLM_MODEL=your-model-name-here
 PORT=3000
 ```
 
-> **IMPORTANT**: Ensure that `LLM_MODEL` exactly matches the identifier of the model loaded in LM Studio.
+> **Note**: The in-game settings panel saves to `data/llm_settings.json` and takes priority over `.env`.
 
 ### 4. Start the Server
 
+**Windows** (recommended):
+```bash
+server.bat
+```
+
+**Or manually**:
 ```bash
 cd backend
-npm start
+node server.js
 ```
 
 ### 5. Launch the Game
@@ -150,59 +168,66 @@ Pax Historia uses **three specialized AI agents** with optimized prompts for spe
 PaxHistoria/
 ├── backend/
 │   ├── server.js                  # Express server + WebSocket
+│   ├── .env                       # Fallback LLM & server config
 │   ├── services/
 │   │   ├── game-engine.js         # Game state management (JSON-based)
-│   │   └── llm-service.js         # LM Studio integration (3 agents)
-│   ├── routes/                    # API Endpoints
+│   │   └── llm-service.js         # Multi-provider LLM integration (3 agents)
+│   ├── routes/
+│   │   ├── map.js                 # Map data, colors, search, cities
+│   │   ├── game.js                # Game lifecycle (new, load, save)
+│   │   ├── actions.js             # Player actions processing
+│   │   ├── nations.js             # Nation info API
+│   │   ├── regions.js             # Region ownership API
+│   │   ├── units.js               # Military units API
+│   │   ├── chat.js                # Diplomacy chat API
+│   │   ├── advisor.js             # Strategic advisor API
+│   │   ├── events.js              # Events API
+│   │   └── llm.js                 # LLM settings API (get/set/test)
 │   └── scripts/                   # Utility scripts
 ├── frontend/
 │   ├── index.html                 # Main page
-│   ├── css/                       # UI styling
+│   ├── css/styles.css             # UI styling (HOI4 aesthetic)
 │   ├── js/
 │   │   ├── app.js                 # Main app controller
-│   │   ├── map.js                 # GameMap (Leaflet + SVG)
-│   │   └── panels/                # UI panels (Actions, Advisor, etc.)
+│   │   ├── map.js                 # GameMap (Leaflet + SVG overlay)
+│   │   ├── nations.js             # HOI4-style dynamic nation labels
+│   │   ├── cities.js              # City & capital markers
+│   │   ├── units.js               # Military unit markers
+│   │   ├── regions.js             # Region data manager
+│   │   ├── api.js                 # API client
+│   │   └── panels/                # UI panels (Actions, Advisor, Diplomacy, Events, Timeline)
 │   └── 1936.svg                   # HOI4 world map SVG
-└── data/
-    ├── nations_v2.json            # 35+ nations data
-    ├── hoi4_map.json              # Region boundaries
-    ├── cities.json                # World capitals coordinates
-    ├── historical_roadmaps.json   # Roadmaps for AI Advisor
-    ├── region_metadata.json       # Terrain, cities, neighbors
-    └── saves/                     # Game saves (auto-generated)
+├── data/
+│   ├── nations_v2.json            # 35+ nations data
+│   ├── hoi4_map.json              # Region boundaries
+│   ├── cities.json                # World capitals & cities coordinates
+│   ├── historical_roadmaps.json   # Roadmaps for AI Advisor
+│   ├── region_metadata.json       # Terrain, cities, neighbors
+│   ├── llm_settings.json          # Active LLM provider settings
+│   └── saves/                     # Game saves (auto-generated)
+├── scripts/                       # Build & data scripts
+└── server.bat                     # Windows quick-start launcher
 ```
 
 ---
 
-## JSON Data Examples
+## LLM Configuration
 
-### `nations_v2.json`
-Defines all playable nations:
+### In-Game Settings (Recommended)
+Use the **LLM Settings** panel in the game UI to configure your provider. Changes are saved to `data/llm_settings.json` and applied immediately.
+
+### Manual Configuration
+Edit `data/llm_settings.json`:
 ```json
 {
-  "ITA": {
-    "name": "Italy",
-    "ideology": "fascism",
-    "leader_name": "Benito Mussolini",
-    "leader_title": "Il Duce",
-    "manpower": 1500000,
-    "color": "#56a552"
-  }
+  "provider": "lm-studio",
+  "apiUrl": "http://127.0.0.1:1234/v1",
+  "apiKey": "lm-studio",
+  "model": "your-model-name"
 }
 ```
 
-### `historical_roadmaps.json`
-Provides context for the AI Advisor:
-```json
-{
-  "ITA": {
-    "profile": "Rising fascist power...",
-    "strategic_dilemmas": ["Expansion vs. Preparation"],
-    "historical_mistakes": ["Premature invasion of Greece"],
-    "narrative_history": "1861: Late unification creates an inferiority complex..."
-  }
-}
-```
+Supported `provider` values: `lm-studio`, `llama.cpp`, `ollama`, `vllm`, `openai`, `google`.
 
 ---
 
@@ -211,14 +236,16 @@ Provides context for the AI Advisor:
 ### Adding a New Nation
 1. Add an entry in `data/nations_v2.json`.
 2. (Optional) Add a roadmap in `data/historical_roadmaps.json`.
-3. Restart the server.
+3. (Optional) Add nation label coordinates in `frontend/js/nations.js`.
+4. Restart the server.
 
 ### Adding Cities
 1. Edit `data/cities.json` with new coordinates.
 2. Coordinates use the `[x, y]` format from the SVG map.
+3. Set `"type": "capital"` for capitals (golden star marker).
 
 ### Modifying AI Prompts
-Edit the `PROMPTS` object in `backend/service/llm-service.js`.
+Edit the `PROMPTS` object in `backend/services/llm-service.js`.
 
 ---
 
