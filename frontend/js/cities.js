@@ -1,6 +1,7 @@
 /**
  * City Manager
- * Handles visualization of cities on the map
+ * Handles visualization of cities and capitals on the map.
+ * Capitals display golden star markers (★) and are always visible.
  */
 
 class CityManager {
@@ -9,10 +10,10 @@ class CityManager {
         this.cities = [];
         this.cityMarkers = [];
 
-        // Create a dedicated pane for cities to stay above regions but below units
+        // Create a dedicated pane for cities above nation labels but below units
         if (!this.map.getPane('citiesPane')) {
             const pane = this.map.createPane('citiesPane');
-            pane.style.zIndex = 500;
+            pane.style.zIndex = 550;
         }
     }
 
@@ -37,35 +38,30 @@ class CityManager {
     displayCities() {
         this.clearMarkers();
 
+        const scale = gameMap.scaleFactor || 1.0;
+        // Use exact SVG height from GameMap for accurate coordinate mapping
+        const mapHeight = (gameMap && gameMap.svgHeight) ? gameMap.svgHeight : 600;
+
         this.cities.forEach(city => {
             if (!city.coords || !Array.isArray(city.coords) || city.coords.length < 2) {
                 console.warn(`Skipping invalid city: ${city.name}`, city);
                 return;
             }
 
+            const isCapital = (city.type === 'capital');
+
             const icon = L.divIcon({
-                className: 'city-marker',
+                className: isCapital ? 'city-marker capital-marker' : 'city-marker',
                 html: this.createCityHTML(city),
-                iconSize: [12, 12],
-                iconAnchor: [6, 6]
+                iconSize: isCapital ? [16, 16] : [12, 12],
+                iconAnchor: isCapital ? [8, 8] : [6, 6]
             });
 
-            // Get map dimensions and scale factor
-            // Default to 1400x600 scale 1.0 if not yet initialized
-            const svgW = this.map.options.maxBounds ? this.map.options.maxBounds[1][1] : 600;
-            const svgH = this.map.options.maxBounds ? this.map.options.maxBounds[1][0] : 1400; // Leaflet bounds are [y, x] so [1][0] is H
-            const scale = gameMap.scaleFactor || 1.0;
+            // Apply Scaling (to match SVG resolution)
+            const scaledX = city.coords[0] * scale;
+            const scaledY = city.coords[1] * scale;
 
-            // Apply Manual Offsets for Visual Alignment (Estimated)
-            const OFFSET_X = 35;
-            const OFFSET_Y = -35;
-
-            // Apply Scaling first (to match SVG resolution)
-            const scaledX = (city.coords[0] + OFFSET_X) * scale;
-            const scaledY = (city.coords[1] + OFFSET_Y) * scale;
-
-            // Then Apply Transform: Lat = Height - Y, Lng = X
-            const mapHeight = this.map.options.maxBounds ? this.map.options.maxBounds[1][0] : 600;
+            // Transform: Lat = SVGHeight - Y, Lng = X
             const position = [mapHeight - scaledY, scaledX];
 
             const marker = L.marker(position, {
@@ -74,24 +70,35 @@ class CityManager {
                 interactive: true
             });
 
-            marker.bindTooltip(city.name, {
+            // Tooltip: capitals get ★ prefix and special class
+            const tooltipLabel = isCapital ? `★ ${city.name}` : city.name;
+            const tooltipClass = isCapital ? 'city-label capital-label' : 'city-label';
+
+            marker.bindTooltip(tooltipLabel, {
                 permanent: true,
                 direction: 'bottom',
-                className: 'city-label',
-                offset: [0, 8]
+                className: tooltipClass,
+                offset: [0, isCapital ? 10 : 8]
             });
 
+            marker.isCapital = isCapital;
             marker.addTo(this.map);
-            console.log(`City ${city.name}: Base[${city.coords}] -> Offset[${OFFSET_X},${OFFSET_Y}] -> Scaled[${scaledX},${scaledY}] -> Leaflet[${position}]`);
             this.cityMarkers.push(marker);
         });
+
+        // Apply initial visibility based on capital status and current zoom
+        this.updateVisibility(this.map.getZoom());
+        console.log(`Rendered ${this.cityMarkers.length} city markers (capitals always visible).`);
     }
 
     /**
      * Create HTML for city icon
      */
     createCityHTML(city) {
-        const typeClass = city.type === 'capital' ? 'city-capital' : 'city-major';
+        if (city.type === 'capital') {
+            return `<div class="city-capital" title="${city.name}"><span class="capital-star">★</span></div>`;
+        }
+        const typeClass = city.type === 'fortress' ? 'city-fortress' : 'city-major';
         return `<div class="${typeClass}" title="${city.name}"></div>`;
     }
 
@@ -104,27 +111,36 @@ class CityManager {
     }
 
     /**
-     * Update visibility of city labels based on zoom level
+     * Update visibility of city labels based on zoom level.
+     * Capitals are ALWAYS visible; non-capitals display labels when zoomed in.
      */
     updateVisibility(zoom) {
-        const labels = document.querySelectorAll('.city-label');
+        this.cityMarkers.forEach(marker => {
+            const isCapital = marker.isCapital;
+            const tooltip = marker.getTooltip();
+            if (tooltip) {
+                const el = tooltip.getElement();
+                if (el) {
+                    if (isCapital || zoom >= 1.2) {
+                        el.style.display = 'block';
+                        el.style.opacity = '1';
+                    } else {
+                        el.style.display = 'none';
+                        el.style.opacity = '0';
+                    }
+                }
+            }
 
-        // Show labels only if zoom is high enough (e.g., > 4)
-        // Adjust threshold as needed based on map scale
-        const showLabels = zoom >= 2;
-
-        labels.forEach(label => {
-            if (showLabels) {
-                label.style.display = 'block';
-                label.style.opacity = '1';
-            } else {
-                label.style.display = 'none';
-                label.style.opacity = '0';
+            // Also hide non-capital marker dots at low zoom
+            const iconEl = marker.getElement();
+            if (iconEl && !isCapital) {
+                if (zoom >= 1.0) {
+                    iconEl.style.display = '';
+                } else {
+                    iconEl.style.display = 'none';
+                }
             }
         });
-
-        // Also scale markers slightly based on zoom?
-        // Optional polish
     }
 }
 

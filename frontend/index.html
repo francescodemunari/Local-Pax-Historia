@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
 
     <!-- Custom CSS -->
@@ -29,16 +29,21 @@
             <h1 class="loading-title">Pax Historia</h1>
             <p class="loading-subtitle">World War II</p>
             <div class="loading-spinner"></div>
-            <p class="loading-text">Loading...</p>
+            <div class="loading-bar"></div>
+            <p class="loading-text">Initializing Command Console</p>
         </div>
     </div>
 
     <!-- Main Menu (shown when no game is active) -->
     <div id="main-menu" class="main-menu hidden">
-        <div class="menu-background"></div>
+        <div class="menu-background">
+            <div class="ambient-glow gold"></div>
+            <div class="ambient-glow cyan"></div>
+        </div>
         <div class="menu-content">
             <h1 class="menu-title">Pax Historia</h1>
             <p class="menu-subtitle">World War II • 1935-1945</p>
+            <span class="tactical-id">Command Operations // 1935-1945</span>
 
             <div class="menu-buttons">
                 <button id="btn-new-game" class="menu-btn primary">
@@ -49,10 +54,14 @@
                     <span class="btn-icon">📂</span>
                     Load Game
                 </button>
+                <button id="btn-llm-settings" class="menu-btn">
+                    <span class="btn-icon">⚙️</span>
+                    AI Settings
+                </button>
             </div>
 
             <div class="menu-footer">
-                <p>Powered by Local AI • LM Studio</p>
+                <p id="menu-ai-footer">Powered by Local AI • LM Studio</p>
             </div>
         </div>
     </div>
@@ -112,7 +121,7 @@
                 <button id="btn-menu" class="header-btn" title="Menu">
                     <span class="icon">☰</span>
                 </button>
-                <h1 class="game-title">Pax Historia</h1>
+                <h1 class="game-title">Pax Historia <span class="header-status-dot"></span></h1>
             </div>
 
             <nav class="header-nav">
@@ -158,6 +167,9 @@
                 </button>
                 <button class="menu-item" id="menu-map-settings">
                     <span class="icon">🗺️</span> Map Settings
+                </button>
+                <button class="menu-item" id="menu-llm-settings">
+                    <span class="icon">⚙️</span> AI Settings
                 </button>
                 <hr>
                 <button class="menu-item" id="menu-save">
@@ -231,32 +243,6 @@
             </div>
 
             <!-- Advisor Panel -->
-            <div id="advisor-panel" class="panel hidden">
-                <div class="panel-header">
-                    <h2>Advisor</h2>
-                    <button class="panel-close">&times;</button>
-                </div>
-                <div class="panel-body">
-                    <div id="advisor-messages" class="chat-messages">
-                        <div class="chat-message system">
-                            <p>Ask your advisor for advice.</p>
-                        </div>
-                    </div>
-
-                    <div class="quick-actions">
-                        <button class="quick-btn" data-action="summary">Summary</button>
-                        <button class="quick-btn" data-action="strategic">Strategic Advice</button>
-                        <button class="quick-btn" data-action="threats">Threats</button>
-                    </div>
-
-                    <div class="chat-input-container">
-                        <textarea id="advisor-input" placeholder="Ask your advisor..." rows="2"></textarea>
-                        <button id="btn-ask-advisor" class="btn primary">
-                            <span class="icon">➤</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
 
             <!-- Diplomacy Panel -->
             <div id="diplomacy-panel" class="panel hidden">
@@ -276,23 +262,6 @@
             </div>
 
             <!-- Events Panel -->
-            <div id="events-panel" class="panel hidden">
-                <div class="panel-header">
-                    <h2>Events</h2>
-                    <button class="panel-close">&times;</button>
-                </div>
-                <div class="panel-body">
-                    <div class="events-filters">
-                        <button class="filter-btn active" data-type="all">All</button>
-                        <button class="filter-btn" data-type="military">Military</button>
-                        <button class="filter-btn" data-type="political">Political</button>
-                        <button class="filter-btn" data-type="economic">Economic</button>
-                    </div>
-                    <div id="events-list" class="events-list">
-                        <!-- Events will appear here -->
-                    </div>
-                </div>
-            </div>
 
             <!-- Diplomatic Chat Modal -->
             <div id="chat-modal" class="panel chat-panel hidden">
@@ -337,6 +306,52 @@
             </div>
         </div>
 
+        <!-- Right-side panels container (Advisor + Events) -->
+        <div id="panels-container-right" class="panels-container-right">
+<div id="advisor-panel" class="panel hidden">
+                <div class="panel-header">
+                    <h2>Advisor</h2>
+                    <button class="panel-close">&times;</button>
+                </div>
+                <div class="panel-body">
+                    <div id="advisor-messages" class="chat-messages">
+                        <div class="chat-message system">
+                            <p>Ask your advisor for advice.</p>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <button class="quick-btn" data-action="summary">Summary</button>
+                        <button class="quick-btn" data-action="strategic">Strategic Advice</button>
+                        <button class="quick-btn" data-action="threats">Threats</button>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <textarea id="advisor-input" placeholder="Ask your advisor..." rows="2"></textarea>
+                        <button id="btn-ask-advisor" class="btn primary">
+                            <span class="icon">➤</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+<div id="events-panel" class="panel hidden">
+                <div class="panel-header">
+                    <h2>Events</h2>
+                    <button class="panel-close">&times;</button>
+                </div>
+                <div class="panel-body">
+                    <div class="events-filters">
+                        <button class="filter-btn active" data-type="all">All</button>
+                        <button class="filter-btn" data-type="military">Military</button>
+                        <button class="filter-btn" data-type="political">Political</button>
+                        <button class="filter-btn" data-type="economic">Economic</button>
+                    </div>
+                    <div id="events-list" class="events-list">
+                        <!-- Events will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Time Jump Modal -->
         <div id="time-modal" class="modal hidden">
             <div class="modal-content compact">
@@ -377,7 +392,7 @@
 
         <!-- Nation Info Popup (appears on map click) -->
         <div id="nation-popup" class="nation-popup hidden">
-            <div class="popup-header">
+            <div class="popup-header corner-brackets">
                 <div class="popup-flag" id="popup-flag"></div>
                 <div class="popup-title">
                     <h3 id="popup-nation-name">Germany</h3>
@@ -413,7 +428,7 @@
 
         <!-- Region Info Popup (appears on map click) -->
         <div id="region-popup" class="region-popup hidden">
-            <div class="popup-header">
+            <div class="popup-header corner-brackets">
                 <div class="popup-flag-container">
                     <div class="popup-flag" id="popup-region-flag"></div>
                 </div>
@@ -487,8 +502,54 @@
         </div>
     </div>
 
-    <!-- Toast Notifications -->
-    <div id="toast-container" class="toast-container"></div>
+        <!-- AI Settings Modal -->
+        <div id="llm-settings-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>AI Settings</h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="llm-settings-form">
+                        <div class="form-group">
+                            <label for="settings-provider">AI Provider</label>
+                            <select id="settings-provider" class="form-select">
+                                <option value="lm-studio">LM Studio (Local)</option>
+                                <option value="ollama">Ollama (Local)</option>
+                                <option value="llama.cpp">Llama.cpp (Local)</option>
+                                <option value="vllm">vLLM (Local)</option>
+                                <option value="openai">OpenAI (Cloud)</option>
+                                <option value="google">Google Gemini (Cloud)</option>
+                                <option value="anthropic">Anthropic Claude (Cloud)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="settings-api-url">API URL / Endpoint</label>
+                            <input type="text" id="settings-api-url" placeholder="http://127.0.0.1:1234/v1">
+                        </div>
+                        <div class="form-group" id="group-api-key">
+                            <label for="settings-api-key">API Key</label>
+                            <input type="password" id="settings-api-key" placeholder="Enter API Key">
+                        </div>
+                        <div class="form-group">
+                            <label for="settings-model">Model Name</label>
+                            <input type="text" id="settings-model" placeholder="qwen3-vl-8b">
+                        </div>
+                        <div id="test-connection-status" class="test-status hidden"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-test-settings" class="btn secondary">Test Connection</button>
+                    <div class="footer-actions">
+                        <button id="btn-cancel-settings" class="btn">Cancel</button>
+                        <button id="btn-save-settings" class="btn primary">Save Settings</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast-container" class="toast-container"></div>
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -501,6 +562,7 @@
     <script src="js/panels/timeline-panel.js"></script>
     <script src="js/regions.js"></script>
     <script src="js/units.js"></script>
+    <script src="js/nations.js"></script>
     <script src="js/cities.js"></script>
     <script src="js/app.js"></script>
 </body>

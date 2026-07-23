@@ -306,7 +306,12 @@ const diplomacyPanel = {
             
             input.value = '';
             
-            const result = await api.sendDiplomaticMessage(this.currentChatId, message, playerNation);
+            const result = await api.sendDiplomaticMessage(
+                this.currentChatId,
+                app.currentGame.saveId,
+                message,
+                playerNation
+            );
             
             if (result.success && result.responses) {
                 result.responses.forEach(resp => {

@@ -2,18 +2,268 @@ const OpenAI = require('openai');
 const fs = require('fs');
 const path = require('path');
 
-// Initialize OpenAI client pointing to LM Studio
-let baseURL = process.env.LLM_API_URL || 'http://127.0.0.1:1234/v1';
-if (baseURL.includes('/api/v1')) {
-    // Keep it as is
-} else if (!baseURL.endsWith('/v1')) {
-    baseURL = baseURL.replace(/\/$/, '') + '/v1';
+const https = require('https');
+const http = require('http');
+
+const SETTINGS_FILE = path.join(__dirname, '../../data/llm_settings.json');
+
+// Default settings
+let currentSettings = {
+    provider: 'lm-studio',
+    apiUrl: process.env.LLM_API_URL || 'http://127.0.0.1:1234/v1',
+    apiKey: 'lm-studio',
+    model: process.env.LLM_MODEL || 'qwen3-vl-8b'
+};
+
+let openai = null;
+
+function loadSettings() {
+    try {
+        if (fs.existsSync(SETTINGS_FILE)) {
+            const data = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
+            currentSettings = { ...currentSettings, ...data };
+            console.log(`[LLM] Loaded settings for provider: ${currentSettings.provider}`);
+        } else {
+            console.log('[LLM] No settings file found, using defaults.');
+        }
+    } catch (e) {
+        console.error('[LLM] Error loading settings:', e.message);
+    }
+    updateClients();
 }
 
-const openai = new OpenAI({
-    baseURL: baseURL,
-    apiKey: 'lm-studio'
-});
+function updateClients() {
+    const isOpenAICompatible = [
+        'openai',
+        'google',
+        'lm-studio',
+        'ollama',
+        'llama.cpp',
+        'vllm'
+    ].includes(currentSettings.provider);
+
+    if (isOpenAICompatible) {
+        let baseURL = currentSettings.apiUrl;
+        if (baseURL) {
+            // Do not append /v1 to Gemini API which uses googleapis.com endpoint
+            if (baseURL.includes('/api/v1')) {
+                // Keep it as is
+            } else if (!baseURL.endsWith('/v1') && !baseURL.includes('googleapis.com')) {
+                baseURL = baseURL.replace(/\/$/, '') + '/v1';
+            }
+        }
+        
+        openai = new OpenAI({
+            baseURL: baseURL || undefined,
+            apiKey: currentSettings.apiKey || 'not-needed'
+        });
+    } else {
+        openai = null;
+    }
+}
+
+function getCurrentSettings() {
+    return currentSettings;
+}
+
+function saveSettings(settings) {
+    currentSettings = {
+        provider: settings.provider || 'lm-studio',
+        apiUrl: settings.apiUrl || '',
+        apiKey: settings.apiKey || '',
+        model: settings.model || ''
+    };
+
+    try {
+        const dir = path.dirname(SETTINGS_FILE);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        fs.writeFileSync(SETTINGS_FILE, JSON.stringify(currentSettings, null, 2), 'utf8');
+        console.log('[LLM] Saved settings successfully.');
+    } catch (e) {
+        console.error('[LLM] Error saving settings:', e.message);
+    }
+
+    updateClients();
+}
+
+function makeHttpRequest(url, options, postData) {
+    return new Promise((resolve, reject) => {
+        try {
+            const urlObj = new URL(url);
+            const isHttps = urlObj.protocol === 'https:';
+            const client = isHttps ? https : http;
+
+            const requestOptions = {
+                hostname: urlObj.hostname,
+                path: urlObj.pathname + urlObj.search,
+                port: urlObj.port || (isHttps ? 443 : 80),
+                method: options.method || 'POST',
+                headers: options.headers || {}
+            };
+
+            const req = client.request(requestOptions, (res) => {
+                let data = '';
+                res.on('data', (chunk) => { data += chunk; });
+                res.on('end', () => {
+                    if (res.statusCode >= 200 && res.statusCode < 300) {
+                        try {
+                            resolve(JSON.parse(data));
+                        } catch (e) {
+                            reject(new Error('Invalid JSON response: ' + data));
+                        }
+                    } else {
+                        reject(new Error(`HTTP ${res.statusCode}: ${data}`));
+                    }
+                });
+            });
+
+            req.on('error', (err) => reject(err));
+            if (postData) {
+                req.write(JSON.stringify(postData));
+            }
+            req.end();
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
+async function callAnthropic(options) {
+    const systemMessage = options.messages.find(m => m.role === 'system');
+    const systemPrompt = systemMessage ? systemMessage.content : undefined;
+    const userMessages = options.messages.filter(m => m.role !== 'system');
+
+    const anthropicMessages = userMessages.map(m => ({
+        role: m.role === 'assistant' ? 'assistant' : 'user',
+        content: m.content
+    }));
+
+    const url = currentSettings.apiUrl || 'https://api.anthropic.com/v1/messages';
+    const headers = {
+        'x-api-key': currentSettings.apiKey || '',
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json'
+    };
+
+    const postData = {
+        model: currentSettings.model || 'claude-3-5-sonnet-20240620',
+        messages: anthropicMessages,
+        max_tokens: options.max_tokens || 3000,
+        temperature: options.temperature !== undefined ? options.temperature : 0.7
+    };
+
+    if (systemPrompt) {
+        postData.system = systemPrompt;
+    }
+
+    const res = await makeHttpRequest(url, { method: 'POST', headers }, postData);
+
+    if (res.content && res.content[0] && res.content[0].text) {
+        return {
+            content: res.content[0].text,
+            model: res.model
+        };
+    } else {
+        throw new Error('Unexpected response format from Anthropic: ' + JSON.stringify(res));
+    }
+}
+
+async function executeChatCompletion(messages, temperature = 0.7, max_tokens = 3000) {
+    if (!openai && currentSettings.provider !== 'anthropic') {
+        updateClients();
+    }
+
+    if (currentSettings.provider === 'anthropic') {
+        const response = await callAnthropic({ messages, temperature, max_tokens });
+        return {
+            content: response.content,
+            model: response.model
+        };
+    } else {
+        const modelName = currentSettings.model || 'qwen3-vl-8b';
+        const response = await openai.chat.completions.create({
+            model: modelName,
+            messages: messages,
+            temperature: temperature,
+            max_tokens: max_tokens
+        });
+
+        return {
+            content: response.choices[0].message.content,
+            model: response.model || modelName
+        };
+    }
+}
+
+async function testConnectionWithSettings(tempSettings) {
+    try {
+        let responseContent;
+        let responseModel;
+        
+        if (tempSettings.provider === 'anthropic') {
+            const messages = [{ role: 'user', content: 'Hello' }];
+            const url = tempSettings.apiUrl || 'https://api.anthropic.com/v1/messages';
+            const headers = {
+                'x-api-key': tempSettings.apiKey || '',
+                'anthropic-version': '2023-06-01',
+                'content-type': 'application/json'
+            };
+            const postData = {
+                model: tempSettings.model || 'claude-3-5-sonnet-20240620',
+                messages: messages,
+                max_tokens: 10,
+                temperature: 0.7
+            };
+
+            const res = await makeHttpRequest(url, { method: 'POST', headers }, postData);
+            if (res.content && res.content[0] && res.content[0].text) {
+                responseContent = res.content[0].text;
+                responseModel = res.model;
+            } else {
+                throw new Error('Unexpected format: ' + JSON.stringify(res));
+            }
+        } else {
+            let baseURL = tempSettings.apiUrl;
+            if (baseURL) {
+                if (baseURL.includes('/api/v1')) {
+                    // Keep it as is
+                } else if (!baseURL.endsWith('/v1') && !baseURL.includes('googleapis.com')) {
+                    baseURL = baseURL.replace(/\/$/, '') + '/v1';
+                }
+            }
+            const tempOpenai = new OpenAI({
+                baseURL: baseURL || undefined,
+                apiKey: tempSettings.apiKey || 'not-needed'
+            });
+
+            const modelName = tempSettings.model || 'qwen3-vl-8b';
+            const response = await tempOpenai.chat.completions.create({
+                model: modelName,
+                messages: [{ role: 'user', content: 'Hello' }],
+                max_tokens: 10,
+                temperature: 0.7
+            });
+
+            responseContent = response.choices[0].message.content;
+            responseModel = response.model || modelName;
+        }
+
+        return {
+            success: true,
+            model: responseModel,
+            message: 'Connection test successful!'
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.message,
+            message: 'Connection test failed.'
+        };
+    }
+}
+
 
 // System prompts for different contexts
 const PROMPTS = {
@@ -211,14 +461,9 @@ Respond ONLY in JSON conforming to the required format.`
     ];
 
     try {
-        const response = await openai.chat.completions.create({
-            model: process.env.LLM_MODEL || 'qwen3-vl-8b',
-            messages: messages,
-            temperature: 0.7,
-            max_tokens: 3000
-        });
+        const response = await executeChatCompletion(messages, 0.7, 3000);
 
-        let content = response.choices[0].message.content;
+        let content = response.content;
 
         // DEBUG: Save raw response for inspection
         try {
@@ -285,14 +530,9 @@ async function diplomaticChat(message, fromNation, toNation, chatHistory = [], c
     ];
 
     try {
-        const response = await openai.chat.completions.create({
-            model: process.env.LLM_MODEL || 'qwen3-vl-8b',
-            messages: messages,
-            temperature: 0.8,
-            max_tokens: 1000
-        });
+        const response = await executeChatCompletion(messages, 0.8, 1000);
 
-        return response.choices[0].message.content;
+        return response.content;
     } catch (error) {
         console.error('Diplomacy Error:', error);
         return `[Communication Error: ${error.message}]`;
@@ -334,13 +574,9 @@ THE SOVEREIGN'S QUESTION: "${question}"`
     ];
 
     try {
-        const response = await openai.chat.completions.create({
-            model: process.env.LLM_MODEL || 'qwen3-vl-8b',
-            messages: messages,
-            temperature: 0.7
-        });
+        const response = await executeChatCompletion(messages, 0.7);
 
-        return response.choices[0].message.content;
+        return response.content;
     } catch (error) {
         console.error('Advisor Error:', error);
         return `Advisor error: ${error.message}`;
@@ -352,11 +588,7 @@ THE SOVEREIGN'S QUESTION: "${question}"`
  */
 async function testConnection() {
     try {
-        const response = await openai.chat.completions.create({
-            model: process.env.LLM_MODEL || 'qwen3-vl-8b',
-            messages: [{ role: 'user', content: 'Hello' }],
-            max_tokens: 10
-        });
+        const response = await executeChatCompletion([{ role: 'user', content: 'Hello' }], 0.7, 10);
         return {
             success: true,
             model: response.model || 'unknown',
@@ -376,5 +608,11 @@ module.exports = {
     diplomaticChat,
     getAdvisorResponse,
     testConnection,
+    getCurrentSettings,
+    saveSettings,
+    testConnectionWithSettings,
     PROMPTS
 };
+
+// Initialize settings
+loadSettings();

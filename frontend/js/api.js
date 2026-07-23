@@ -3,7 +3,10 @@
  * Handles all communication with the backend server
  */
 
-const API_BASE = 'http://localhost:3000/api';
+// Dynamically resolve API base from browser origin to avoid localhost vs 127.0.0.1 mismatch
+const API_BASE = (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http'))
+    ? `${window.location.origin}/api`
+    : 'http://127.0.0.1:3000/api';
 
 class ApiClient {
     constructor() {
@@ -166,10 +169,10 @@ class ApiClient {
         });
     }
 
-    async sendDiplomaticMessage(chatId, message, senderNation, isPlayer = true) {
+    async sendDiplomaticMessage(chatId, saveId, message, senderNation, isPlayer = true) {
         return this.request(`/chat/${chatId}/message`, {
             method: 'POST',
-            body: { message, senderNation, isPlayer }
+            body: { saveId, message, senderNation, isPlayer }
         });
     }
 
@@ -215,6 +218,24 @@ class ApiClient {
         return this.request('/advisor/test');
     }
 
+    async getLLMSettings() {
+        return this.request('/llm/settings');
+    }
+
+    async saveLLMSettings(settings) {
+        return this.request('/llm/settings', {
+            method: 'POST',
+            body: settings
+        });
+    }
+
+    async testLLMConnection(settings) {
+        return this.request('/llm/test', {
+            method: 'POST',
+            body: settings
+        });
+    }
+
     // ==================== Map ====================
 
     async getMapGeoJSON() {
@@ -255,7 +276,9 @@ class WebSocketClient {
     }
 
     connect() {
-        const wsUrl = `ws://localhost:3000`;
+        // Dynamically resolve WebSocket URL from browser origin
+        const wsProtocol = (window.location.protocol === 'https:') ? 'wss:' : 'ws:';
+        const wsUrl = `${wsProtocol}//${window.location.host}`;
 
         try {
             this.ws = new WebSocket(wsUrl);

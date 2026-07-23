@@ -18,12 +18,6 @@ A historically accurate grand strategy game set in the 1935-1945 period, featuri
 - **JSON Architecture**: No database required - everything is stored in JSON files for maximum simplicity.
 - **City & Unit Visualization**: Markers for world capitals and historical military units.
 
-## Requirements
-
-- **Node.js** 18+
-- **LM Studio** with a local model loaded
-- **Modern Browser** (Chrome, Firefox, Edge)
-
 ## Installation
 
 ### 1. LM Studio Setup

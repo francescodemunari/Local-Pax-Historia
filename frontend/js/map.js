@@ -7,6 +7,8 @@ class GameMap {
     constructor() {
         this.map = null;
         this.svgLayer = null; // New native SVG overlay
+        this.svgWidth = 1400.16;
+        this.svgHeight = 600;
         this.nationColors = {};
         this.selectedSVGPath = null;
         this.mainLayerGroup = null;
@@ -106,14 +108,21 @@ class GameMap {
                 const svgW = viewBox[2];
                 const svgH = viewBox[3];
 
+                this.svgWidth = svgW;
+                this.svgHeight = svgH;
+
                 // Calculate scale factor relative to standard HOI4 data coordinates (1400x600)
-                // If using high-res map (5600x2400), scale factor will be ~4
                 this.scaleFactor = svgW / 1400.16;
                 console.log(`Map Scale Factor: ${this.scaleFactor} (Base: 1400.16, Actual: ${svgW})`);
 
-                // Leaflet bounds [y, x]
+                // Leaflet bounds [y, x] for middle, left, and right overlays (360-degree world wrapping)
                 const bounds = [[0, 0], [svgH, svgW]];
-                this.map.setMaxBounds(bounds);
+                const boundsLeft = [[0, -svgW], [svgH, 0]];
+                const boundsRight = [[0, svgW], [svgH, 2 * svgW]];
+
+                // Extended bounds to allow smooth horizontal wrapping
+                const wrapBounds = [[-50, -svgW * 0.5], [svgH + 50, svgW * 1.5]];
+                this.map.setMaxBounds(wrapBounds);
 
                 // Ensure Leaflet knows the container size
                 this.map.invalidateSize();
@@ -122,24 +131,58 @@ class GameMap {
                 const fitOptions = { padding: [10, 10], animate: false };
                 this.map.fitBounds(bounds, fitOptions);
 
-                // Add SVG as overlay
-                this.svgLayer = L.svgOverlay(svgElement, bounds, {
-                    interactive: true,
-                    className: 'map-svg-overlay'
-                }).addTo(this.map);
+                // Clone SVG element for seamless horizontal wrapping
+                const svgLeft = svgElement.cloneNode(true);
+                const svgRight = svgElement.cloneNode(true);
 
-                // Add interactivity to the actual SVG paths
+                // Add SVG overlays (Left, Middle, Right)
+                this.svgLayerLeft = L.svgOverlay(svgLeft, boundsLeft, { interactive: true, className: 'map-svg-overlay' }).addTo(this.map);
+                this.svgLayer = L.svgOverlay(svgElement, bounds, { interactive: true, className: 'map-svg-overlay' }).addTo(this.map);
+                this.svgLayerRight = L.svgOverlay(svgRight, boundsRight, { interactive: true, className: 'map-svg-overlay' }).addTo(this.map);
+
+                // Add interactivity to the SVG paths
                 this.setupSVGInteractivity(svgElement, mapData.regions);
+                this.setupSVGInteractivity(svgLeft, mapData.regions);
+                this.setupSVGInteractivity(svgRight, mapData.regions);
 
-                // Initial coloring
+                // Initial coloring across all map copies
                 this.applyNationColorsToSVG(svgElement, mapData.regions);
+                this.applyNationColorsToSVG(svgLeft, mapData.regions);
+                this.applyNationColorsToSVG(svgRight, mapData.regions);
 
-                console.log('Native SVG Overlay rendered successfully.');
+                // Seamless horizontal wrap reset listener
+                this.map.off('move', this._wrapHandler);
+                this._wrapHandler = () => {
+                    if (this.isWrapping) return;
+                    const center = this.map.getCenter();
+                    const w = svgW;
+                    if (center.lng < 0) {
+                        this.isWrapping = true;
+                        this.map.setView([center.lat, center.lng + w], this.map.getZoom(), { animate: false });
+                        this.isWrapping = false;
+                    } else if (center.lng > w) {
+                        this.isWrapping = true;
+                        this.map.setView([center.lat, center.lng - w], this.map.getZoom(), { animate: false });
+                        this.isWrapping = false;
+                    }
+                };
+                this.map.on('move', this._wrapHandler);
 
-                // Final stabilization
+                console.log('Native SVG Overlay with World Wrapping rendered successfully.');
+
+                // Final stabilization & initial world object load
                 setTimeout(() => {
                     this.map.invalidateSize();
                     this.map.fitBounds(bounds, { padding: [20, 20] });
+
+                    if (window.app) {
+                        if (window.app.nationManager) {
+                            window.app.nationManager.loadNationLabels();
+                        }
+                        if (window.app.cityManager) {
+                            window.app.cityManager.loadCities();
+                        }
+                    }
                 }, 100);
             })
             .catch(err => {
@@ -496,6 +539,9 @@ class GameMap {
 
         if (app.cityManager) {
             app.cityManager.updateVisibility(zoom);
+        }
+        if (app.nationManager) {
+            app.nationManager.updateVisibility(zoom);
         }
     }
 

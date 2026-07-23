@@ -125,7 +125,7 @@ router.get('/:id/stats', async (req, res) => {
         res.json({
             id: region.id,
             name: region.name,
-            nation_code: region.nation_code || 'Neutral',
+            nation_code: region.nation_code || null,
             infrastructure: meta.infrastructure || 5,
             supply_capacity: meta.supply_capacity || 15,
             unit_count: 0

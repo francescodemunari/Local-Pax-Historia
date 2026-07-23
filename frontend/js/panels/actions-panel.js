@@ -180,7 +180,18 @@ const actionsPanel = {
             `;
 
             const container = document.getElementById('pending-actions');
-            container.insertBefore(suggestionsDiv, container.firstChild);
+            if (!container) return;
+
+            // Remove any previously shown brainstorm suggestions to keep it clean
+            container.querySelectorAll('.brainstorm-suggestions')
+                .forEach(el => el.remove());
+
+            // Defensive insert (works whether container already has a hint or is empty)
+            if (container.firstChild) {
+                container.insertBefore(suggestionsDiv, container.firstChild);
+            } else {
+                container.appendChild(suggestionsDiv);
+            }
 
         } catch (error) {
             console.error('Failed to brainstorm:', error);

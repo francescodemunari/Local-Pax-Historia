@@ -27,8 +27,9 @@ const app = {
             // Initialize map
             gameMap.init();
 
-            // Initialize city and unit managers
+            // Initialize city, nation, and unit managers
             this.cityManager = new CityManager(gameMap.map);
+            this.nationManager = new NationLabelManager(gameMap.map);
             this.unitManager = new UnitManager(gameMap.map);
 
             // Initialize panels
@@ -41,6 +42,14 @@ const app = {
             // Load nations
             await this.loadNations();
 
+            // Load LLM settings for footer initialization
+            try {
+                const settings = await api.getLLMSettings();
+                this.updateAIFooter(settings);
+            } catch (e) {
+                console.warn('Failed to load initial LLM settings for footer:', e);
+            }
+
             // Setup UI event handlers
             this.setupEventHandlers();
 
@@ -50,7 +59,11 @@ const app = {
 
         } catch (error) {
             console.error('Initialization error:', error);
-            this.showError('Unable to connect to the server. Make sure the backend is running.');
+            if (error.message && error.message.includes('fetch')) {
+                this.showError('Unable to connect to the server. Make sure the backend is running.');
+            } else {
+                this.showError(`Initialization error: ${error.message}. Check the browser console for details.`);
+            }
         }
     },
 
@@ -86,12 +99,8 @@ const app = {
                 document.getElementById('current-date').textContent = this.formatDate(data.data.new_date);
             }
 
-            // 2. Load and add new events
+            // 2. Show toast for most important event (eventsPanel already handled via REST response)
             if (data.data.events && data.data.events.length > 0) {
-                eventsPanel.events = [...(data.data.events), ...eventsPanel.events].slice(0, 100);
-                eventsPanel.renderEvents();
-
-                // Show toast for most important event
                 const major = data.data.events.find(e => ['major', 'critical'].includes(e.severity));
                 if (major) {
                     this.showToast(`WORLD EVENT: ${major.title}`, 'warning');
@@ -142,16 +151,11 @@ const app = {
             this.showLoadGame();
         });
 
-        // Nation selection
-        document.querySelectorAll('.modal-close').forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.closeAllModals();
-                if (!this.currentGame) {
-                    this.showMainMenu();
-                }
-            });
+        document.getElementById('btn-llm-settings').addEventListener('click', () => {
+            this.showLLMSettings();
         });
 
+        // Nation selection
         document.getElementById('btn-start-game').addEventListener('click', () => {
             this.startNewGame();
         });
@@ -183,12 +187,15 @@ const app = {
             });
         });
 
-        // Modal Close Buttons
+        // Modal Close Buttons (unified handler for all close buttons)
         document.querySelectorAll('.modal-close, .panel-close, .popup-close').forEach(btn => {
             btn.addEventListener('click', () => {
                 this.closeAllModals();
                 this.closeAllPopups();
                 this.closeAllPanels();
+                if (!this.currentGame) {
+                    this.showMainMenu();
+                }
             });
         });
 
@@ -213,6 +220,11 @@ const app = {
             eventsPanel.show();
         });
 
+        document.getElementById('menu-llm-settings').addEventListener('click', () => {
+            document.getElementById('side-menu').classList.add('hidden');
+            this.showLLMSettings();
+        });
+
         // Click outside side menu to close
         document.addEventListener('click', (e) => {
             const sideMenu = document.getElementById('side-menu');
@@ -220,6 +232,29 @@ const app = {
             if (!sideMenu.contains(e.target) && !menuBtn.contains(e.target)) {
                 sideMenu.classList.add('hidden');
             }
+        });
+
+        // AI Settings Modal event handlers
+        document.getElementById('btn-cancel-settings').addEventListener('click', (e) => {
+            e.preventDefault();
+            this.closeAllModals();
+            if (!this.currentGame) {
+                this.showMainMenu();
+            }
+        });
+
+        document.getElementById('btn-save-settings').addEventListener('click', (e) => {
+            e.preventDefault();
+            this.saveLLMSettings();
+        });
+
+        document.getElementById('btn-test-settings').addEventListener('click', (e) => {
+            e.preventDefault();
+            this.testLLMSettings();
+        });
+
+        document.getElementById('settings-provider').addEventListener('change', (e) => {
+            this.handleLLMProviderChange(e.target.value);
         });
     },
 
@@ -533,6 +568,12 @@ const app = {
      */
     async loadWorldObjects() {
         try {
+            // Load and display nation labels
+            if (this.nationManager) {
+                await this.nationManager.loadNationLabels();
+                console.log('Nation labels loaded and displayed');
+            }
+
             // Load and display cities
             if (this.cityManager) {
                 await this.cityManager.loadCities();
@@ -619,8 +660,8 @@ const app = {
             const nationCode = regionData.nation_code;
             let nationInfo = null;
 
-            // Only fetch nation info if we have a valid nation code (not a color hex)
-            if (nationCode && !nationCode.startsWith('#')) {
+            // Only fetch nation info if we have a valid 3-letter nation code (not a hex color, not empty)
+            if (nationCode && /^[A-Z]{3}$/.test(nationCode)) {
                 nationInfo = await api.getNationInfoForMap(nationCode, this.currentGame?.saveId);
             }
 
@@ -758,6 +799,169 @@ const app = {
                 toast.remove();
             }
         }, 5000);
+    },
+
+    /**
+     * Show LLM Settings Modal
+     */
+    async showLLMSettings() {
+        const statusEl = document.getElementById('test-connection-status');
+        statusEl.classList.add('hidden');
+        statusEl.textContent = '';
+
+        try {
+            const settings = await api.getLLMSettings();
+            document.getElementById('settings-provider').value = settings.provider || 'lm-studio';
+            document.getElementById('settings-api-url').value = settings.apiUrl || '';
+            document.getElementById('settings-api-key').value = settings.apiKey || '';
+            document.getElementById('settings-model').value = settings.model || '';
+
+            this.handleLLMProviderChange(settings.provider);
+        } catch (error) {
+            console.error('Failed to load LLM settings:', error);
+            this.showToast('Failed to load AI settings', 'error');
+        }
+
+        document.getElementById('llm-settings-modal').classList.remove('hidden');
+    },
+
+    /**
+     * Handle LLM provider selection change
+     */
+    handleLLMProviderChange(provider) {
+        const keyGroup = document.getElementById('group-api-key');
+        const urlInput = document.getElementById('settings-api-url');
+        const modelInput = document.getElementById('settings-model');
+
+        // Show/hide API Key
+        const needsKey = ['openai', 'google', 'anthropic'].includes(provider);
+        if (needsKey) {
+            keyGroup.style.display = 'flex';
+        } else {
+            keyGroup.style.display = 'none';
+        }
+
+        // Prefill default URLs and models if changing providers
+        const defaults = {
+            'lm-studio': { url: 'http://127.0.0.1:1234/v1', model: 'qwen3-vl-8b' },
+            'ollama': { url: 'http://127.0.0.1:11434/v1', model: 'llama3' },
+            'llama.cpp': { url: 'http://127.0.0.1:8080/v1', model: 'default' },
+            'vllm': { url: 'http://127.0.0.1:8000/v1', model: 'default' },
+            'openai': { url: 'https://api.openai.com/v1', model: 'gpt-4o' },
+            'google': { url: 'https://generativelanguage.googleapis.com/v1beta/openai/', model: 'gemini-1.5-flash' },
+            'anthropic': { url: 'https://api.anthropic.com/v1/messages', model: 'claude-3-5-sonnet-20240620' }
+        };
+
+        const config = defaults[provider];
+        if (config) {
+            // Only update URL if empty or if it matches one of the other defaults to avoid overwriting user edits
+            const defaultUrls = Object.values(defaults).map(d => d.url);
+            if (!urlInput.value || defaultUrls.includes(urlInput.value)) {
+                urlInput.value = config.url;
+            }
+            
+            // Only update model if empty or if it matches one of the other defaults
+            const defaultModels = Object.values(defaults).map(d => d.model);
+            if (!modelInput.value || defaultModels.includes(modelInput.value)) {
+                modelInput.value = config.model;
+            }
+        }
+    },
+
+    /**
+     * Test connection with current settings
+     */
+    async testLLMSettings() {
+        const provider = document.getElementById('settings-provider').value;
+        const apiUrl = document.getElementById('settings-api-url').value;
+        const apiKey = document.getElementById('settings-api-key').value;
+        const model = document.getElementById('settings-model').value;
+
+        const statusEl = document.getElementById('test-connection-status');
+        statusEl.classList.remove('hidden', 'success', 'error');
+        statusEl.classList.add('loading');
+        statusEl.textContent = 'Testing connection... Please wait.';
+
+        const btnTest = document.getElementById('btn-test-settings');
+        btnTest.disabled = true;
+
+        try {
+            const result = await api.testLLMConnection({ provider, apiUrl, apiKey, model });
+            statusEl.classList.remove('loading');
+            
+            if (result.success) {
+                statusEl.classList.add('success');
+                statusEl.innerHTML = `<strong>Success!</strong> Connected to ${result.model}.`;
+                this.showToast('AI connection successful', 'success');
+            } else {
+                statusEl.classList.add('error');
+                statusEl.innerHTML = `<strong>Failed!</strong> ${result.error || result.message}`;
+                this.showToast('AI connection failed', 'error');
+            }
+        } catch (error) {
+            statusEl.classList.remove('loading');
+            statusEl.classList.add('error');
+            statusEl.innerHTML = `<strong>Error!</strong> ${error.message}`;
+            this.showToast('AI connection error', 'error');
+        } finally {
+            btnTest.disabled = false;
+        }
+    },
+
+    /**
+     * Save LLM settings to backend
+     */
+    async saveLLMSettings() {
+        const provider = document.getElementById('settings-provider').value;
+        const apiUrl = document.getElementById('settings-api-url').value;
+        const apiKey = document.getElementById('settings-api-key').value;
+        const model = document.getElementById('settings-model').value;
+
+        const btnSave = document.getElementById('btn-save-settings');
+        btnSave.disabled = true;
+        btnSave.textContent = 'Saving...';
+
+        try {
+            const res = await api.saveLLMSettings({ provider, apiUrl, apiKey, model });
+            if (res.success) {
+                this.showToast('AI settings saved successfully', 'success');
+                this.updateAIFooter(res.settings);
+                this.closeAllModals();
+                if (!this.currentGame) {
+                    this.showMainMenu();
+                }
+            } else {
+                this.showToast('Failed to save AI settings', 'error');
+            }
+        } catch (error) {
+            console.error('Save settings error:', error);
+            this.showToast('Error saving AI settings: ' + error.message, 'error');
+        } finally {
+            btnSave.disabled = false;
+            btnSave.textContent = 'Save Settings';
+        }
+    },
+
+    /**
+     * Update AI footer label in Main Menu
+     */
+    updateAIFooter(settings) {
+        const footerEl = document.getElementById('menu-ai-footer');
+        if (!footerEl) return;
+
+        const providerNames = {
+            'lm-studio': 'LM Studio',
+            'ollama': 'Ollama',
+            'llama.cpp': 'Llama.cpp',
+            'vllm': 'vLLM',
+            'openai': 'OpenAI',
+            'google': 'Google Gemini',
+            'anthropic': 'Anthropic Claude'
+        };
+
+        const providerName = providerNames[settings.provider] || 'AI';
+        const modelName = settings.model ? ` • ${settings.model}` : '';
+        footerEl.textContent = `Powered by ${providerName}${modelName}`;
     }
 };
 

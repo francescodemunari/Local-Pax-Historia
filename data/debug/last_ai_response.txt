@@ -1,72 +1,71 @@
+```json
 {
-  "events": [
-    {
-      "id": "event_001",
-      "date": "1935-12-01",
-      "nation": "ITA",
-      "type": "military",
-      "description": "Le truppe di rinforzo della 2^ Divisione Eritrea e del 1° Reggimento Alpini, partite da Massaua, raggiungono il fronte di Amba Aradam il 5 dicembre. Il generale Badoglio ordina un'offensiva di contenimento per isolare le posizioni etiopiche sulle pendici del Monte Guglielmo, mentre il 3° Corpo d'Armata avanza verso il passo di Gondar. Le perdite etiopiche aumentano, ma la resistenza è ancora forte.",
-      "consequences": [
-        "ITA: +20% capacità di fronte a Amba Aradam, ma +10% perdite per il trasporto.",
-        "ETH: -15% morale nelle truppe di montagna, ma +5% resistenza nelle posizioni difensive."
-      ]
-    },
-    {
-      "id": "event_002",
-      "date": "1935-12-05",
-      "nation": "ETH",
-      "type": "military",
-      "description": "L'esercito etiope, guidato dal generale Ras Desta, concentra le sue forze sul passo di Amba Alagi, lanciando un'offensiva di disturbo contro i trasporti italiani. Le truppe etiopiche, appoggiate da unità di cavalleria, riuscendo a bloccare per 48 ore l'accesso alle linee di rifornimento del fronte occidentale. La battaglia si svolge lungo il fiume Chala, con combattimenti intensi tra Alpini e Guardie Imperiali.",
-      "consequences": [
-        "ITA: -25% rifornimenti per 72 ore, ma +10% unità di fanteria dislocate in risposta.",
-        "ETH: +15% morale nelle truppe di montagna, ma -5% capacità di movimento per le perdite di cavalleria."
-      ]
-    },
-    {
-      "id": "event_003",
-      "date": "1935-12-10",
-      "nation": "ITA",
-      "type": "diplomatic",
-      "description": "Il governo italiano, attraverso l'ambasciatore a Berlino, invia una nota formale a Hitler, esprimendo il desiderio di un'eventuale alleanza contro le potenze coloniali. Hitler, nonostante la sua crescente tensione con la Francia, risponde con un'offerta di supporto tecnico e logistico per la campagna etiope, ma senza impegno militare immediato.",
-      "consequences": [
-        "ITA: +10% supporto diplomatico da GER, ma -5% credibilità tra le potenze europee per la sua espansione.",
-        "GER: +5% stabilità interna per il supporto all'Italia, ma +10% tensione con la Francia."
-      ]
-    },
-    {
-      "id": "event_004",
-      "date": "1935-12-15",
-      "nation": "ETH",
-      "type": "military",
-      "description": "L'esercito etiope, dopo aver rafforzato le difese di Amba Alagi, organizza un'offensiva coordinata con i ribelli della regione di Shewa. Le truppe etiopiche, supportate da unità di fanteria e artiglieria leggera, attaccano le linee di rifornimento italiani a Gondar, causando un collasso temporaneo del sistema di trasporto. Il generale Badoglio ordina una contraffazione di rifornimenti a Massaua per evitare un'eventuale rotta.",
-      "consequences": [
-        "ITA: -30% rifornimenti per 48 ore, ma +20% capacità di rifornimento da Massaua.",
-        "ETH: +20% morale nelle truppe di montagna, ma -10% capacità di movimento per le perdite di artiglieria."
-      ]
-    },
-    {
-      "id": "event_005",
-      "date": "1935-12-20",
-      "nation": "ITA",
-      "type": "economic",
-      "description": "Il governo italiano, per sostenere la campagna in Etiopia, emette una nuova serie di obbligazioni di guerra a 5 anni, con un tasso di interesse del 12%. L'operazione, finanziata da banche private e industriali, permette di rafforzare le truppe di rinforzo e di rifornire le basi logistico-militari a Massaua. Tuttavia, il debito pubblico aumenta di 150 milioni di lire.",
-      "consequences": [
-        "ITA: +25% capacità di rifornimento e +15% truppe di rinforzo, ma -10% stabilità economica a breve termine.",
-        "GLOBAL: +5% tensione tra le potenze europee per la crescita del debito italiano."
-      ]
-    },
-    {
-      "id": "event_006",
-      "date": "1935-12-25",
-      "nation": "ENG",
-      "type": "diplomatic",
-      "description": "Il governo britannico, attraverso il suo ambasciatore a Roma, invia una nota di protesta ufficiale contro l'invasione italiana in Etiopia. L'UK, pur non dichiarando guerra, impone un embargo temporaneo su alcuni materiali strategici, come l'acciaio e il petrolio, affermando che l'Italia sta violando le norme internazionali. La risposta italiana è un duro affronto diplomatico, ma senza ulteriori azioni.",
-      "consequences": [
-        "ITA: -5% supporto diplomatico da ENG, ma +10% supporto tra le potenze coloniali.",
-        "ENG: +10% stabilità interna per il sostegno all'ETI, ma -5% credibilità per l'embargo."
-      ]
-    }
-  ],
-  "turn_number": 1,
-  "status": "completed"
+    "consequences": "The Italian command has successfully transitioned from a localized colonial operation to a full-scale imperial conquest. By mobilizing the Regia Aeronautica and the Regio Esercito simultaneously, Italy has achieved significant tactical breakthroughs in the Ethiopian highlands. However, the 'friction' of the African theater is beginning to manifest: the lack of a unified logistical command is causing significant delays in supply chains reaching the front lines. Internationally, the move has solidified the 'Mutilated Victory' narrative domestically, boosting Mussolini's popularity, but it has also forced the United Kingdom and France to take a harder line in the League of Nations, leading to a tightening of economic sanctions that will begin to pinch the Italian treasury.",
+    "events": [
+        {
+            "title": "The Siege of Amba Aradam",
+            "description": "Italian forces, led by General Badoglio's divisions, launch a coordinated assault on the Ethiopian stronghold of Amba Aradam. The Regia Aeronautica provides heavy bombardment, successfully suppressing Ethiopian artillery positions and allowing the Alpini and Bersaglieri units to seize key heights.",
+            "event_type": "military",
+            "severity": "major",
+            "affected_nations": ["ITA"],
+            "state_changes": {
+                "ITA": {
+                    "stability": 1,
+                    "war_support": 5,
+                    "treasury": -2,
+                    "occupied_regions": ["AMBA_ARADAM"]
+                }
+            }
+        },
+        {
+            "title": "Logistical Friction in the Highlands",
+            "description": "The rapid advance of the Italian land forces is being hampered by the rugged terrain and the destruction of infrastructure. Supply columns moving from the coast toward the interior are suffering from a lack of spare parts and fuel, leading to a buildup of equipment at the base of the mountain passes.",
+            "event_type": "economic",
+            "severity": "moderate",
+            "affected_nations": ["ITA"],
+            "state_changes": {
+                "ITA": {
+                    "stability": -1,
+                    "war_support": -1,
+                    "treasury": -3
+                }
+            }
+        },
+        {
+            "title": "League of Nations Sanctions Tightened",
+            "description": "In response to the 'full-scale' nature of the invasion, the United Kingdom and France have moved to restrict the export of specialized machinery and aviation fuel to Italy. This move aims to cripple the Italian war machine's ability to sustain a long-term campaign.",
+            "event_type": "diplomatic",
+            "severity": "moderate",
+            "affected_nations": ["ITA", "ENG", "FRA"],
+            "state_changes": {
+                "ITA": {
+                    "stability": -2,
+                    "war_support": 2,
+                    "treasury": -5
+                },
+                "ENG": {
+                    "stability": 2
+                },
+                "FRA": {
+                    "stability": 2
+                }
+            }
+        },
+        {
+            "title": "Ethiopian Scorched Earth Policy",
+            "description": "Facing overwhelming aerial superiority, Ethiopian forces have begun a scorched-earth retreat. They are destroying crops and poisoning wells along the primary Italian advance routes to deny the Regio Esercito local sustenance.",
+            "event_type": "social",
+            "severity": "minor",
+            "affected_nations": ["ITA"],
+            "state_changes": {
+                "ITA": {
+                    "stability": -1,
+                    "war_support": 2,
+                    "treasury": -1
+                }
+            }
+        }
+    ],
+    "global_tension_delta": 5
 }
+```

@@ -74,4 +74,22 @@ router.get('/filter/major', (req, res) => {
     }
 });
 
+// Search nations by name / code / leader (used by frontend searchNations + diplomacy filter)
+router.get('/search/:query', (req, res) => {
+    try {
+        const q = (req.params.query || '').toLowerCase();
+        if (!q) return res.json([]);
+        const nations = Object.values(getNationsWithTerritory()).filter(n =>
+            (n.name && n.name.toLowerCase().includes(q)) ||
+            (n.code && n.code.toLowerCase().includes(q)) ||
+            (n.leader_name && n.leader_name.toLowerCase().includes(q)) ||
+            (n.capital && n.capital.toLowerCase().includes(q))
+        );
+        res.json(nations);
+    } catch (error) {
+        console.error('Error searching nations:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = router;
