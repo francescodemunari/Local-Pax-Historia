@@ -46,13 +46,26 @@ class CityManager {
         const capitalCities = this.cities.filter(city => city.type === 'capital' || city.is_capital);
 
         capitalCities.forEach(city => {
-            if (!city.coords || !Array.isArray(city.coords) || city.coords.length < 2) {
-                console.warn(`Skipping invalid city: ${city.name}`, city);
-                return;
+            let cx = city.coords ? city.coords[0] : null;
+            let cy = city.coords ? city.coords[1] : null;
+
+            // Dynamically query native SVG path getBBox() for sub-pixel accuracy
+            const targetRegionId = city.region_id || city.id;
+            const svgPath = document.querySelector(`.map-svg-overlay path[id="${targetRegionId}"]`);
+            if (svgPath) {
+                try {
+                    const bbox = svgPath.getBBox();
+                    if (bbox && bbox.width > 0 && bbox.height > 0) {
+                        cx = bbox.x + bbox.width / 2;
+                        cy = bbox.y + bbox.height / 2;
+                    }
+                } catch (e) {}
             }
 
-            const scaledX = city.coords[0] * scale;
-            const scaledY = city.coords[1] * scale;
+            if (cx === null || cy === null) return;
+
+            const scaledX = cx * scale;
+            const scaledY = cy * scale;
             const baseLat = mapHeight - scaledY;
 
             // Replicate markers for world wrapping: middle, left (-mapWidth), right (+mapWidth)

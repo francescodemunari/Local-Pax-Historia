@@ -1,5 +1,5 @@
 {
-  "id": "1785766981984",
+  "id": "1785768449068",
   "name": "Kingdom of Italy - 1935-12-01",
   "playerNationCode": "ITA",
   "currentDate": "1935-12-01",
@@ -924,7 +924,7 @@
   "events": [],
   "units": [
     {
-      "id": "unit_1785766981984_0",
+      "id": "unit_1785768449068_0",
       "name": "1st Eritrean Division",
       "unit_type": "infantry",
       "nation_code": "ITA",
@@ -936,10 +936,10 @@
       "strength": 100,
       "organization": 100,
       "experience": 0,
-      "created_at": "2026-08-03T14:23:01.984Z"
+      "created_at": "2026-08-03T14:47:29.068Z"
     },
     {
-      "id": "unit_1785766981984_1",
+      "id": "unit_1785768449068_1",
       "name": "2nd Eritrean Division",
       "unit_type": "infantry",
       "nation_code": "ITA",
@@ -951,10 +951,10 @@
       "strength": 100,
       "organization": 100,
       "experience": 0,
-      "created_at": "2026-08-03T14:23:01.984Z"
+      "created_at": "2026-08-03T14:47:29.068Z"
     },
     {
-      "id": "unit_1785766981984_2",
+      "id": "unit_1785768449068_2",
       "name": "Native Army Corps",
       "unit_type": "infantry",
       "nation_code": "ITA",
@@ -966,10 +966,10 @@
       "strength": 100,
       "organization": 100,
       "experience": 0,
-      "created_at": "2026-08-03T14:23:01.984Z"
+      "created_at": "2026-08-03T14:47:29.068Z"
     },
     {
-      "id": "unit_1785766981984_3",
+      "id": "unit_1785768449068_3",
       "name": "Granatieri Division",
       "unit_type": "infantry",
       "nation_code": "ITA",
@@ -981,10 +981,10 @@
       "strength": 100,
       "organization": 100,
       "experience": 0,
-      "created_at": "2026-08-03T14:23:01.984Z"
+      "created_at": "2026-08-03T14:47:29.068Z"
     },
     {
-      "id": "unit_1785766981984_4",
+      "id": "unit_1785768449068_4",
       "name": "Imperial Guard Kebur Zabagna",
       "unit_type": "infantry",
       "nation_code": "ETH",
@@ -996,10 +996,10 @@
       "strength": 100,
       "organization": 100,
       "experience": 0,
-      "created_at": "2026-08-03T14:23:01.984Z"
+      "created_at": "2026-08-03T14:47:29.068Z"
     },
     {
-      "id": "unit_1785766981984_5",
+      "id": "unit_1785768449068_5",
       "name": "Ogaden Army",
       "unit_type": "infantry",
       "nation_code": "ETH",
@@ -1011,10 +1011,10 @@
       "strength": 100,
       "organization": 100,
       "experience": 0,
-      "created_at": "2026-08-03T14:23:01.984Z"
+      "created_at": "2026-08-03T14:47:29.068Z"
     },
     {
-      "id": "unit_1785766981984_6",
+      "id": "unit_1785768449068_6",
       "name": "Northern Army",
       "unit_type": "infantry",
       "nation_code": "ETH",
@@ -1026,10 +1026,10 @@
       "strength": 100,
       "organization": 100,
       "experience": 0,
-      "created_at": "2026-08-03T14:23:01.984Z"
+      "created_at": "2026-08-03T14:47:29.068Z"
     },
     {
-      "id": "unit_1785766981984_7",
+      "id": "unit_1785768449068_7",
       "name": "1st Panzer Division",
       "unit_type": "armor",
       "nation_code": "GER",
@@ -1041,10 +1041,10 @@
       "strength": 100,
       "organization": 100,
       "experience": 0,
-      "created_at": "2026-08-03T14:23:01.984Z"
+      "created_at": "2026-08-03T14:47:29.068Z"
     },
     {
-      "id": "unit_1785766981984_8",
+      "id": "unit_1785768449068_8",
       "name": "1st Infantry Division",
       "unit_type": "infantry",
       "nation_code": "GER",
@@ -1056,10 +1056,10 @@
       "strength": 100,
       "organization": 100,
       "experience": 0,
-      "created_at": "2026-08-03T14:23:01.984Z"
+      "created_at": "2026-08-03T14:47:29.068Z"
     },
     {
-      "id": "unit_1785766981984_9",
+      "id": "unit_1785768449068_9",
       "name": "1st Armored Division",
       "unit_type": "armor",
       "nation_code": "FRA",
@@ -1071,10 +1071,10 @@
       "strength": 100,
       "organization": 100,
       "experience": 0,
-      "created_at": "2026-08-03T14:23:01.984Z"
+      "created_at": "2026-08-03T14:47:29.068Z"
     },
     {
-      "id": "unit_1785766981984_10",
+      "id": "unit_1785768449068_10",
       "name": "7th Army",
       "unit_type": "infantry",
       "nation_code": "FRA",
@@ -1086,10 +1086,10 @@
       "strength": 100,
       "organization": 100,
       "experience": 0,
-      "created_at": "2026-08-03T14:23:01.984Z"
+      "created_at": "2026-08-03T14:47:29.068Z"
     },
     {
-      "id": "unit_1785766981984_11",
+      "id": "unit_1785768449068_11",
       "name": "Home Fleet",
       "unit_type": "naval",
       "nation_code": "ENG",
@@ -1101,10 +1101,10 @@
       "strength": 100,
       "organization": 100,
       "experience": 0,
-      "created_at": "2026-08-03T14:23:01.984Z"
+      "created_at": "2026-08-03T14:47:29.068Z"
     },
     {
-      "id": "unit_1785766981984_12",
+      "id": "unit_1785768449068_12",
       "name": "British Expeditionary Force",
       "unit_type": "infantry",
       "nation_code": "ENG",
@@ -1116,11 +1116,11 @@
       "strength": 100,
       "organization": 100,
       "experience": 0,
-      "created_at": "2026-08-03T14:23:01.984Z"
+      "created_at": "2026-08-03T14:47:29.068Z"
     }
   ],
   "history": [],
-  "created_at": "2026-08-03T14:23:01.984Z",
+  "created_at": "2026-08-03T14:47:29.068Z",
   "world_context": "Historical 1936 start. Europe is on the brink of tension as ideologies clash.",
   "simulation_rules": "1. Realistic consequences. 2. Diplomatic weight. 3. Historical plausibility with player flexibility."
 }

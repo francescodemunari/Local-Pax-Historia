@@ -4,6 +4,7 @@
         "name": "Washington DC",
         "nation_code": "USA",
         "type": "capital",
+        "region_id": "District_of_Columbia",
         "coords": [
             239.2,
             107
@@ -14,6 +15,7 @@
         "name": "New York",
         "nation_code": "USA",
         "type": "major_city",
+        "region_id": "New_York",
         "coords": [
             350,
             130
@@ -24,6 +26,7 @@
         "name": "Chicago",
         "nation_code": "USA",
         "type": "major_city",
+        "region_id": "Illinois",
         "coords": [
             300,
             130
@@ -34,6 +37,7 @@
         "name": "San Francisco",
         "nation_code": "USA",
         "type": "major_city",
+        "region_id": "California",
         "coords": [
             195,
             155
@@ -44,6 +48,7 @@
         "name": "Los Angeles",
         "nation_code": "USA",
         "type": "major_city",
+        "region_id": "California",
         "coords": [
             210,
             170
@@ -54,9 +59,10 @@
         "name": "London",
         "nation_code": "ENG",
         "type": "capital",
+        "region_id": "Greater_London_Area",
         "coords": [
-            705.2,
-            128.3
+            693.1,
+            118.3
         ]
     },
     {
@@ -64,6 +70,7 @@
         "name": "Liverpool",
         "nation_code": "ENG",
         "type": "major_city",
+        "region_id": "Lancashire",
         "coords": [
             684.2,
             110.2
@@ -74,6 +81,7 @@
         "name": "Gibraltar",
         "nation_code": "ENG",
         "type": "fortress",
+        "region_id": "Gibraltar",
         "coords": [
             682,
             199.8
@@ -84,6 +92,7 @@
         "name": "Suez Canal",
         "nation_code": "ENG",
         "type": "strategic",
+        "region_id": "Suez",
         "coords": [
             830.2,
             227.5
@@ -94,6 +103,7 @@
         "name": "Alexandria",
         "nation_code": "ENG",
         "type": "major_city",
+        "region_id": "Alexandria",
         "coords": [
             826.2,
             227.3
@@ -104,6 +114,7 @@
         "name": "Cairo",
         "nation_code": "ENG",
         "type": "major_city",
+        "region_id": "Cairo",
         "coords": [
             838.5,
             256.8
@@ -114,9 +125,10 @@
         "name": "Paris",
         "nation_code": "FRA",
         "type": "capital",
+        "region_id": "Ile_de_France",
         "coords": [
             712.3,
-            148.6
+            140.1
         ]
     },
     {
@@ -124,6 +136,7 @@
         "name": "Marseille",
         "nation_code": "FRA",
         "type": "major_city",
+        "region_id": "Bouches_du_Rhone",
         "coords": [
             710,
             170
@@ -134,6 +147,7 @@
         "name": "Lyon",
         "nation_code": "FRA",
         "type": "major_city",
+        "region_id": "Rhone",
         "coords": [
             720.5,
             163.4
@@ -144,6 +158,7 @@
         "name": "Algiers",
         "nation_code": "FRA",
         "type": "major_city",
+        "region_id": "Algiers",
         "coords": [
             708.3,
             208.4
@@ -154,6 +169,7 @@
         "name": "Dakar",
         "nation_code": "FRA",
         "type": "major_city",
+        "region_id": "Senegal",
         "coords": [
             610,
             322
@@ -164,9 +180,21 @@
         "name": "Berlin",
         "nation_code": "GER",
         "type": "capital",
+        "region_id": "Brandenburg",
         "coords": [
-            756.3,
-            127
+            745.2,
+            114.8
+        ]
+    },
+    {
+        "id": "konigsberg",
+        "name": "Königsberg",
+        "nation_code": "GER",
+        "type": "fortress",
+        "region_id": "Königsberg",
+        "coords": [
+            783.3,
+            115.2
         ]
     },
     {
@@ -174,6 +202,7 @@
         "name": "Munich",
         "nation_code": "GER",
         "type": "major_city",
+        "region_id": "Oberbayern",
         "coords": [
             740,
             148
@@ -184,19 +213,10 @@
         "name": "Hamburg",
         "nation_code": "GER",
         "type": "major_city",
+        "region_id": "Holstein",
         "coords": [
             738,
             113
-        ]
-    },
-    {
-        "id": "konigsberg",
-        "name": "Königsberg",
-        "nation_code": "GER",
-        "type": "major_city",
-        "coords": [
-            783.3,
-            115.2
         ]
     },
     {
@@ -204,9 +224,10 @@
         "name": "Rome",
         "nation_code": "ITA",
         "type": "capital",
+        "region_id": "Lazio",
         "coords": [
-            752.8,
-            177.6
+            744.4,
+            167.3
         ]
     },
     {
@@ -214,6 +235,7 @@
         "name": "Milan",
         "nation_code": "ITA",
         "type": "major_city",
+        "region_id": "Lombardia",
         "coords": [
             740,
             159.8
@@ -224,6 +246,7 @@
         "name": "Naples",
         "nation_code": "ITA",
         "type": "major_city",
+        "region_id": "Campania",
         "coords": [
             762.5,
             185
@@ -234,6 +257,7 @@
         "name": "Venice",
         "nation_code": "ITA",
         "type": "major_city",
+        "region_id": "Veneto",
         "coords": [
             753,
             163
@@ -244,19 +268,10 @@
         "name": "Tripoli",
         "nation_code": "ITA",
         "type": "major_city",
+        "region_id": "Tripolitania",
         "coords": [
             755,
             225
-        ]
-    },
-    {
-        "id": "addis_abeba",
-        "name": "Addis Abeba",
-        "nation_code": "ETH",
-        "type": "capital",
-        "coords": [
-            870,
-            345
         ]
     },
     {
@@ -264,9 +279,10 @@
         "name": "Moscow",
         "nation_code": "SOV",
         "type": "capital",
+        "region_id": "Moscow",
         "coords": [
-            863.2,
-            109.6
+            843.9,
+            95.5
         ]
     },
     {
@@ -274,6 +290,7 @@
         "name": "Leningrad",
         "nation_code": "SOV",
         "type": "major_city",
+        "region_id": "Leningrad",
         "coords": [
             820.6,
             84.3
@@ -284,6 +301,7 @@
         "name": "Stalingrad",
         "nation_code": "SOV",
         "type": "major_city",
+        "region_id": "Stalingrad",
         "coords": [
             908.5,
             153
@@ -294,6 +312,7 @@
         "name": "Kiev",
         "nation_code": "SOV",
         "type": "major_city",
+        "region_id": "Kiev",
         "coords": [
             840,
             132
@@ -303,7 +322,8 @@
         "id": "sevastopol",
         "name": "Sevastopol",
         "nation_code": "SOV",
-        "type": "major_city",
+        "type": "fortress",
+        "region_id": "Crimea",
         "coords": [
             849.4,
             163
@@ -313,7 +333,8 @@
         "id": "vladivostok",
         "name": "Vladivostok",
         "nation_code": "SOV",
-        "type": "major_city",
+        "type": "fortress",
+        "region_id": "Vladivostok",
         "coords": [
             1220,
             160
@@ -324,9 +345,10 @@
         "name": "Tokyo",
         "nation_code": "JAP",
         "type": "capital",
+        "region_id": "Kanto",
         "coords": [
-            1249.7,
-            207.7
+            1243.3,
+            194.6
         ]
     },
     {
@@ -334,6 +356,7 @@
         "name": "Osaka",
         "nation_code": "JAP",
         "type": "major_city",
+        "region_id": "Kansai",
         "coords": [
             1237.6,
             210
@@ -344,6 +367,7 @@
         "name": "Seoul",
         "nation_code": "JAP",
         "type": "major_city",
+        "region_id": "Gyeonggi",
         "coords": [
             1211.8,
             197.9
@@ -354,6 +378,7 @@
         "name": "Nanjing",
         "nation_code": "CHI",
         "type": "capital",
+        "region_id": "Nanjing",
         "coords": [
             1168,
             217
@@ -364,19 +389,10 @@
         "name": "Shanghai",
         "nation_code": "CHI",
         "type": "major_city",
+        "region_id": "Jiangsu",
         "coords": [
             1175.7,
             220
-        ]
-    },
-    {
-        "id": "beijing",
-        "name": "Beijing",
-        "nation_code": "CHI",
-        "type": "major_city",
-        "coords": [
-            1153,
-            183
         ]
     },
     {
@@ -384,6 +400,7 @@
         "name": "Chongqing",
         "nation_code": "CHI",
         "type": "major_city",
+        "region_id": "Sichuan",
         "coords": [
             1113.7,
             240.3
@@ -394,6 +411,7 @@
         "name": "Guangzhou",
         "nation_code": "CHI",
         "type": "major_city",
+        "region_id": "Guangdong",
         "coords": [
             1134.3,
             261.6
@@ -404,9 +422,10 @@
         "name": "Madrid",
         "nation_code": "SPR",
         "type": "capital",
+        "region_id": "Madrid",
         "coords": [
-            681.5,
-            183.6
+            679.6,
+            175.2
         ]
     },
     {
@@ -414,6 +433,7 @@
         "name": "Barcelona",
         "nation_code": "SPR",
         "type": "major_city",
+        "region_id": "Catalonia",
         "coords": [
             700,
             180
@@ -424,6 +444,7 @@
         "name": "Lisbon",
         "nation_code": "POR",
         "type": "capital",
+        "region_id": "Lisbon",
         "coords": [
             665,
             190
@@ -434,9 +455,10 @@
         "name": "Warsaw",
         "nation_code": "POL",
         "type": "capital",
+        "region_id": "Mazovia",
         "coords": [
-            790,
-            122
+            788.1,
+            118.2
         ]
     },
     {
@@ -444,9 +466,10 @@
         "name": "Budapest",
         "nation_code": "HUN",
         "type": "capital",
+        "region_id": "Northern_Hungary",
         "coords": [
-            785,
-            150
+            775.2,
+            144.2
         ]
     },
     {
@@ -454,9 +477,10 @@
         "name": "Bucharest",
         "nation_code": "ROM",
         "type": "capital",
+        "region_id": "Muntenia",
         "coords": [
-            812,
-            165
+            818.1,
+            158.2
         ]
     },
     {
@@ -464,9 +488,10 @@
         "name": "Belgrade",
         "nation_code": "YUG",
         "type": "capital",
+        "region_id": "Serbia",
         "coords": [
-            790,
-            167
+            782.1,
+            158.2
         ]
     },
     {
@@ -474,9 +499,10 @@
         "name": "Sofia",
         "nation_code": "BUL",
         "type": "capital",
+        "region_id": "Sofia",
         "coords": [
-            800,
-            180
+            793.1,
+            168.2
         ]
     },
     {
@@ -484,9 +510,10 @@
         "name": "Athens",
         "nation_code": "GRE",
         "type": "capital",
+        "region_id": "Attica",
         "coords": [
-            800,
-            200
+            789.1,
+            186.2
         ]
     },
     {
@@ -494,9 +521,10 @@
         "name": "Ankara",
         "nation_code": "TUR",
         "type": "capital",
+        "region_id": "Ankara",
         "coords": [
-            850,
-            192
+            835.1,
+            185.2
         ]
     },
     {
@@ -504,99 +532,10 @@
         "name": "Istanbul",
         "nation_code": "TUR",
         "type": "major_city",
+        "region_id": "Thrace",
         "coords": [
             812.5,
             181.2
-        ]
-    },
-    {
-        "id": "vienna",
-        "name": "Vienna",
-        "nation_code": "AUS",
-        "type": "capital",
-        "coords": [
-            770,
-            147
-        ]
-    },
-    {
-        "id": "prague",
-        "name": "Prague",
-        "nation_code": "CZE",
-        "type": "capital",
-        "coords": [
-            760,
-            136
-        ]
-    },
-    {
-        "id": "copenhagen",
-        "name": "Copenhagen",
-        "nation_code": "DEN",
-        "type": "capital",
-        "coords": [
-            740,
-            105
-        ]
-    },
-    {
-        "id": "stockholm",
-        "name": "Stockholm",
-        "nation_code": "SWE",
-        "type": "capital",
-        "coords": [
-            762,
-            80
-        ]
-    },
-    {
-        "id": "oslo",
-        "name": "Oslo",
-        "nation_code": "NOR",
-        "type": "capital",
-        "coords": [
-            730,
-            83
-        ]
-    },
-    {
-        "id": "helsinki",
-        "name": "Helsinki",
-        "nation_code": "FIN",
-        "type": "capital",
-        "coords": [
-            825.7,
-            73.8
-        ]
-    },
-    {
-        "id": "amsterdam",
-        "name": "Amsterdam",
-        "nation_code": "HOL",
-        "type": "capital",
-        "coords": [
-            715,
-            122
-        ]
-    },
-    {
-        "id": "brussels",
-        "name": "Brussels",
-        "nation_code": "BEL",
-        "type": "capital",
-        "coords": [
-            712,
-            130
-        ]
-    },
-    {
-        "id": "bern",
-        "name": "Bern",
-        "nation_code": "SWI",
-        "type": "capital",
-        "coords": [
-            720,
-            155
         ]
     },
     {
@@ -604,6 +543,7 @@
         "name": "Tehran",
         "nation_code": "PER",
         "type": "capital",
+        "region_id": "Tehran",
         "coords": [
             930,
             205
@@ -614,6 +554,7 @@
         "name": "Baghdad",
         "nation_code": "IRQ",
         "type": "capital",
+        "region_id": "Baghdad",
         "coords": [
             886.1,
             229.7
@@ -624,19 +565,109 @@
         "name": "Kabul",
         "nation_code": "AFG",
         "type": "capital",
+        "region_id": "Kabul",
         "coords": [
             970.8,
             211.3
         ]
     },
     {
-        "id": "bangkok",
-        "name": "Bangkok",
-        "nation_code": "SIA",
+        "id": "vienna",
+        "name": "Vienna",
+        "nation_code": "AUS",
         "type": "capital",
+        "region_id": "Niederösterreich",
         "coords": [
-            1090,
-            310
+            768.2,
+            142.1
+        ]
+    },
+    {
+        "id": "prague",
+        "name": "Prague",
+        "nation_code": "CZE",
+        "type": "capital",
+        "region_id": "Bohemia",
+        "coords": [
+            758.1,
+            132.5
+        ]
+    },
+    {
+        "id": "copenhagen",
+        "name": "Copenhagen",
+        "nation_code": "DEN",
+        "type": "capital",
+        "region_id": "Sjaelland",
+        "coords": [
+            738.2,
+            98.5
+        ]
+    },
+    {
+        "id": "stockholm",
+        "name": "Stockholm",
+        "nation_code": "SWE",
+        "type": "capital",
+        "region_id": "Södermanland",
+        "coords": [
+            765.2,
+            74.1
+        ]
+    },
+    {
+        "id": "oslo",
+        "name": "Oslo",
+        "nation_code": "NOR",
+        "type": "capital",
+        "region_id": "Eastern_Norway",
+        "coords": [
+            735.1,
+            78.2
+        ]
+    },
+    {
+        "id": "helsinki",
+        "name": "Helsinki",
+        "nation_code": "FIN",
+        "type": "capital",
+        "region_id": "Uusimaa",
+        "coords": [
+            805.1,
+            66.2
+        ]
+    },
+    {
+        "id": "brussels",
+        "name": "Brussels",
+        "nation_code": "BEL",
+        "type": "capital",
+        "region_id": "Vlaanderen",
+        "coords": [
+            710.2,
+            130.5
+        ]
+    },
+    {
+        "id": "amsterdam",
+        "name": "Amsterdam",
+        "nation_code": "HOL",
+        "type": "capital",
+        "region_id": "Holland",
+        "coords": [
+            715.1,
+            122.3
+        ]
+    },
+    {
+        "id": "bern",
+        "name": "Bern",
+        "nation_code": "SWI",
+        "type": "capital",
+        "region_id": "Swiss_Plateau",
+        "coords": [
+            721.5,
+            148.2
         ]
     },
     {
@@ -644,19 +675,10 @@
         "name": "Manila",
         "nation_code": "PHI",
         "type": "capital",
+        "region_id": "Manila",
         "coords": [
             1178,
             295
-        ]
-    },
-    {
-        "id": "jakarta",
-        "name": "Jakarta",
-        "nation_code": "INS",
-        "type": "major_city",
-        "coords": [
-            1120,
-            385
         ]
     },
     {
@@ -664,6 +686,7 @@
         "name": "Singapore",
         "nation_code": "ENG",
         "type": "fortress",
+        "region_id": "Malaya",
         "coords": [
             1103,
             343
@@ -674,29 +697,10 @@
         "name": "Rangoon",
         "nation_code": "ENG",
         "type": "major_city",
+        "region_id": "Burma",
         "coords": [
             1055,
             295
-        ]
-    },
-    {
-        "id": "new_delhi",
-        "name": "New Delhi",
-        "nation_code": "ENG",
-        "type": "major_city",
-        "coords": [
-            990,
-            255
-        ]
-    },
-    {
-        "id": "bombay",
-        "name": "Bombay",
-        "nation_code": "ENG",
-        "type": "major_city",
-        "coords": [
-            970,
-            285
         ]
     },
     {
@@ -704,9 +708,21 @@
         "name": "Calcutta",
         "nation_code": "ENG",
         "type": "major_city",
+        "region_id": "Bengal",
         "coords": [
             1030,
             275
+        ]
+    },
+    {
+        "id": "bombay",
+        "name": "Bombay",
+        "nation_code": "ENG",
+        "type": "major_city",
+        "region_id": "Bombay",
+        "coords": [
+            970,
+            285
         ]
     },
     {
@@ -714,29 +730,10 @@
         "name": "Karachi",
         "nation_code": "ENG",
         "type": "major_city",
+        "region_id": "Sind",
         "coords": [
             950,
             260
-        ]
-    },
-    {
-        "id": "rio_de_janeiro",
-        "name": "Rio de Janeiro",
-        "nation_code": "BRA",
-        "type": "capital",
-        "coords": [
-            500,
-            395
-        ]
-    },
-    {
-        "id": "buenos_aires",
-        "name": "Buenos Aires",
-        "nation_code": "ARG",
-        "type": "capital",
-        "coords": [
-            475,
-            460
         ]
     },
     {
@@ -744,6 +741,7 @@
         "name": "Santiago",
         "nation_code": "CHL",
         "type": "capital",
+        "region_id": "Santiago",
         "coords": [
             445,
             445
@@ -754,6 +752,7 @@
         "name": "Lima",
         "nation_code": "PER",
         "type": "capital",
+        "region_id": "Lima",
         "coords": [
             390,
             348
@@ -764,26 +763,29 @@
         "name": "Bogotá",
         "nation_code": "COL",
         "type": "capital",
+        "region_id": "Bogota",
         "coords": [
             395,
             300
         ]
     },
     {
-        "id": "mexico_city",
-        "name": "Mexico City",
-        "nation_code": "MEX",
-        "type": "capital",
+        "id": "nairobi",
+        "name": "Nairobi",
+        "nation_code": "ENG",
+        "type": "major_city",
+        "region_id": "Kenya",
         "coords": [
-            275,
-            245
+            850,
+            357
         ]
     },
     {
         "id": "cape_town",
         "name": "Cape Town",
         "nation_code": "SAF",
-        "type": "capital",
+        "type": "major_city",
+        "region_id": "Cape",
         "coords": [
             780,
             510
@@ -794,29 +796,10 @@
         "name": "Johannesburg",
         "nation_code": "SAF",
         "type": "major_city",
+        "region_id": "Transvaal",
         "coords": [
             810,
             485
-        ]
-    },
-    {
-        "id": "nairobi",
-        "name": "Nairobi",
-        "nation_code": "ENG",
-        "type": "major_city",
-        "coords": [
-            850,
-            357
-        ]
-    },
-    {
-        "id": "canberra",
-        "name": "Canberra",
-        "nation_code": "AST",
-        "type": "capital",
-        "coords": [
-            1305,
-            460
         ]
     },
     {
@@ -824,6 +807,7 @@
         "name": "Sydney",
         "nation_code": "AST",
         "type": "major_city",
+        "region_id": "New_South_Wales",
         "coords": [
             1320,
             445
@@ -834,6 +818,7 @@
         "name": "Wellington",
         "nation_code": "NZL",
         "type": "capital",
+        "region_id": "Wellington",
         "coords": [
             1398.6,
             482.5

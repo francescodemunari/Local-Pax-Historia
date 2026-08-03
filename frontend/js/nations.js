@@ -102,19 +102,51 @@ class NationLabelManager {
         const mapHeight = (gameMap && gameMap.svgHeight) ? gameMap.svgHeight : 600;
         const mapWidth = (gameMap && gameMap.svgWidth) ? gameMap.svgWidth : 1400.16;
 
-        // Iterate over defined nation coordinates
-        Object.keys(this.nationCoordinates).forEach(code => {
-            const info = this.nationCoordinates[code];
-            const nationData = this.nationsData[code] || {};
-            
-            // Format label text: prefer explicit uppercase HOI4 label or nation name
-            const text = info.label || (nationData.name ? nationData.name.toUpperCase() : code);
-            const sizeClass = info.size || 'medium';
-            const angle = info.angle || 0;
-            const letterSpacing = info.letterSpacing || '0.15em';
+        // Combine defined nation coordinates with all nations from API data
+        const allNationCodes = new Set([
+            ...Object.keys(this.nationCoordinates),
+            ...Object.keys(this.nationsData)
+        ]);
 
-            const scaledX = info.coords[0] * scale;
-            const scaledY = info.coords[1] * scale;
+        allNationCodes.forEach(code => {
+            const nationData = this.nationsData[code] || {};
+            const info = this.nationCoordinates[code] || {};
+
+            let coords = info.coords;
+            let text = info.label || (nationData.name ? nationData.name.toUpperCase() : code);
+            let sizeClass = info.size || 'small';
+            let angle = info.angle || 0;
+            let letterSpacing = info.letterSpacing || '0.15em';
+
+            // FALLBACK: Calculate centroid from SVG map paths if no hardcoded coordinates
+            if (!coords) {
+                const paths = Array.from(document.querySelectorAll('.map-svg-overlay path'))
+                    .filter(p => p.regionData && (p.regionData.nation_code === code || p.regionData.nation === code));
+
+                if (paths.length > 0) {
+                    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+                    paths.forEach(p => {
+                        try {
+                            const bbox = p.getBBox();
+                            if (bbox && bbox.width > 0 && bbox.height > 0) {
+                                minX = Math.min(minX, bbox.x);
+                                maxX = Math.max(maxX, bbox.x + bbox.width);
+                                minY = Math.min(minY, bbox.y);
+                                maxY = Math.max(maxY, bbox.y + bbox.height);
+                            }
+                        } catch (e) {}
+                    });
+
+                    if (minX !== Infinity) {
+                        coords = [(minX + maxX) / 2, (minY + maxY) / 2];
+                    }
+                }
+            }
+
+            if (!coords) return; // Skip if position cannot be resolved
+
+            const scaledX = coords[0] * scale;
+            const scaledY = coords[1] * scale;
             const baseLat = mapHeight - scaledY;
 
             // Render 3 copies for world wrapping: middle, left (-mapWidth), right (+mapWidth)
