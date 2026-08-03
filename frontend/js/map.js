@@ -21,14 +21,14 @@ class GameMap {
         // Create map with simple CRS for flat SVG coordinates
         this.map = L.map('map', {
             crs: L.CRS.Simple,
-            minZoom: 0,  // Prevent zoom out beyond map
+            minZoom: -1,  // Will be recalculated dynamically after SVG loads
             maxZoom: 5,
             zoomControl: false,
             attributionControl: false,
             zoomSnap: 0.25,
             zoomDelta: 0.5,
             wheelPxPerZoomLevel: 120,
-            maxBoundsViscosity: 1.0  // Prevent panning outside bounds
+            maxBoundsViscosity: 1.0
         });
 
         // Add zoom listener for labels
@@ -120,8 +120,22 @@ class GameMap {
                 const boundsLeft = [[0, -svgW], [svgH, 0]];
                 const boundsRight = [[0, svgW], [svgH, 2 * svgW]];
 
-                // Extended bounds to allow smooth horizontal wrapping
-                const wrapBounds = [[-50, -svgW * 0.5], [svgH + 50, svgW * 1.5]];
+                // Calculate minZoom dynamically so the map always fills the viewport vertically
+                const mapContainer = this.map.getContainer();
+                const containerH = mapContainer.clientHeight || 600;
+                const containerW = mapContainer.clientWidth || 1200;
+                // In CRS.Simple, zoom 0 means 1px = 1 unit. We need the map to fill the container.
+                // minZoom = log2(containerHeight / svgHeight) ensures the map fills vertically.
+                const minZoomH = Math.log2(containerH / svgH);
+                const minZoomW = Math.log2(containerW / svgW);
+                const computedMinZoom = Math.max(minZoomH, minZoomW);
+                // Round up to nearest 0.25 to work with zoomSnap
+                const safeMinZoom = Math.ceil(computedMinZoom * 4) / 4;
+                this.map.setMinZoom(safeMinZoom);
+                console.log(`Dynamic minZoom: ${safeMinZoom} (containerH: ${containerH}, svgH: ${svgH})`);
+
+                // Tight vertical bounds to prevent blue sky; wide horizontal for wrapping
+                const wrapBounds = [[0, -svgW * 0.5], [svgH, svgW * 1.5]];
                 this.map.setMaxBounds(wrapBounds);
 
                 // Ensure Leaflet knows the container size
@@ -150,23 +164,54 @@ class GameMap {
                 this.applyNationColorsToSVG(svgLeft, mapData.regions);
                 this.applyNationColorsToSVG(svgRight, mapData.regions);
 
-                // Seamless horizontal wrap reset listener
-                this.map.off('move', this._wrapHandler);
+                // Seamless horizontal wrap — use 'moveend' to avoid per-frame jank
+                this.map.off('moveend', this._wrapHandler);
                 this._wrapHandler = () => {
                     if (this.isWrapping) return;
                     const center = this.map.getCenter();
                     const w = svgW;
-                    if (center.lng < 0) {
+                    let newLng = center.lng;
+                    let newLat = center.lat;
+                    let needsCorrection = false;
+
+                    // Horizontal wrap
+                    if (newLng < 0) {
+                        newLng += w;
+                        needsCorrection = true;
+                    } else if (newLng > w) {
+                        newLng -= w;
+                        needsCorrection = true;
+                    }
+
+                    // Clamp vertical position to map extent
+                    if (newLat < 0) {
+                        newLat = 0;
+                        needsCorrection = true;
+                    } else if (newLat > svgH) {
+                        newLat = svgH;
+                        needsCorrection = true;
+                    }
+
+                    if (needsCorrection) {
                         this.isWrapping = true;
-                        this.map.setView([center.lat, center.lng + w], this.map.getZoom(), { animate: false });
-                        this.isWrapping = false;
-                    } else if (center.lng > w) {
-                        this.isWrapping = true;
-                        this.map.setView([center.lat, center.lng - w], this.map.getZoom(), { animate: false });
+                        this.map.setView([newLat, newLng], this.map.getZoom(), { animate: false });
                         this.isWrapping = false;
                     }
                 };
-                this.map.on('move', this._wrapHandler);
+                this.map.on('moveend', this._wrapHandler);
+
+                // Also recalculate minZoom on window resize
+                window.addEventListener('resize', () => {
+                    const ch = mapContainer.clientHeight || 600;
+                    const cw = mapContainer.clientWidth || 1200;
+                    const newMinH = Math.log2(ch / svgH);
+                    const newMinW = Math.log2(cw / svgW);
+                    const newMin = Math.ceil(Math.max(newMinH, newMinW) * 4) / 4;
+                    this.map.setMinZoom(newMin);
+                    if (this.map.getZoom() < newMin) {
+                        this.map.setZoom(newMin);
+                    }
+                });
 
                 console.log('Native SVG Overlay with World Wrapping rendered successfully.');
 

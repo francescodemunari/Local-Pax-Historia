@@ -33,73 +33,75 @@ class CityManager {
     }
 
     /**
-     * Display cities on map
+     * Display cities on map (with 3-copy world wrapping replication)
      */
     displayCities() {
         this.clearMarkers();
 
         const scale = gameMap.scaleFactor || 1.0;
-        // Use exact SVG height from GameMap for accurate coordinate mapping
         const mapHeight = (gameMap && gameMap.svgHeight) ? gameMap.svgHeight : 600;
+        const mapWidth = (gameMap && gameMap.svgWidth) ? gameMap.svgWidth : 1400.16;
 
-        this.cities.forEach(city => {
+        // ONLY keep capital cities as requested
+        const capitalCities = this.cities.filter(city => city.type === 'capital' || city.is_capital);
+
+        capitalCities.forEach(city => {
             if (!city.coords || !Array.isArray(city.coords) || city.coords.length < 2) {
                 console.warn(`Skipping invalid city: ${city.name}`, city);
                 return;
             }
 
-            const isCapital = (city.type === 'capital');
-
-            const icon = L.divIcon({
-                className: isCapital ? 'city-marker capital-marker' : 'city-marker',
-                html: this.createCityHTML(city),
-                iconSize: isCapital ? [16, 16] : [12, 12],
-                iconAnchor: isCapital ? [8, 8] : [6, 6]
-            });
-
-            // Apply Scaling (to match SVG resolution)
             const scaledX = city.coords[0] * scale;
             const scaledY = city.coords[1] * scale;
+            const baseLat = mapHeight - scaledY;
 
-            // Transform: Lat = SVGHeight - Y, Lng = X
-            const position = [mapHeight - scaledY, scaledX];
+            // Replicate markers for world wrapping: middle, left (-mapWidth), right (+mapWidth)
+            const xOffsets = [0, -mapWidth, mapWidth];
 
-            const marker = L.marker(position, {
-                icon: icon,
-                pane: 'citiesPane',
-                interactive: true
+            xOffsets.forEach(xOffset => {
+                const icon = L.divIcon({
+                    className: 'city-marker capital-marker',
+                    html: this.createCityHTML(city),
+                    iconSize: [12, 12],
+                    iconAnchor: [6, 6]
+                });
+
+                const position = [baseLat, scaledX + xOffset];
+
+                const marker = L.marker(position, {
+                    icon: icon,
+                    pane: 'citiesPane',
+                    interactive: true
+                });
+
+                // Clean tooltip label without emoji star
+                const tooltipLabel = city.name;
+                const tooltipClass = 'city-label capital-label';
+
+                marker.bindTooltip(tooltipLabel, {
+                    permanent: true,
+                    direction: 'bottom',
+                    className: tooltipClass,
+                    offset: [0, 8]
+                });
+
+                marker.isCapital = true;
+                marker.cityId = city.id;
+                marker.addTo(this.map);
+                this.cityMarkers.push(marker);
             });
-
-            // Tooltip: capitals get ★ prefix and special class
-            const tooltipLabel = isCapital ? `★ ${city.name}` : city.name;
-            const tooltipClass = isCapital ? 'city-label capital-label' : 'city-label';
-
-            marker.bindTooltip(tooltipLabel, {
-                permanent: true,
-                direction: 'bottom',
-                className: tooltipClass,
-                offset: [0, isCapital ? 10 : 8]
-            });
-
-            marker.isCapital = isCapital;
-            marker.addTo(this.map);
-            this.cityMarkers.push(marker);
         });
 
-        // Apply initial visibility based on capital status and current zoom
+        // Apply initial visibility based on zoom level
         this.updateVisibility(this.map.getZoom());
-        console.log(`Rendered ${this.cityMarkers.length} city markers (capitals always visible).`);
+        console.log(`Rendered ${this.cityMarkers.length} capital city markers.`);
     }
 
     /**
-     * Create HTML for city icon
+     * Create HTML for city icon (clean sleek capital marker, no emojis)
      */
     createCityHTML(city) {
-        if (city.type === 'capital') {
-            return `<div class="city-capital" title="${city.name}"><span class="capital-star">★</span></div>`;
-        }
-        const typeClass = city.type === 'fortress' ? 'city-fortress' : 'city-major';
-        return `<div class="${typeClass}" title="${city.name}"></div>`;
+        return `<div class="city-capital" title="${city.name}"></div>`;
     }
 
     /**
@@ -112,33 +114,24 @@ class CityManager {
 
     /**
      * Update visibility of city labels based on zoom level.
-     * Capitals are ALWAYS visible; non-capitals display labels when zoomed in.
+     * Hides all city labels and markers when zoomed out (zoom < 1.4) to keep the map clean.
      */
     updateVisibility(zoom) {
+        const visible = zoom >= 1.4;
+
         this.cityMarkers.forEach(marker => {
-            const isCapital = marker.isCapital;
             const tooltip = marker.getTooltip();
             if (tooltip) {
                 const el = tooltip.getElement();
                 if (el) {
-                    if (isCapital || zoom >= 1.2) {
-                        el.style.display = 'block';
-                        el.style.opacity = '1';
-                    } else {
-                        el.style.display = 'none';
-                        el.style.opacity = '0';
-                    }
+                    el.style.display = visible ? 'block' : 'none';
+                    el.style.opacity = visible ? '1' : '0';
                 }
             }
 
-            // Also hide non-capital marker dots at low zoom
             const iconEl = marker.getElement();
-            if (iconEl && !isCapital) {
-                if (zoom >= 1.0) {
-                    iconEl.style.display = '';
-                } else {
-                    iconEl.style.display = 'none';
-                }
+            if (iconEl) {
+                iconEl.style.display = visible ? '' : 'none';
             }
         });
     }

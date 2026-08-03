@@ -1,108 +1,842 @@
 [
-    {"id":"washington","name":"Washington DC","nation_code":"USA","type":"capital","coords":[239.2,107.0]},
-    {"id":"new_york","name":"New York","nation_code":"USA","type":"major_city","coords":[350.0,130.0]},
-    {"id":"chicago","name":"Chicago","nation_code":"USA","type":"major_city","coords":[300.0,130.0]},
-    {"id":"san_francisco","name":"San Francisco","nation_code":"USA","type":"major_city","coords":[195.0,155.0]},
-    {"id":"los_angeles","name":"Los Angeles","nation_code":"USA","type":"major_city","coords":[210.0,170.0]},
-
-    {"id":"london","name":"London","nation_code":"ENG","type":"capital","coords":[705.2,128.3]},
-    {"id":"liverpool","name":"Liverpool","nation_code":"ENG","type":"major_city","coords":[684.2,110.2]},
-    {"id":"gibraltar","name":"Gibraltar","nation_code":"ENG","type":"fortress","coords":[682.0,199.8]},
-    {"id":"suez","name":"Suez Canal","nation_code":"ENG","type":"strategic","coords":[830.2,227.5]},
-    {"id":"alexandria","name":"Alexandria","nation_code":"ENG","type":"major_city","coords":[826.2,227.3]},
-    {"id":"cairo","name":"Cairo","nation_code":"ENG","type":"major_city","coords":[838.5,256.8]},
-
-    {"id":"paris","name":"Paris","nation_code":"FRA","type":"capital","coords":[712.3,148.6]},
-    {"id":"marseille","name":"Marseille","nation_code":"FRA","type":"major_city","coords":[710.0,170.0]},
-    {"id":"lyon","name":"Lyon","nation_code":"FRA","type":"major_city","coords":[720.5,163.4]},
-    {"id":"algiers","name":"Algiers","nation_code":"FRA","type":"major_city","coords":[708.3,208.4]},
-    {"id":"dakar","name":"Dakar","nation_code":"FRA","type":"major_city","coords":[610.0,322.0]},
-
-    {"id":"berlin","name":"Berlin","nation_code":"GER","type":"capital","coords":[756.3,127.0]},
-    {"id":"munich","name":"Munich","nation_code":"GER","type":"major_city","coords":[740.0,148.0]},
-    {"id":"hamburg","name":"Hamburg","nation_code":"GER","type":"major_city","coords":[738.0,113.0]},
-    {"id":"konigsberg","name":"Königsberg","nation_code":"GER","type":"major_city","coords":[783.3,115.2]},
-
-    {"id":"rome","name":"Rome","nation_code":"ITA","type":"capital","coords":[752.8,177.6]},
-    {"id":"milan","name":"Milan","nation_code":"ITA","type":"major_city","coords":[740.0,159.8]},
-    {"id":"naples","name":"Naples","nation_code":"ITA","type":"major_city","coords":[762.5,185.0]},
-    {"id":"venice","name":"Venice","nation_code":"ITA","type":"major_city","coords":[753.0,163.0]},
-    {"id":"tripoli","name":"Tripoli","nation_code":"ITA","type":"major_city","coords":[755.0,225.0]},
-    {"id":"addis_abeba","name":"Addis Abeba","nation_code":"ETH","type":"capital","coords":[870.0,345.0]},
-
-    {"id":"moscow","name":"Moscow","nation_code":"SOV","type":"capital","coords":[863.2,109.6]},
-    {"id":"leningrad","name":"Leningrad","nation_code":"SOV","type":"major_city","coords":[820.6,84.3]},
-    {"id":"stalingrad","name":"Stalingrad","nation_code":"SOV","type":"major_city","coords":[908.5,153.0]},
-    {"id":"kiev","name":"Kiev","nation_code":"SOV","type":"major_city","coords":[840.0,132.0]},
-    {"id":"sevastopol","name":"Sevastopol","nation_code":"SOV","type":"major_city","coords":[849.4,163.0]},
-    {"id":"vladivostok","name":"Vladivostok","nation_code":"SOV","type":"major_city","coords":[1220.0,160.0]},
-
-    {"id":"tokyo","name":"Tokyo","nation_code":"JAP","type":"capital","coords":[1249.7,207.7]},
-    {"id":"osaka","name":"Osaka","nation_code":"JAP","type":"major_city","coords":[1237.6,210.0]},
-    {"id":"seoul","name":"Seoul","nation_code":"JAP","type":"major_city","coords":[1211.8,197.9]},
-
-    {"id":"nanjing","name":"Nanjing","nation_code":"CHI","type":"capital","coords":[1168.0,217.0]},
-    {"id":"shanghai","name":"Shanghai","nation_code":"CHI","type":"major_city","coords":[1175.7,220.0]},
-    {"id":"beijing","name":"Beijing","nation_code":"CHI","type":"major_city","coords":[1153.0,183.0]},
-    {"id":"chongqing","name":"Chongqing","nation_code":"CHI","type":"major_city","coords":[1113.7,240.3]},
-    {"id":"guangzhou","name":"Guangzhou","nation_code":"CHI","type":"major_city","coords":[1134.3,261.6]},
-
-    {"id":"madrid","name":"Madrid","nation_code":"SPA","type":"capital","coords":[681.5,183.6]},
-    {"id":"barcelona","name":"Barcelona","nation_code":"SPA","type":"major_city","coords":[700.0,180.0]},
-
-    {"id":"lisbon","name":"Lisbon","nation_code":"POR","type":"capital","coords":[665.0,190.0]},
-
-    {"id":"warsaw","name":"Warsaw","nation_code":"POL","type":"capital","coords":[790.0,122.0]},
-
-    {"id":"budapest","name":"Budapest","nation_code":"HUN","type":"capital","coords":[785.0,150.0]},
-
-    {"id":"bucharest","name":"Bucharest","nation_code":"ROM","type":"capital","coords":[812.0,165.0]},
-
-    {"id":"belgrade","name":"Belgrade","nation_code":"YUG","type":"capital","coords":[790.0,167.0]},
-
-    {"id":"sofia","name":"Sofia","nation_code":"BUL","type":"capital","coords":[800.0,180.0]},
-
-    {"id":"athens","name":"Athens","nation_code":"GRE","type":"capital","coords":[800.0,200.0]},
-
-    {"id":"ankara","name":"Ankara","nation_code":"TUR","type":"capital","coords":[850.0,192.0]},
-    {"id":"istanbul","name":"Istanbul","nation_code":"TUR","type":"major_city","coords":[812.5,181.2]},
-
-    {"id":"vienna","name":"Vienna","nation_code":"AUS","type":"capital","coords":[770.0,147.0]},
-    {"id":"prague","name":"Prague","nation_code":"CZE","type":"capital","coords":[760.0,136.0]},
-    {"id":"copenhagen","name":"Copenhagen","nation_code":"DEN","type":"capital","coords":[740.0,105.0]},
-    {"id":"stockholm","name":"Stockholm","nation_code":"SWE","type":"capital","coords":[762.0,80.0]},
-    {"id":"oslo","name":"Oslo","nation_code":"NOR","type":"capital","coords":[730.0,83.0]},
-    {"id":"helsinki","name":"Helsinki","nation_code":"FIN","type":"capital","coords":[825.7,73.8]},
-
-    {"id":"amsterdam","name":"Amsterdam","nation_code":"NED","type":"capital","coords":[715.0,122.0]},
-    {"id":"brussels","name":"Brussels","nation_code":"BEL","type":"capital","coords":[712.0,130.0]},
-    {"id":"bern","name":"Bern","nation_code":"SWI","type":"capital","coords":[720.0,155.0]},
-
-    {"id":"tehran","name":"Tehran","nation_code":"IRA","type":"capital","coords":[930.0,205.0]},
-    {"id":"baghdad","name":"Baghdad","nation_code":"IRQ","type":"capital","coords":[886.1,229.7]},
-    {"id":"kabul","name":"Kabul","nation_code":"AFG","type":"capital","coords":[970.8,211.3]},
-    {"id":"bangkok","name":"Bangkok","nation_code":"SIA","type":"capital","coords":[1090.0,310.0]},
-    {"id":"manila","name":"Manila","nation_code":"PHI","type":"capital","coords":[1178.0,295.0]},
-    {"id":"jakarta","name":"Jakarta","nation_code":"NED","type":"major_city","coords":[1120.0,385.0]},
-    {"id":"singapore","name":"Singapore","nation_code":"ENG","type":"fortress","coords":[1103.0,343.0]},
-    {"id":"rangoon","name":"Rangoon","nation_code":"ENG","type":"major_city","coords":[1055.0,295.0]},
-    {"id":"new_delhi","name":"New Delhi","nation_code":"ENG","type":"major_city","coords":[990.0,255.0]},
-    {"id":"bombay","name":"Bombay","nation_code":"ENG","type":"major_city","coords":[970.0,285.0]},
-    {"id":"calcutta","name":"Calcutta","nation_code":"ENG","type":"major_city","coords":[1030.0,275.0]},
-    {"id":"karachi","name":"Karachi","nation_code":"ENG","type":"major_city","coords":[950.0,260.0]},
-
-    {"id":"rio_de_janeiro","name":"Rio de Janeiro","nation_code":"BRA","type":"capital","coords":[500.0,395.0]},
-    {"id":"buenos_aires","name":"Buenos Aires","nation_code":"ARG","type":"capital","coords":[475.0,460.0]},
-    {"id":"santiago","name":"Santiago","nation_code":"CHI","type":"capital","coords":[445.0,445.0]},
-    {"id":"lima","name":"Lima","nation_code":"PER","type":"capital","coords":[390.0,348.0]},
-    {"id":"bogota","name":"Bogotá","nation_code":"COL","type":"capital","coords":[395.0,300.0]},
-    {"id":"mexico_city","name":"Mexico City","nation_code":"MEX","type":"capital","coords":[275.0,245.0]},
-
-    {"id":"cape_town","name":"Cape Town","nation_code":"SAF","type":"capital","coords":[780.0,510.0]},
-    {"id":"johannesburg","name":"Johannesburg","nation_code":"SAF","type":"major_city","coords":[810.0,485.0]},
-    {"id":"nairobi","name":"Nairobi","nation_code":"ENG","type":"major_city","coords":[850.0,357.0]},
-
-    {"id":"canberra","name":"Canberra","nation_code":"AST","type":"capital","coords":[1305.0,460.0]},
-    {"id":"sydney","name":"Sydney","nation_code":"AST","type":"major_city","coords":[1320.0,445.0]},
-    {"id":"wellington","name":"Wellington","nation_code":"NZL","type":"capital","coords":[1398.6,482.5]}
+    {
+        "id": "washington",
+        "name": "Washington DC",
+        "nation_code": "USA",
+        "type": "capital",
+        "coords": [
+            239.2,
+            107
+        ]
+    },
+    {
+        "id": "new_york",
+        "name": "New York",
+        "nation_code": "USA",
+        "type": "major_city",
+        "coords": [
+            350,
+            130
+        ]
+    },
+    {
+        "id": "chicago",
+        "name": "Chicago",
+        "nation_code": "USA",
+        "type": "major_city",
+        "coords": [
+            300,
+            130
+        ]
+    },
+    {
+        "id": "san_francisco",
+        "name": "San Francisco",
+        "nation_code": "USA",
+        "type": "major_city",
+        "coords": [
+            195,
+            155
+        ]
+    },
+    {
+        "id": "los_angeles",
+        "name": "Los Angeles",
+        "nation_code": "USA",
+        "type": "major_city",
+        "coords": [
+            210,
+            170
+        ]
+    },
+    {
+        "id": "london",
+        "name": "London",
+        "nation_code": "ENG",
+        "type": "capital",
+        "coords": [
+            705.2,
+            128.3
+        ]
+    },
+    {
+        "id": "liverpool",
+        "name": "Liverpool",
+        "nation_code": "ENG",
+        "type": "major_city",
+        "coords": [
+            684.2,
+            110.2
+        ]
+    },
+    {
+        "id": "gibraltar",
+        "name": "Gibraltar",
+        "nation_code": "ENG",
+        "type": "fortress",
+        "coords": [
+            682,
+            199.8
+        ]
+    },
+    {
+        "id": "suez",
+        "name": "Suez Canal",
+        "nation_code": "ENG",
+        "type": "strategic",
+        "coords": [
+            830.2,
+            227.5
+        ]
+    },
+    {
+        "id": "alexandria",
+        "name": "Alexandria",
+        "nation_code": "ENG",
+        "type": "major_city",
+        "coords": [
+            826.2,
+            227.3
+        ]
+    },
+    {
+        "id": "cairo",
+        "name": "Cairo",
+        "nation_code": "ENG",
+        "type": "major_city",
+        "coords": [
+            838.5,
+            256.8
+        ]
+    },
+    {
+        "id": "paris",
+        "name": "Paris",
+        "nation_code": "FRA",
+        "type": "capital",
+        "coords": [
+            712.3,
+            148.6
+        ]
+    },
+    {
+        "id": "marseille",
+        "name": "Marseille",
+        "nation_code": "FRA",
+        "type": "major_city",
+        "coords": [
+            710,
+            170
+        ]
+    },
+    {
+        "id": "lyon",
+        "name": "Lyon",
+        "nation_code": "FRA",
+        "type": "major_city",
+        "coords": [
+            720.5,
+            163.4
+        ]
+    },
+    {
+        "id": "algiers",
+        "name": "Algiers",
+        "nation_code": "FRA",
+        "type": "major_city",
+        "coords": [
+            708.3,
+            208.4
+        ]
+    },
+    {
+        "id": "dakar",
+        "name": "Dakar",
+        "nation_code": "FRA",
+        "type": "major_city",
+        "coords": [
+            610,
+            322
+        ]
+    },
+    {
+        "id": "berlin",
+        "name": "Berlin",
+        "nation_code": "GER",
+        "type": "capital",
+        "coords": [
+            756.3,
+            127
+        ]
+    },
+    {
+        "id": "munich",
+        "name": "Munich",
+        "nation_code": "GER",
+        "type": "major_city",
+        "coords": [
+            740,
+            148
+        ]
+    },
+    {
+        "id": "hamburg",
+        "name": "Hamburg",
+        "nation_code": "GER",
+        "type": "major_city",
+        "coords": [
+            738,
+            113
+        ]
+    },
+    {
+        "id": "konigsberg",
+        "name": "Königsberg",
+        "nation_code": "GER",
+        "type": "major_city",
+        "coords": [
+            783.3,
+            115.2
+        ]
+    },
+    {
+        "id": "rome",
+        "name": "Rome",
+        "nation_code": "ITA",
+        "type": "capital",
+        "coords": [
+            752.8,
+            177.6
+        ]
+    },
+    {
+        "id": "milan",
+        "name": "Milan",
+        "nation_code": "ITA",
+        "type": "major_city",
+        "coords": [
+            740,
+            159.8
+        ]
+    },
+    {
+        "id": "naples",
+        "name": "Naples",
+        "nation_code": "ITA",
+        "type": "major_city",
+        "coords": [
+            762.5,
+            185
+        ]
+    },
+    {
+        "id": "venice",
+        "name": "Venice",
+        "nation_code": "ITA",
+        "type": "major_city",
+        "coords": [
+            753,
+            163
+        ]
+    },
+    {
+        "id": "tripoli",
+        "name": "Tripoli",
+        "nation_code": "ITA",
+        "type": "major_city",
+        "coords": [
+            755,
+            225
+        ]
+    },
+    {
+        "id": "addis_abeba",
+        "name": "Addis Abeba",
+        "nation_code": "ETH",
+        "type": "capital",
+        "coords": [
+            870,
+            345
+        ]
+    },
+    {
+        "id": "moscow",
+        "name": "Moscow",
+        "nation_code": "SOV",
+        "type": "capital",
+        "coords": [
+            863.2,
+            109.6
+        ]
+    },
+    {
+        "id": "leningrad",
+        "name": "Leningrad",
+        "nation_code": "SOV",
+        "type": "major_city",
+        "coords": [
+            820.6,
+            84.3
+        ]
+    },
+    {
+        "id": "stalingrad",
+        "name": "Stalingrad",
+        "nation_code": "SOV",
+        "type": "major_city",
+        "coords": [
+            908.5,
+            153
+        ]
+    },
+    {
+        "id": "kiev",
+        "name": "Kiev",
+        "nation_code": "SOV",
+        "type": "major_city",
+        "coords": [
+            840,
+            132
+        ]
+    },
+    {
+        "id": "sevastopol",
+        "name": "Sevastopol",
+        "nation_code": "SOV",
+        "type": "major_city",
+        "coords": [
+            849.4,
+            163
+        ]
+    },
+    {
+        "id": "vladivostok",
+        "name": "Vladivostok",
+        "nation_code": "SOV",
+        "type": "major_city",
+        "coords": [
+            1220,
+            160
+        ]
+    },
+    {
+        "id": "tokyo",
+        "name": "Tokyo",
+        "nation_code": "JAP",
+        "type": "capital",
+        "coords": [
+            1249.7,
+            207.7
+        ]
+    },
+    {
+        "id": "osaka",
+        "name": "Osaka",
+        "nation_code": "JAP",
+        "type": "major_city",
+        "coords": [
+            1237.6,
+            210
+        ]
+    },
+    {
+        "id": "seoul",
+        "name": "Seoul",
+        "nation_code": "JAP",
+        "type": "major_city",
+        "coords": [
+            1211.8,
+            197.9
+        ]
+    },
+    {
+        "id": "nanjing",
+        "name": "Nanjing",
+        "nation_code": "CHI",
+        "type": "capital",
+        "coords": [
+            1168,
+            217
+        ]
+    },
+    {
+        "id": "shanghai",
+        "name": "Shanghai",
+        "nation_code": "CHI",
+        "type": "major_city",
+        "coords": [
+            1175.7,
+            220
+        ]
+    },
+    {
+        "id": "beijing",
+        "name": "Beijing",
+        "nation_code": "CHI",
+        "type": "major_city",
+        "coords": [
+            1153,
+            183
+        ]
+    },
+    {
+        "id": "chongqing",
+        "name": "Chongqing",
+        "nation_code": "CHI",
+        "type": "major_city",
+        "coords": [
+            1113.7,
+            240.3
+        ]
+    },
+    {
+        "id": "guangzhou",
+        "name": "Guangzhou",
+        "nation_code": "CHI",
+        "type": "major_city",
+        "coords": [
+            1134.3,
+            261.6
+        ]
+    },
+    {
+        "id": "madrid",
+        "name": "Madrid",
+        "nation_code": "SPR",
+        "type": "capital",
+        "coords": [
+            681.5,
+            183.6
+        ]
+    },
+    {
+        "id": "barcelona",
+        "name": "Barcelona",
+        "nation_code": "SPR",
+        "type": "major_city",
+        "coords": [
+            700,
+            180
+        ]
+    },
+    {
+        "id": "lisbon",
+        "name": "Lisbon",
+        "nation_code": "POR",
+        "type": "capital",
+        "coords": [
+            665,
+            190
+        ]
+    },
+    {
+        "id": "warsaw",
+        "name": "Warsaw",
+        "nation_code": "POL",
+        "type": "capital",
+        "coords": [
+            790,
+            122
+        ]
+    },
+    {
+        "id": "budapest",
+        "name": "Budapest",
+        "nation_code": "HUN",
+        "type": "capital",
+        "coords": [
+            785,
+            150
+        ]
+    },
+    {
+        "id": "bucharest",
+        "name": "Bucharest",
+        "nation_code": "ROM",
+        "type": "capital",
+        "coords": [
+            812,
+            165
+        ]
+    },
+    {
+        "id": "belgrade",
+        "name": "Belgrade",
+        "nation_code": "YUG",
+        "type": "capital",
+        "coords": [
+            790,
+            167
+        ]
+    },
+    {
+        "id": "sofia",
+        "name": "Sofia",
+        "nation_code": "BUL",
+        "type": "capital",
+        "coords": [
+            800,
+            180
+        ]
+    },
+    {
+        "id": "athens",
+        "name": "Athens",
+        "nation_code": "GRE",
+        "type": "capital",
+        "coords": [
+            800,
+            200
+        ]
+    },
+    {
+        "id": "ankara",
+        "name": "Ankara",
+        "nation_code": "TUR",
+        "type": "capital",
+        "coords": [
+            850,
+            192
+        ]
+    },
+    {
+        "id": "istanbul",
+        "name": "Istanbul",
+        "nation_code": "TUR",
+        "type": "major_city",
+        "coords": [
+            812.5,
+            181.2
+        ]
+    },
+    {
+        "id": "vienna",
+        "name": "Vienna",
+        "nation_code": "AUS",
+        "type": "capital",
+        "coords": [
+            770,
+            147
+        ]
+    },
+    {
+        "id": "prague",
+        "name": "Prague",
+        "nation_code": "CZE",
+        "type": "capital",
+        "coords": [
+            760,
+            136
+        ]
+    },
+    {
+        "id": "copenhagen",
+        "name": "Copenhagen",
+        "nation_code": "DEN",
+        "type": "capital",
+        "coords": [
+            740,
+            105
+        ]
+    },
+    {
+        "id": "stockholm",
+        "name": "Stockholm",
+        "nation_code": "SWE",
+        "type": "capital",
+        "coords": [
+            762,
+            80
+        ]
+    },
+    {
+        "id": "oslo",
+        "name": "Oslo",
+        "nation_code": "NOR",
+        "type": "capital",
+        "coords": [
+            730,
+            83
+        ]
+    },
+    {
+        "id": "helsinki",
+        "name": "Helsinki",
+        "nation_code": "FIN",
+        "type": "capital",
+        "coords": [
+            825.7,
+            73.8
+        ]
+    },
+    {
+        "id": "amsterdam",
+        "name": "Amsterdam",
+        "nation_code": "HOL",
+        "type": "capital",
+        "coords": [
+            715,
+            122
+        ]
+    },
+    {
+        "id": "brussels",
+        "name": "Brussels",
+        "nation_code": "BEL",
+        "type": "capital",
+        "coords": [
+            712,
+            130
+        ]
+    },
+    {
+        "id": "bern",
+        "name": "Bern",
+        "nation_code": "SWI",
+        "type": "capital",
+        "coords": [
+            720,
+            155
+        ]
+    },
+    {
+        "id": "tehran",
+        "name": "Tehran",
+        "nation_code": "PER",
+        "type": "capital",
+        "coords": [
+            930,
+            205
+        ]
+    },
+    {
+        "id": "baghdad",
+        "name": "Baghdad",
+        "nation_code": "IRQ",
+        "type": "capital",
+        "coords": [
+            886.1,
+            229.7
+        ]
+    },
+    {
+        "id": "kabul",
+        "name": "Kabul",
+        "nation_code": "AFG",
+        "type": "capital",
+        "coords": [
+            970.8,
+            211.3
+        ]
+    },
+    {
+        "id": "bangkok",
+        "name": "Bangkok",
+        "nation_code": "SIA",
+        "type": "capital",
+        "coords": [
+            1090,
+            310
+        ]
+    },
+    {
+        "id": "manila",
+        "name": "Manila",
+        "nation_code": "PHI",
+        "type": "capital",
+        "coords": [
+            1178,
+            295
+        ]
+    },
+    {
+        "id": "jakarta",
+        "name": "Jakarta",
+        "nation_code": "INS",
+        "type": "major_city",
+        "coords": [
+            1120,
+            385
+        ]
+    },
+    {
+        "id": "singapore",
+        "name": "Singapore",
+        "nation_code": "ENG",
+        "type": "fortress",
+        "coords": [
+            1103,
+            343
+        ]
+    },
+    {
+        "id": "rangoon",
+        "name": "Rangoon",
+        "nation_code": "ENG",
+        "type": "major_city",
+        "coords": [
+            1055,
+            295
+        ]
+    },
+    {
+        "id": "new_delhi",
+        "name": "New Delhi",
+        "nation_code": "ENG",
+        "type": "major_city",
+        "coords": [
+            990,
+            255
+        ]
+    },
+    {
+        "id": "bombay",
+        "name": "Bombay",
+        "nation_code": "ENG",
+        "type": "major_city",
+        "coords": [
+            970,
+            285
+        ]
+    },
+    {
+        "id": "calcutta",
+        "name": "Calcutta",
+        "nation_code": "ENG",
+        "type": "major_city",
+        "coords": [
+            1030,
+            275
+        ]
+    },
+    {
+        "id": "karachi",
+        "name": "Karachi",
+        "nation_code": "ENG",
+        "type": "major_city",
+        "coords": [
+            950,
+            260
+        ]
+    },
+    {
+        "id": "rio_de_janeiro",
+        "name": "Rio de Janeiro",
+        "nation_code": "BRA",
+        "type": "capital",
+        "coords": [
+            500,
+            395
+        ]
+    },
+    {
+        "id": "buenos_aires",
+        "name": "Buenos Aires",
+        "nation_code": "ARG",
+        "type": "capital",
+        "coords": [
+            475,
+            460
+        ]
+    },
+    {
+        "id": "santiago",
+        "name": "Santiago",
+        "nation_code": "CHL",
+        "type": "capital",
+        "coords": [
+            445,
+            445
+        ]
+    },
+    {
+        "id": "lima",
+        "name": "Lima",
+        "nation_code": "PER",
+        "type": "capital",
+        "coords": [
+            390,
+            348
+        ]
+    },
+    {
+        "id": "bogota",
+        "name": "Bogotá",
+        "nation_code": "COL",
+        "type": "capital",
+        "coords": [
+            395,
+            300
+        ]
+    },
+    {
+        "id": "mexico_city",
+        "name": "Mexico City",
+        "nation_code": "MEX",
+        "type": "capital",
+        "coords": [
+            275,
+            245
+        ]
+    },
+    {
+        "id": "cape_town",
+        "name": "Cape Town",
+        "nation_code": "SAF",
+        "type": "capital",
+        "coords": [
+            780,
+            510
+        ]
+    },
+    {
+        "id": "johannesburg",
+        "name": "Johannesburg",
+        "nation_code": "SAF",
+        "type": "major_city",
+        "coords": [
+            810,
+            485
+        ]
+    },
+    {
+        "id": "nairobi",
+        "name": "Nairobi",
+        "nation_code": "ENG",
+        "type": "major_city",
+        "coords": [
+            850,
+            357
+        ]
+    },
+    {
+        "id": "canberra",
+        "name": "Canberra",
+        "nation_code": "AST",
+        "type": "capital",
+        "coords": [
+            1305,
+            460
+        ]
+    },
+    {
+        "id": "sydney",
+        "name": "Sydney",
+        "nation_code": "AST",
+        "type": "major_city",
+        "coords": [
+            1320,
+            445
+        ]
+    },
+    {
+        "id": "wellington",
+        "name": "Wellington",
+        "nation_code": "NZL",
+        "type": "capital",
+        "coords": [
+            1398.6,
+            482.5
+        ]
+    }
 ]

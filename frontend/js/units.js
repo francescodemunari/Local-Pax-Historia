@@ -131,35 +131,49 @@ class UnitManager {
             return;
         }
 
+        // Get map width for world wrapping
+        const mapWidth = (gameMap && gameMap.svgWidth) ? gameMap.svgWidth : 1400.16;
+
         // Apply Offsets, Scaling and Transformation
         const scaledX = (svgX + OFFSET_X) * scale;
         const scaledY = (svgY + OFFSET_Y) * scale;
-        position = [mapHeight - scaledY, scaledX];
+        const baseLat = mapHeight - scaledY;
 
-        // Create icon HTML showing unit count and types
+        // Create HTML for icon
         const iconHtml = this.createIconHTML(units);
 
-        const icon = L.divIcon({
-            className: 'unit-marker', // Fixed: match CSS class defined in styles.css
-            html: iconHtml,
-            iconSize: [40, 40],
-            iconAnchor: [20, 20]
-        });
+        // Replicate markers for world wrapping: middle, left (-mapWidth), right (+mapWidth)
+        const xOffsets = [0, -mapWidth, mapWidth];
 
-        const marker = L.marker(position, {
-            icon: icon,
-            interactive: true,
-            pane: 'unitsPane'
-        });
+        if (!this.unitMarkers[regionId]) {
+            this.unitMarkers[regionId] = [];
+        }
 
-        marker.on('click', (e) => {
-            L.DomEvent.stopPropagation(e);
-            this.showUnitsPopup(regionId, units);
-        });
+        xOffsets.forEach(xOffset => {
+            const icon = L.divIcon({
+                className: 'unit-marker',
+                html: iconHtml,
+                iconSize: [40, 40],
+                iconAnchor: [20, 20]
+            });
 
-        marker.addTo(this.map);
-        console.log(`Created unit marker for ${regionId} at position`, position);
-        this.unitMarkers[regionId] = marker;
+            const position = [baseLat, scaledX + xOffset];
+
+            const marker = L.marker(position, {
+                icon: icon,
+                interactive: true,
+                pane: 'unitsPane'
+            });
+
+            marker.on('click', (e) => {
+                L.DomEvent.stopPropagation(e);
+                this.showUnitsPopup(regionId, units);
+            });
+
+            marker.addTo(this.map);
+            this.unitMarkers[regionId].push(marker);
+        });
+        console.log(`Created unit markers for ${regionId} (including world wrap copies).`);
     }
 
     /**
@@ -191,15 +205,23 @@ class UnitManager {
      * Show popup with unit details
      */
     showUnitsPopup(regionId, units) {
-        if (this.regionManager) {
-            // Highlight and select the region in RegionManager
-            // This will open the comprehensive region popup with the unit list
+        if (this.regionManager && typeof this.regionManager.selectRegion === 'function') {
             this.regionManager.selectRegion(regionId);
+        } else if (window.app && window.app.regionManager && typeof window.app.regionManager.selectRegion === 'function') {
+            window.app.regionManager.selectRegion(regionId);
         } else {
-            const unitList = units.map(u =>
-                `${this.unitIcons[u.unit_type]} ${u.unit_name} (${u.strength}% str)`
-            ).join('\n');
-            alert(`Units in region:\n\n${unitList}`);
+            const unitList = units.map(u => {
+                const icon = this.unitIcons[u.unit_type] || '⚔️';
+                const name = u.name || u.unit_name || `${u.nation_code || ''} ${u.unit_type || 'Division'}`;
+                const strength = u.strength !== undefined ? u.strength : (u.military_strength || 100);
+                return `${icon} ${name} (${strength}% str)`;
+            }).join('\n');
+
+            if (window.app && window.app.showToast) {
+                window.app.showToast(`Units in region:\n${unitList}`, 'info');
+            } else {
+                alert(`Units in region:\n\n${unitList}`);
+            }
         }
     }
 
@@ -301,8 +323,12 @@ class UnitManager {
      * Clear all unit markers
      */
     clearUnits() {
-        Object.values(this.unitMarkers).forEach(marker => {
-            this.map.removeLayer(marker);
+        Object.values(this.unitMarkers).forEach(item => {
+            if (Array.isArray(item)) {
+                item.forEach(m => this.map.removeLayer(m));
+            } else if (item) {
+                this.map.removeLayer(item);
+            }
         });
         this.unitMarkers = {};
     }
@@ -311,12 +337,15 @@ class UnitManager {
      * Toggle unit visibility
      */
     toggleUnits(visible) {
-        Object.values(this.unitMarkers).forEach(marker => {
-            if (visible) {
-                marker.addTo(this.map);
-            } else {
-                this.map.removeLayer(marker);
-            }
+        Object.values(this.unitMarkers).forEach(item => {
+            const markers = Array.isArray(item) ? item : [item];
+            markers.forEach(m => {
+                if (visible) {
+                    m.addTo(this.map);
+                } else {
+                    this.map.removeLayer(m);
+                }
+            });
         });
     }
 }

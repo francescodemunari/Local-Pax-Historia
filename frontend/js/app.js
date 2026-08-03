@@ -27,10 +27,14 @@ const app = {
             // Initialize map
             gameMap.init();
 
-            // Initialize city, nation, and unit managers
+            // Initialize city, nation, unit, and region managers
             this.cityManager = new CityManager(gameMap.map);
             this.nationManager = new NationLabelManager(gameMap.map);
             this.unitManager = new UnitManager(gameMap.map);
+            if (typeof RegionManager !== 'undefined') {
+                this.regionManager = new RegionManager(gameMap.map);
+                this.unitManager.regionManager = this.regionManager;
+            }
 
             // Initialize panels
             actionsPanel.init();
@@ -568,6 +572,16 @@ const app = {
      */
     async loadWorldObjects() {
         try {
+            // Load region metadata for neighbor info
+            try {
+                const res = await fetch('/data/region_metadata.json');
+                if (res.ok) {
+                    this.regionMetadata = await res.json();
+                }
+            } catch (e) {
+                console.warn('Could not load region metadata:', e);
+            }
+
             // Load and display nation labels
             if (this.nationManager) {
                 await this.nationManager.loadNationLabels();
@@ -580,10 +594,9 @@ const app = {
                 console.log('Cities loaded and displayed');
             }
 
-            // Load and display units
-            if (this.unitManager && this.currentGame) {
-                await this.unitManager.loadUnits(this.currentGame.saveId);
-                console.log('Units loaded and displayed');
+            // Clear any default units on initial load (units spawn only via Actions)
+            if (this.unitManager) {
+                this.unitManager.clearUnits();
             }
         } catch (error) {
             console.error('Failed to load world objects:', error);
@@ -700,13 +713,6 @@ const app = {
             // Assuming we have a flag service or static assets
             // flagEl.style.backgroundImage = `url('assets/flags/${nation.code.toLowerCase()}.png')`;
             flagEl.style.backgroundColor = nation.color || '#333';
-        }
-
-        // Handle Bordering Regions (Mocking for now to match screenshot)
-        const borderingEl = document.getElementById('popup-bordering-regions');
-        if (borderingEl) {
-            // In a real scenario, we'd fetch neighbors from hoi4_map.json or a pre-calculated index
-            // borderingEl.innerHTML = neighbors.map(n => `<span class="border-tag">${n}</span>`).join('');
         }
 
         // Actions

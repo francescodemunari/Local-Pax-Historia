@@ -56,6 +56,7 @@ app.get('/api/ping', (req, res) => {
 });
 
 // Static files (MOVE AFTER API ROUTES)
+app.use('/data', express.static(path.join(__dirname, '../data')));
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Health check
