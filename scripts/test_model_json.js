@@ -1,0 +1,11 @@
+const assert = require('node:assert/strict');
+const { parseModelJSON } = require('../backend/services/model-json');
+const expected = { events: [{ title: 'A {brace}', description: 'Keep literal : +5 and "quotes".' }] };
+assert.deepEqual(parseModelJSON('```json\n' + JSON.stringify(expected) + '\n```'), expected);
+assert.deepEqual(parseModelJSON('<think>{"events":["not output"]}</think>\n' + JSON.stringify(expected) + '\nDone {comment}'), expected);
+assert.deepEqual(parseModelJSON('{"explanation":"not events"}\n' + JSON.stringify(expected)), expected);
+assert.throws(() => parseModelJSON('{"events":[],"value":+5}'), /not return valid event JSON/);
+assert.throws(() => parseModelJSON('No usable result'), /campaign has not advanced/);
+assert.equal(parseModelJSON(JSON.stringify({events:[{description:'literal <think>keep this</think>'}]})).events[0].description, 'literal <think>keep this</think>');
+assert.throws(() => parseModelJSON(null), /no event data/);
+console.log('✓ Model JSON fences, commentary, quoted braces and invalid-response handling passed');

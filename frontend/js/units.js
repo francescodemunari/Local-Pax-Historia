@@ -7,9 +7,12 @@ class UnitManager {
     constructor(map) {
         this.map = map;
         this.units = [];
+        this.saveId = null;
         this.unitMarkers = {};
+        this.unitsVisible = true;
         this.unitIcons = {
             infantry: '🪖',
+            cavalry: '🐎',
             armor: '🛡️',
             naval: '⚓',
             air: '✈️'
@@ -27,6 +30,7 @@ class UnitManager {
      */
     async loadUnits(saveId) {
         try {
+            this.saveId = saveId;
             const url = `/api/units?saveId=${saveId}`;
             console.log(`Fetching units from: ${url}`);
 
@@ -41,11 +45,7 @@ class UnitManager {
             console.log(`[UnitManager] Loaded ${this.units.length} units for saveId ${saveId}`);
             console.log('[UnitManager] First unit sample:', this.units[0]);
 
-            if (this.units.length > 0) {
-                this.displayUnits();
-            } else {
-                console.warn('[UnitManager] No units returned from API.');
-            }
+            this.displayUnits();
 
             return this.units;
         } catch (error) {
@@ -81,6 +81,7 @@ class UnitManager {
                 this.createUnitMarker(regionId, data.units, data.centroid);
             }
         });
+        this.toggleUnits(this.unitsVisible);
     }
 
     /**
@@ -91,14 +92,6 @@ class UnitManager {
         // Transform: Lat = Height - y, Lng = x
 
         // Get scale factor
-        const scale = gameMap.scaleFactor || 1.0;
-        const mapHeight = this.map.options.maxBounds ? this.map.options.maxBounds[1][0] : 600;
-
-        // Visual Alignment Offsets (match cities.js)
-        const OFFSET_X = 35;
-        const OFFSET_Y = -35;
-
-        let position;
         let svgX, svgY;
 
         // Extract raw SVG coordinates first
@@ -134,10 +127,8 @@ class UnitManager {
         // Get map width for world wrapping
         const mapWidth = (gameMap && gameMap.svgWidth) ? gameMap.svgWidth : 1400.16;
 
-        // Apply Offsets, Scaling and Transformation
-        const scaledX = (svgX + OFFSET_X) * scale;
-        const scaledY = (svgY + OFFSET_Y) * scale;
-        const baseLat = mapHeight - scaledY;
+        // The stored centroid is already in SVG coordinates. Offsetting it here
+        // made every unit visibly drift away from its selected deployment region.
 
         // Create HTML for icon
         const iconHtml = this.createIconHTML(units);
@@ -157,7 +148,7 @@ class UnitManager {
                 iconAnchor: [20, 20]
             });
 
-            const position = [baseLat, scaledX + xOffset];
+            const position = gameMap.svgToLatLng([svgX, svgY], xOffset);
 
             const marker = L.marker(position, {
                 icon: icon,
@@ -188,11 +179,10 @@ class UnitManager {
         let html = '<div class="unit-icon-stack">';
 
         // Show the top unit icon or a combined icon
-        const topType = units[0].unit_type;
-        const icon = this.unitIcons[topType] || '⚔️';
+        const icon = Object.keys(typeCounts).map(type=>this.unitIcons[type] || '⚔️').join('');
         const totalCount = units.length;
 
-        html += `<div class="unit-main-icon">${icon}</div>`;
+        html += `<div class="unit-main-icon" style="font-size:${Object.keys(typeCounts).length>1?11:18}px" title="${Object.keys(typeCounts).filter(type=>Object.hasOwn(this.unitIcons,type)).join(', ')}">${icon}</div>`;
         if (totalCount > 1) {
             html += `<div class="unit-count-badge">${totalCount}</div>`;
         }
@@ -205,117 +195,25 @@ class UnitManager {
      * Show popup with unit details
      */
     showUnitsPopup(regionId, units) {
-        if (this.regionManager && typeof this.regionManager.selectRegion === 'function') {
-            this.regionManager.selectRegion(regionId);
-        } else if (window.app && window.app.regionManager && typeof window.app.regionManager.selectRegion === 'function') {
-            window.app.regionManager.selectRegion(regionId);
+        const region = gameMap.currentRegions?.find(candidate =>
+            candidate.id === regionId || candidate.name === regionId
+        );
+        if (region && typeof app !== 'undefined' && app.handleRegionClick) {
+            app.handleRegionClick(region);
+            return;
+        }
+
+        const unitList = units.map(u => {
+            const icon = this.unitIcons[u.unit_type] || '⚔️';
+            const name = u.name || u.unit_name || `${u.nation_code || ''} ${u.unit_type || 'Division'}`;
+            const strength = u.strength !== undefined ? u.strength : (u.military_strength || 100);
+            return `${icon} ${name} (${strength}% str)`;
+        }).join('\n');
+
+        if (typeof app !== 'undefined' && app.showToast) {
+            app.showToast(`Units in region:\n${unitList}`, 'info');
         } else {
-            const unitList = units.map(u => {
-                const icon = this.unitIcons[u.unit_type] || '⚔️';
-                const name = u.name || u.unit_name || `${u.nation_code || ''} ${u.unit_type || 'Division'}`;
-                const strength = u.strength !== undefined ? u.strength : (u.military_strength || 100);
-                return `${icon} ${name} (${strength}% str)`;
-            }).join('\n');
-
-            if (window.app && window.app.showToast) {
-                window.app.showToast(`Units in region:\n${unitList}`, 'info');
-            } else {
-                alert(`Units in region:\n\n${unitList}`);
-            }
-        }
-    }
-
-    /**
-     * Create a new unit
-     */
-    async createUnit(unitData) {
-        try {
-            const response = await fetch('/api/units', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(unitData)
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Failed to create unit');
-            }
-
-            const newUnit = await response.json();
-            console.log('Unit created:', newUnit);
-
-            // Reload units
-            await this.loadUnits(unitData.nation_code);
-            this.displayUnits();
-
-            return newUnit;
-        } catch (error) {
-            console.error('Error creating unit:', error);
-            alert(`Failed to create unit: ${error.message}`);
-        }
-    }
-
-    /**
-     * Move a unit to a different region
-     */
-    async moveUnit(unitId, toRegionId) {
-        try {
-            const response = await fetch(`/api/units/${unitId}/move`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ to_region_id: toRegionId })
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Failed to move unit');
-            }
-
-            const result = await response.json();
-            console.log('Unit moved:', result);
-
-            // TODO: Animate movement
-            // For now, just reload
-            const unit = this.units.find(u => u.id === unitId);
-            if (unit) {
-                await this.loadUnits(unit.nation_code);
-                this.displayUnits();
-            }
-
-            return result;
-        } catch (error) {
-            console.error('Error moving unit:', error);
-            alert(`Failed to move unit: ${error.message}`);
-        }
-    }
-
-    /**
-     * Disband a unit
-     */
-    async disbandUnit(unitId) {
-        if (!confirm('Are you sure you want to disband this unit?')) return;
-
-        try {
-            const response = await fetch(`/api/units/${unitId}`, {
-                method: 'DELETE'
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Failed to disband unit');
-            }
-
-            console.log('Unit disbanded');
-
-            // Reload units
-            const unit = this.units.find(u => u.id === unitId);
-            if (unit) {
-                await this.loadUnits(unit.nation_code);
-                this.displayUnits();
-            }
-        } catch (error) {
-            console.error('Error disbanding unit:', error);
-            alert(`Failed to disband unit: ${error.message}`);
+            alert(`Units in region:\n\n${unitList}`);
         }
     }
 
@@ -337,6 +235,7 @@ class UnitManager {
      * Toggle unit visibility
      */
     toggleUnits(visible) {
+        this.unitsVisible = Boolean(visible);
         Object.values(this.unitMarkers).forEach(item => {
             const markers = Array.isArray(item) ? item : [item];
             markers.forEach(m => {

@@ -1,0 +1,41 @@
+{
+  "ww1-1910": {
+    "world": "Start: 1 January 1910. Europe is at peace between its great powers, but alliance commitments, imperial rivalry, naval competition and nationalist disputes create risks. Germany, Austria-Hungary and Italy belong to the Triple Alliance; France and Russia are allied, while British understandings with France and Russia are not an automatic obligation to fight every war. The Ottoman state still holds Libya and substantial Balkan territory. Qing rule continues in China. There has been no Italo-Turkish War, Balkan Wars, Sarajevo assassination or world war. Give diplomacy, administrative reform, industrial preparation and domestic opposition time to develop. Do not use tanks, modern aircraft fleets, nuclear weapons or digital communications. Distinguish plans from mobilization, deployment and actual fighting.",
+    "nations": {
+      "ITA": "Italy must balance its alliance obligations, Mediterranean ambitions and relations with Austria-Hungary. Expansion would require diplomatic preparation, transport and sustained domestic support; Libya is still Ottoman territory.",
+      "GER": "Germany balances continental security, alliance commitments and naval competition with Britain. Diplomatic isolation is a risk; a future two-front war is not inevitable.",
+      "FRA": "France balances security against Germany, its Russian alliance and cooperation with Britain. Avoid treating British intervention as guaranteed.",
+      "RUS": "Russia faces competing priorities of internal reform, recovery and influence in the Balkans. Do not assume that mobilization produces instant readiness.",
+      "CHI": "The Qing administration faces pressures for reform and competing political movements. A future revolution is not already accomplished."
+    },
+    "sources": [
+      "https://encyclopedia.1914-1918-online.net/article/alliance-system-1914/"
+    ]
+  },
+  "ww2-geographic": {
+    "world": "Start: 1 January 1936. Germany is rearming under Nazi rule, but the Rhineland remilitarization of March 1936 has not yet happened. Austria and Czechoslovakia remain separate states. Italy is fighting Ethiopia; the campaign is not yet concluded. The League of Nations and competing security commitments shape diplomatic responses. Spain has not yet entered its later civil war. Do not assume later annexations, alliances or the outcome of a future world war. Distinguish immediate diplomatic decisions from training, industrial conversion and transport that take months. Technology and communications must fit 1936. Domestic political coercion and persecution have human and diplomatic consequences, not abstract resource bonuses.",
+    "nations": {
+      "ITA": "Italy is engaged in the Ethiopian campaign and faces international pressure. Assess supply lines, relations with Britain and France, and the consequences of extending the war.",
+      "GER": "German policy confronts the European security settlement and French/British responses. Rhineland deployment is a possible decision, not a completed starting fact.",
+      "FRA": "French security depends on diplomacy, credible deterrence and coordination with allies; domestic political changes cannot be assumed in advance.",
+      "ENG": "Britain weighs European security, imperial commitments and avoiding another major war. Other states cannot command British policy.",
+      "ETH": "Ethiopia is defending against the Italian invasion. Preserve Ethiopian agency and assess terrain, external diplomacy and the practical limits of supply."
+    },
+    "sources": [
+      "https://encyclopedia.ushmm.org/content/en/article/1936-key-dates",
+      "https://encyclopedia.ushmm.org/content/en/article/german-prewar-expansion"
+    ]
+  },
+  "world-2010": {
+    "world": "Start: 1 January 2010. Governments are dealing with the aftermath of the global financial crisis in an interconnected world of trade, finance and international institutions. Diplomacy, energy, infrastructure, public opinion and communications matter alongside military capacity. Nuclear deterrence makes escalation between nuclear powers qualitatively different from conventional war. States have distinct interests even inside alliances; NATO, the EU and the UN are not a single government. Do not import knowledge of later uprisings, wars, pandemics or election outcomes as completed facts or inevitable events. Model reform, procurement and institutional change with realistic implementation delays. Existing campaign outcomes override the historical starting trajectory.",
+    "nations": {
+      "USA": "Balance global security commitments and cooperation with domestic recovery and political constraints. Other governments retain independent decision-making.",
+      "CHI": "Consider trade dependence, domestic development and relations with neighboring states when judging expansion or coercion.",
+      "RUS": "Energy relationships and regional security interests interact with wider economic and diplomatic constraints. Do not assume later conflicts have already begun.",
+      "ITA": "Consider European institutions, coalition politics and international economic connections when evaluating domestic or foreign initiatives."
+    },
+    "sources": [
+      "https://www.un.org/en/yearbook"
+    ]
+  }
+}

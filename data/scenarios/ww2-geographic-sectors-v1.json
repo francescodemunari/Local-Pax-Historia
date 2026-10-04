@@ -1,0 +1,40 @@
+{
+  "id": "ww2-geographic-sectors-v1",
+  "version": "1.0.0",
+  "name": "World War II — Geographic Map (original sectors)",
+  "era": "1936",
+  "isDefault": false,
+  "defaultStartDate": "1936-01-01",
+  "startDates": [
+    "1936-01-01"
+  ],
+  "description": "Dated geographic atlas sandbox (1936-01-01). Capitals use geographic coordinates; operational sectors are generated, not historical provinces. Colonial control follows an explicit scenario overlay.",
+  "worldContext": "Germany is rearming, the Italian-Ethiopian War is ongoing, and international tensions are rising. Do not assume later annexations or WWII victories have already occurred.",
+  "simulationRules": "Use the selected date and nation catalog. Some map entities are dependent administrations, not independent sovereign countries. Do not treat every territory as independent. Recruitment starts only through approved actions. Resources are game-balance defaults.",
+  "renderer": {
+    "type": "svg-overlay",
+    "svgUrl": "/maps/ww2-geographic-sectors-v1.svg"
+  },
+  "assets": {
+    "map": "scenarios/ww2-geographic-sectors-v1/map.json",
+    "nations": "scenarios/ww2-geographic-sectors-v1/nations.json",
+    "cities": "scenarios/ww2-geographic-sectors-v1/cities.json"
+  },
+  "unitCatalog": {
+    "infantry": {
+      "label": "Infantry Division",
+      "manpower": 10000,
+      "treasury": 50,
+      "landSpeed": 2,
+      "landKmPerDay": 40
+    },
+    "armor": {
+      "label": "Armored Brigade",
+      "manpower": 4000,
+      "treasury": 120,
+      "landSpeed": 4,
+      "landKmPerDay": 80
+    }
+  },
+  "hidden": true
+}

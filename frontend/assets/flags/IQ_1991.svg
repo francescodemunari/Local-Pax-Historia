@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="900"
+   height="600"
+   version="1.1"
+   id="svg9"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs9" />
+  <rect
+     width="900"
+     height="600"
+     fill="#000"
+     id="rect1" />
+  <rect
+     width="900"
+     height="400"
+     fill="#fff"
+     id="rect2" />
+  <rect
+     width="900"
+     height="200"
+     fill="#ce1126"
+     id="rect3" />
+  <g
+     id="g9"
+     transform="translate(0,5.7294902)">
+    <use
+       xlink:href="#s"
+       x="-225"
+       id="use3" />
+    <g
+       id="s"
+       transform="translate(450,300)"
+       fill="#007a3d">
+      <g
+         id="c">
+        <path
+           id="t"
+           d="M 0,-60 V 0 h 30"
+           transform="rotate(18,0,-60)" />
+        <use
+           xlink:href="#t"
+           transform="scale(-1,1)"
+           id="use4" />
+      </g>
+      <use
+         xlink:href="#c"
+         transform="rotate(72)"
+         id="use5" />
+      <use
+         xlink:href="#c"
+         transform="rotate(144)"
+         id="use6" />
+      <use
+         xlink:href="#c"
+         transform="rotate(-144)"
+         id="use7" />
+      <use
+         xlink:href="#c"
+         transform="rotate(-72)"
+         id="use8" />
+    </g>
+    <use
+       xlink:href="#s"
+       x="225"
+       id="use9" />
+  </g>
+</svg>

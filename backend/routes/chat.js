@@ -1,4 +1,6 @@
+const respondWithError = require('../services/http-error');
 const express = require('express');
+const crypto = require('crypto');
 const router = express.Router();
 const llmService = require('../services/llm-service');
 const GameEngine = require('../services/game-engine');
@@ -10,17 +12,26 @@ router.post('/start', async (req, res) => {
     try {
         const { saveId, participantNations, topic } = req.body;
 
-        if (!saveId || !participantNations || participantNations.length === 0) {
+        if (typeof saveId !== 'string' || !Array.isArray(participantNations) || participantNations.length < 2) {
             return res.status(400).json({ error: 'saveId and participantNations are required' });
         }
 
         const gameState = await engine.loadGame(saveId);
-        const chatType = participantNations.length > 2 ? 'conference' : 'bilateral';
+        const nations = engine.getEffectiveNations(gameState);
+        const participants = [...new Set(participantNations.map(code => String(code || '').toUpperCase()))];
+        if (participants.length !== participantNations.length || !participants.includes(gameState.playerNationCode) ||
+            participants.some(code => !nations[code] || gameState.nations[code]?.annexed_by)) {
+            return res.status(400).json({ error: 'participantNations must be unique, valid nations and include the player nation' });
+        }
+        if (topic != null && (typeof topic !== 'string' || topic.length > 160)) {
+            return res.status(400).json({ error: 'topic must be a string of at most 160 characters' });
+        }
+        const chatType = participants.length > 2 ? 'conference' : 'bilateral';
 
         const newChat = {
-            id: Date.now().toString(),
+            id: `chat_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`,
             save_id: saveId,
-            participant_nations: participantNations.map(n => n.toUpperCase()),
+            participant_nations: participants,
             chat_type: chatType,
             topic: topic || 'Diplomacy',
             is_active: true,
@@ -36,7 +47,7 @@ router.post('/start', async (req, res) => {
         res.json(newChat);
     } catch (error) {
         console.error('Error starting diplomatic chat:', error);
-        res.status(500).json({ error: error.message });
+        respondWithError(res, error);
     }
 });
 
@@ -46,8 +57,11 @@ router.post('/:chatId/message', async (req, res) => {
         const { saveId, message, senderNation, isPlayer } = req.body;
         const chatId = req.params.chatId;
 
-        if (!saveId || !message || !senderNation) {
+        if (typeof saveId !== 'string' || typeof message !== 'string' || !message.trim() || typeof senderNation !== 'string') {
             return res.status(400).json({ error: 'saveId, message and senderNation are required' });
+        }
+        if (message.trim().length > 4000) {
+            return res.status(400).json({ error: 'message must not exceed 4000 characters' });
         }
 
         const gameState = await engine.loadGame(saveId);
@@ -56,13 +70,19 @@ router.post('/:chatId/message', async (req, res) => {
         if (!chat) {
             return res.status(404).json({ error: 'Chat not found' });
         }
+        if (!chat.is_active) {
+            return res.status(409).json({ error: 'Chat is closed' });
+        }
+        if (senderNation.toUpperCase() !== gameState.playerNationCode || !chat.participant_nations.includes(gameState.playerNationCode)) {
+            return res.status(403).json({ error: 'Messages can only be sent by the player nation in this chat' });
+        }
 
         // Save player message
         const playerMsg = {
-            id: Date.now().toString(),
+            id: `message_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`,
             sender_nation: senderNation.toUpperCase(),
             sender_is_player: isPlayer !== false,
-            message_text: message,
+            message_text: message.trim(),
             game_date: gameState.currentDate,
             created_at: new Date().toISOString()
         };
@@ -77,7 +97,7 @@ router.post('/:chatId/message', async (req, res) => {
             return res.json({ success: true, responses: [] });
         }
 
-        const nations = engine.getNations();
+        const nations = engine.getEffectiveNations(gameState);
         const responses = [];
 
         // Get responses from each AI nation
@@ -87,21 +107,21 @@ router.post('/:chatId/message', async (req, res) => {
 
             // Get AI response
             const aiResponse = await llmService.diplomaticChat(
-                message,
+                message.trim(),
                 gameState.playerNation,
                 targetNation,
                 chat.messages,
                 {
                     currentDate: gameState.currentDate,
                     participants: chat.participant_nations.map(c => nations[c]?.name || c).join(', '),
-                    worldContext: gameState.world_context || "Historical 1936 start.",
+                    worldContext: engine.getScenarioBriefing(gameState) + "\nUse only saved cities/capital and territorial control below. If capital is null, say no controlled capital is designated; never invent a replacement seat. Diplomacy cannot commit a relocation or annexation; those require simulation.\nCURRENT STATE: " + JSON.stringify(engine.buildWorldStateSummary(gameState)),
                     simRules: gameState.simulation_rules || "Standard simulation logic.",
                     eventHistory: (gameState.events || []).slice(-20)
                 }
             );
 
             const aiMsg = {
-                id: (Date.now() + 1).toString(),
+                id: `message_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`,
                 sender_nation: nationCode,
                 sender_is_player: false,
                 message_text: aiResponse,
@@ -133,7 +153,7 @@ router.post('/:chatId/message', async (req, res) => {
         res.json({ success: true, responses });
     } catch (error) {
         console.error('Error processing diplomatic message:', error);
-        res.status(500).json({ error: error.message });
+        respondWithError(res, error);
     }
 });
 
@@ -151,7 +171,7 @@ router.get('/save/:saveId', async (req, res) => {
         res.json(chats);
     } catch (error) {
         console.error('Error fetching chats:', error);
-        res.status(500).json({ error: error.message });
+        respondWithError(res, error);
     }
 });
 
@@ -166,7 +186,7 @@ router.get('/:chatId/messages', async (req, res) => {
 
         if (!chat) return res.status(404).json({ error: 'Chat not found' });
 
-        const nations = engine.getNations();
+        const nations = engine.getEffectiveNations(gameState);
         const enrichedMessages = chat.messages.map(m => {
             const nation = nations[m.sender_nation];
             return {
@@ -180,7 +200,7 @@ router.get('/:chatId/messages', async (req, res) => {
         res.json(enrichedMessages);
     } catch (error) {
         console.error('Error fetching messages:', error);
-        res.status(500).json({ error: error.message });
+        respondWithError(res, error);
     }
 });
 
@@ -201,7 +221,7 @@ router.post('/:chatId/close', async (req, res) => {
         res.json({ success: true });
     } catch (error) {
         console.error('Error closing chat:', error);
-        res.status(500).json({ error: error.message });
+        respondWithError(res, error);
     }
 });
 
@@ -209,11 +229,11 @@ router.post('/:chatId/close', async (req, res) => {
 router.get('/available/:saveId', async (req, res) => {
     try {
         const gameState = await engine.loadGame(req.params.saveId);
-        const nations = engine.getNations();
+        const nations = engine.getEffectiveNations(gameState);
         const playerNationCode = gameState.playerNationCode;
 
         const available = Object.values(nations)
-            .filter(n => n.code !== playerNationCode)
+            .filter(n => n.code !== playerNationCode && !gameState.nations[n.code]?.annexed_by)
             .map(n => ({
                 code: n.code,
                 name: n.name,
@@ -228,7 +248,7 @@ router.get('/available/:saveId', async (req, res) => {
         res.json(available);
     } catch (error) {
         console.error('Error fetching available nations:', error);
-        res.status(500).json({ error: error.message });
+        respondWithError(res, error);
     }
 });
 

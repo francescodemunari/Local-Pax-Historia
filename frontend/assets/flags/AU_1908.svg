@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1279.9999" height="639.99994" viewBox="0 0 30240 15119.998">
+  <defs>
+    <path id="a" d="m3.1273259 2.4939592.7776278 5.6147606L0 4l-3.9049537 4.1087198.7776278-5.6147606-5.6470253-.4912708 4.8746396-2.89277214-3.1367717-4.72132446 5.3009483 2.0075327L0-9l1.735535 5.3961245 5.3009483-2.0075327L3.8997116-.89008374 8.7743512 2.0026884z"/>
+    <path id="b" d="m0-9 2.351141 5.763932 6.2083676.4549151L3.8042261 1.236068l1.4858412 6.0450849L0 4l-5.2900673 3.2811529 1.4858412-6.0450849-4.7552825-4.0172209 6.2083676-.4549151L0-9z"/>
+  </defs>
+  <path style="fill:#012169;fill-opacity:1;stroke:none" d="M0-.001h30240v15120H0z"/>
+  <path style="fill:#012169;fill-opacity:1;stroke:none" d="M0-.001h15120v7560.0005H0z"/>
+  <path style="fill:#fff;stroke:none" d="M6300-.001h2520v2520.0003h6300v2519.9999H8820v2520.0003H6300V5039.9992H0V2519.9993h6300V-.001z"/>
+  <path style="fill:#fff;stroke:none" d="M0-.001h1690.467L15120 6714.7656v845.2339h-1690.467L0 845.2332V-.001z"/>
+  <path style="fill:#fff;stroke:none" d="M15120-.001h-1690.467L0 6714.7656v845.2339h1690.467L15120 845.2332V-.001z"/>
+  <path style="fill:#e4002b;fill-opacity:1;stroke:none" d="M6804-.001h1512v3024.0004h6804v1511.9999H8316v3024.0002H6804V4535.9993H0V3023.9994h6804V-.001z"/>
+  <path style="fill:#e4002b;fill-opacity:1;stroke:none" d="m0-.001 5040 2520.0003H3913.022L0 563.4882V-.001zm15120 0h-1126.978l-5040 2520.0003H10080L15120-.001z"/>
+  <path style="fill:#e4002b;stroke:none;fill-opacity:1" d="m15120 7559.9995-5040-2520.0003h1126.978L15120 6996.5103v563.4892zm-15120 0h1126.978l5040-2520.0003H5040L0 7559.9995z"/>
+  <path style="fill:none;stroke:none" d="M0-37.163956h30314.326v15157.163H0z"/>
+  <path d="m7559.9946 13930.811 2243.7088-3886.216H5316.287l2243.7076 3886.216z" style="fill:#fff;stroke:none"/>
+  <path d="m7559.9946 8749.187-2243.7075 3886.216h4487.4163L7559.9946 8749.187z" style="fill:#fff;stroke:none"/>
+  <use transform="matrix(120.05773 0 0 120.00565 22680.002 12600.114)" style="fill:#fff;stroke:none" xlink:href="#a" width="1" height="1"/>
+  <use transform="matrix(120.05773 0 0 120.00565 18900.002 6690.1142)" style="fill:#fff;stroke:none" xlink:href="#a" width="1" height="1"/>
+  <use transform="matrix(120.05773 0 0 120.00565 22680.002 2520.114)" style="fill:#fff;stroke:none" xlink:href="#a" width="1" height="1"/>
+  <use transform="matrix(120.05773 0 0 120.00565 26040.002 5670.1142)" style="fill:#fff;stroke:none" xlink:href="#a" width="1" height="1"/>
+  <use transform="matrix(70 0 0 70 24191.168 8190.3174)" style="fill:#fff;stroke:none" xlink:href="#b" width="1" height="1"/>
+</svg>

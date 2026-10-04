@@ -1,0 +1,3369 @@
+{
+  "ww1-1910": [
+    {
+      "nation": "ITA",
+      "date": "1910-03-31",
+      "profile": {
+        "leader_name": "Luigi Luzzatti",
+        "leader_title": "Prime Minister",
+        "ruling_party": "Liberal constitutional government"
+      },
+      "source": "https://storia.camera.it/governi/i-governo-luzzatti/Ministero%20delle%20poste%20e%20telegrafi"
+    },
+    {
+      "nation": "AST",
+      "date": "1910-04-29",
+      "profile": {
+        "leader_name": "Andrew Fisher",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q314016",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "ENG",
+      "date": "1910-05-06",
+      "profile": {
+        "head_of_state": "George V"
+      },
+      "source": "https://www.royal.uk/george-v"
+    },
+    {
+      "nation": "ITA",
+      "date": "1911-03-30",
+      "profile": {
+        "leader_name": "Giovanni Giolitti",
+        "leader_title": "Prime Minister",
+        "ruling_party": "Liberal constitutional government"
+      },
+      "source": "https://storia.camera.it/governi/iv-governo-giolitti"
+    },
+    {
+      "nation": "CAN",
+      "date": "1911-10-10",
+      "profile": {
+        "leader_name": "Robert Borden",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q128655",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q16",
+      "revision": 2547610960
+    },
+    {
+      "nation": "PRU",
+      "date": "1912-09-24",
+      "profile": {
+        "leader_name": "Guillermo Billinghurst",
+        "leader_title": "Head of State",
+        "leader_entity": "Q136790",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "USA",
+      "date": "1913-03-04",
+      "profile": {
+        "leader_name": "Woodrow Wilson",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q34296",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q30",
+      "revision": 2547611009
+    },
+    {
+      "nation": "AST",
+      "date": "1913-06-24",
+      "profile": {
+        "leader_name": "Joseph Cook",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q356230",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "PRU",
+      "date": "1914-02-04",
+      "profile": {
+        "leader_name": "Óscar R. Benavides",
+        "leader_title": "Head of State",
+        "leader_entity": "Q129005",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "AST",
+      "date": "1914-09-17",
+      "profile": {
+        "leader_name": "Andrew Fisher",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q314016",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "PRU",
+      "date": "1915-08-18",
+      "profile": {
+        "leader_name": "José Pardo y Barreda",
+        "leader_title": "Head of State",
+        "leader_entity": "Q136632",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "AST",
+      "date": "1915-10-27",
+      "profile": {
+        "leader_name": "Billy Hughes",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q152666",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "PRU",
+      "date": "1919-07-04",
+      "profile": {
+        "leader_name": "Augusto Leguía",
+        "leader_title": "Head of State",
+        "leader_entity": "Q131010",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "CAN",
+      "date": "1920-07-10",
+      "profile": {
+        "leader_name": "Arthur Meighen",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q128645",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q16",
+      "revision": 2547610960
+    },
+    {
+      "nation": "USA",
+      "date": "1921-03-04",
+      "profile": {
+        "leader_name": "Warren G. Harding",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q35286",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q30",
+      "revision": 2547611009
+    },
+    {
+      "nation": "CAN",
+      "date": "1921-12-29",
+      "profile": {
+        "leader_name": "William Lyon Mackenzie King",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q128633",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q16",
+      "revision": 2547610960
+    },
+    {
+      "nation": "AST",
+      "date": "1923-02-09",
+      "profile": {
+        "leader_name": "S. M. Bruce",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q23358",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "USA",
+      "date": "1923-08-02",
+      "profile": {
+        "leader_name": "Calvin Coolidge",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q36023",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q30",
+      "revision": 2547611009
+    }
+  ],
+  "ww2-geographic": [
+    {
+      "nation": "AAV",
+      "date": "1936-01-16",
+      "profile": {
+        "leader_name": "Humphrey Walwyn",
+        "leader_title": "Governor",
+        "ruling_party": null
+      },
+      "source": "https://api.parliament.uk/historic-hansard/written-answers/1937/feb/23/newfoundland"
+    },
+    {
+      "nation": "ENG",
+      "date": "1936-01-20",
+      "profile": {
+        "head_of_state": "Edward VIII"
+      },
+      "source": "https://www.royal.uk/edward-viii"
+    },
+    {
+      "nation": "ENG",
+      "date": "1936-12-11",
+      "profile": {
+        "head_of_state": "George VI"
+      },
+      "source": "https://www.royal.uk/george-vi"
+    },
+    {
+      "nation": "FIN",
+      "date": "1937-03-01",
+      "profile": {
+        "leader_name": "Kyösti Kallio",
+        "leader_title": "Head of State",
+        "leader_entity": "Q209441",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q33",
+      "revision": 2544147998
+    },
+    {
+      "nation": "ENG",
+      "date": "1937-05-28",
+      "profile": {
+        "leader_name": "Neville Chamberlain",
+        "leader_title": "Prime Minister",
+        "ruling_party": "Conservative Party / National Government"
+      },
+      "source": "https://www.gov.uk/government/history/past-prime-ministers/neville-chamberlain"
+    },
+    {
+      "nation": "ROM",
+      "date": "1937-12-29",
+      "profile": {
+        "leader_name": "Octavian Goga",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q223414",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "ROM",
+      "date": "1938-02-11",
+      "profile": {
+        "leader_name": "Patriarch Miron of Romania",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q2268352",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "TUR",
+      "date": "1938-11-10",
+      "profile": {
+        "leader_name": "Abdülhalik Renda",
+        "leader_title": "Head of State",
+        "leader_entity": "Q1076524",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q43",
+      "revision": 2547610866
+    },
+    {
+      "nation": "TUR",
+      "date": "1938-11-11",
+      "profile": {
+        "leader_name": "İsmet İnönü",
+        "leader_title": "Head of State",
+        "leader_entity": "Q183297",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q43",
+      "revision": 2547610866
+    },
+    {
+      "nation": "ROM",
+      "date": "1939-03-07",
+      "profile": {
+        "leader_name": "Armand Călinescu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q439903",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "AST",
+      "date": "1939-04-07",
+      "profile": {
+        "leader_name": "Earle Page",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q370926",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "AST",
+      "date": "1939-04-26",
+      "profile": {
+        "leader_name": "Robert Menzies",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q214438",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "HOL",
+      "date": "1939-08-10",
+      "profile": {
+        "leader_name": "Dirk Jan de Geer",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q693053",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q55",
+      "revision": 2547611431
+    },
+    {
+      "nation": "ROM",
+      "date": "1939-09-21",
+      "profile": {
+        "leader_name": "Gheorghe Argeșanu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q2299760",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "ROM",
+      "date": "1939-09-28",
+      "profile": {
+        "leader_name": "Constantin Argetoianu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q1127788",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "ROM",
+      "date": "1939-11-24",
+      "profile": {
+        "leader_name": "Gheorghe Tătărescu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q1842040",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "PRU",
+      "date": "1939-12-08",
+      "profile": {
+        "leader_name": "Manuel Prado Ugarteche",
+        "leader_title": "Head of State",
+        "leader_entity": "Q116718",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "ENG",
+      "date": "1940-05-10",
+      "profile": {
+        "leader_name": "Winston Churchill",
+        "leader_title": "Prime Minister",
+        "ruling_party": "Wartime coalition"
+      },
+      "source": "https://www.gov.uk/government/history/past-prime-ministers/winston-churchill"
+    },
+    {
+      "nation": "ROM",
+      "date": "1940-07-04",
+      "profile": {
+        "leader_name": "Ion Gigurtu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q921959",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "HOL",
+      "date": "1940-09-03",
+      "profile": {
+        "leader_name": "Pieter Sjoerds Gerbrandy",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q951705",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q55",
+      "revision": 2547611431
+    },
+    {
+      "nation": "FIN",
+      "date": "1940-12-19",
+      "profile": {
+        "leader_name": "Risto Ryti",
+        "leader_title": "Head of State",
+        "leader_entity": "Q209435",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q33",
+      "revision": 2544147998
+    },
+    {
+      "nation": "AST",
+      "date": "1941-08-29",
+      "profile": {
+        "leader_name": "Arthur Fadden",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q23369",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "AST",
+      "date": "1941-10-07",
+      "profile": {
+        "leader_name": "John Curtin",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q23375",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "DEN",
+      "date": "1942-05-04",
+      "profile": {
+        "leader_name": "Vilhelm Buhl",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q664052",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q35",
+      "revision": 2547611179
+    },
+    {
+      "nation": "DEN",
+      "date": "1942-11-09",
+      "profile": {
+        "leader_name": "Erik Scavenius",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q731504",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q35",
+      "revision": 2547611179
+    },
+    {
+      "nation": "FIN",
+      "date": "1944-08-04",
+      "profile": {
+        "leader_name": "Carl Gustaf Emil Mannerheim",
+        "leader_title": "Head of State",
+        "leader_entity": "Q152306",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q33",
+      "revision": 2544147998
+    },
+    {
+      "nation": "ROM",
+      "date": "1944-08-23",
+      "profile": {
+        "leader_name": "Constantin Sănătescu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q368100",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "ROM",
+      "date": "1944-12-06",
+      "profile": {
+        "leader_name": "Nicolae Rădescu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q279653",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "ROM",
+      "date": "1945-03-06",
+      "profile": {
+        "leader_name": "Petru Groza",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q317313",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "GER",
+      "date": "1945-04-30",
+      "profile": {
+        "leader_name": "Karl Dönitz",
+        "leader_title": "Head of State",
+        "leader_entity": "Q76437",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q7318",
+      "revision": 2546624794
+    },
+    {
+      "nation": "DEN",
+      "date": "1945-05-05",
+      "profile": {
+        "leader_name": "Vilhelm Buhl",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q664052",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q35",
+      "revision": 2547611179
+    },
+    {
+      "nation": "HOL",
+      "date": "1945-06-24",
+      "profile": {
+        "leader_name": "Wim Schermerhorn",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q634025",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q55",
+      "revision": 2547611431
+    },
+    {
+      "nation": "NOR",
+      "date": "1945-06-25",
+      "profile": {
+        "leader_name": "Einar Gerhardsen",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q164346",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q20",
+      "revision": 2547610331
+    },
+    {
+      "nation": "AST",
+      "date": "1945-07-06",
+      "profile": {
+        "leader_name": "Frank Forde",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q459146",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "AST",
+      "date": "1945-07-13",
+      "profile": {
+        "leader_name": "Ben Chifley",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q23379",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "PRU",
+      "date": "1945-07-28",
+      "profile": {
+        "leader_name": "José Luis Bustamante y Rivero",
+        "leader_title": "Head of State",
+        "leader_entity": "Q128999",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "NOR",
+      "date": "1945-11-05",
+      "profile": {
+        "leader_name": "Einar Gerhardsen",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q164346",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q20",
+      "revision": 2547610331
+    },
+    {
+      "nation": "DEN",
+      "date": "1945-11-07",
+      "profile": {
+        "leader_name": "Knud Kristensen",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q1335084",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q35",
+      "revision": 2547611179
+    },
+    {
+      "nation": "FIN",
+      "date": "1946-03-11",
+      "profile": {
+        "leader_name": "Juho Kusti Paasikivi",
+        "leader_title": "Head of State",
+        "leader_entity": "Q202171",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q33",
+      "revision": 2544147998
+    },
+    {
+      "nation": "HOL",
+      "date": "1946-07-03",
+      "profile": {
+        "leader_name": "Louis Beel",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q735519",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q55",
+      "revision": 2547611431
+    },
+    {
+      "nation": "DEN",
+      "date": "1947-11-13",
+      "profile": {
+        "leader_name": "Hans Hedtoft",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q503087",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q35",
+      "revision": 2547611179
+    },
+    {
+      "nation": "HOL",
+      "date": "1948-08-07",
+      "profile": {
+        "leader_name": "Willem Drees",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q12769",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q55",
+      "revision": 2547611431
+    },
+    {
+      "nation": "PRU",
+      "date": "1948-11-01",
+      "profile": {
+        "leader_name": "Manuel Odría",
+        "leader_title": "Head of State",
+        "leader_entity": "Q129008",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "CAN",
+      "date": "1948-11-15",
+      "profile": {
+        "leader_name": "Louis St. Laurent",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q128626",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q16",
+      "revision": 2547610960
+    },
+    {
+      "nation": "AST",
+      "date": "1949-12-19",
+      "profile": {
+        "leader_name": "Robert Menzies",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q214438",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "TUR",
+      "date": "1950-05-22",
+      "profile": {
+        "leader_name": "Celâl Bayar",
+        "leader_title": "Head of State",
+        "leader_entity": "Q151735",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q43",
+      "revision": 2547610866
+    },
+    {
+      "nation": "DEN",
+      "date": "1950-10-30",
+      "profile": {
+        "leader_name": "Erik Eriksen",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q710950",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q35",
+      "revision": 2547611179
+    },
+    {
+      "nation": "NOR",
+      "date": "1951-11-19",
+      "profile": {
+        "leader_name": "Oscar Torp",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q355258",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q20",
+      "revision": 2547610331
+    }
+  ],
+  "world-2010": [
+    {
+      "nation": "AUV",
+      "date": "2010-01-16",
+      "profile": {
+        "leader_name": "Aires Ali",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q357430",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1029",
+      "revision": 2531713838
+    },
+    {
+      "nation": "ADN",
+      "date": "2010-01-27",
+      "profile": {
+        "leader_name": "Porfirio Lobo Sosa",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q4737",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q783",
+      "revision": 2544186688
+    },
+    {
+      "nation": "ANG",
+      "date": "2010-02-19",
+      "profile": {
+        "leader_name": "Ivo Josipović",
+        "leader_title": "Head of State",
+        "leader_entity": "Q57258",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q224",
+      "revision": 2547610554
+    },
+    {
+      "nation": "AQU",
+      "date": "2010-02-23",
+      "profile": {
+        "leader_name": "Mahamadou Danda",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q386527",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1032",
+      "revision": 2542474582
+    },
+    {
+      "nation": "AOF",
+      "date": "2010-03-03",
+      "profile": {
+        "leader_name": "Yulia Tymoshenko",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q48283",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q212",
+      "revision": 2547610423
+    },
+    {
+      "nation": "CHL",
+      "date": "2010-03-11",
+      "profile": {
+        "leader_name": "Sebastián Piñera",
+        "leader_title": "Head of State",
+        "leader_entity": "Q306",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q298",
+      "revision": 2544587426
+    },
+    {
+      "nation": "AOF",
+      "date": "2010-03-11",
+      "profile": {
+        "leader_name": "Mykola Azarov",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57590",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q212",
+      "revision": 2547610423
+    },
+    {
+      "nation": "ASH",
+      "date": "2010-05-06",
+      "profile": {
+        "leader_name": "Goodluck Jonathan",
+        "leader_title": "Head of State",
+        "leader_entity": "Q57380",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1033",
+      "revision": 2546746665
+    },
+    {
+      "nation": "ADQ",
+      "date": "2010-05-08",
+      "profile": {
+        "leader_name": "Laura Chinchilla",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57321",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q800",
+      "revision": 2544183914
+    },
+    {
+      "nation": "ENG",
+      "date": "2010-05-11",
+      "profile": {
+        "leader_name": "David Cameron",
+        "leader_title": "Prime Minister",
+        "ruling_party": "Conservative–Liberal Democrat coalition",
+        "ideology": "Liberal conservatism"
+      },
+      "source": "https://www.gov.uk/government/history/past-prime-ministers/david-cameron"
+    },
+    {
+      "nation": "AST",
+      "date": "2010-06-24",
+      "profile": {
+        "leader_name": "Julia Gillard",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q41563",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "AME",
+      "date": "2010-06-28",
+      "profile": {
+        "leader_name": "Petr Nečas",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q35786",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q213",
+      "revision": 2546330872
+    },
+    {
+      "nation": "BGI",
+      "date": "2010-06-30",
+      "profile": {
+        "leader_name": "Benigno Aquino III",
+        "leader_title": "Head of State",
+        "leader_entity": "Q1464",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q928",
+      "revision": 2547611670
+    },
+    {
+      "nation": "AMF",
+      "date": "2010-07-08",
+      "profile": {
+        "leader_name": "Iveta Radičová",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q211771",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q214",
+      "revision": 2545554858
+    },
+    {
+      "nation": "COL",
+      "date": "2010-08-07",
+      "profile": {
+        "leader_name": "Juan Manuel Santos",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57311",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q739",
+      "revision": 2547610699
+    },
+    {
+      "nation": "HOL",
+      "date": "2010-10-14",
+      "profile": {
+        "leader_name": "Mark Rutte",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57792",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q55",
+      "revision": 2547611431
+    },
+    {
+      "nation": "ACB",
+      "date": "2010-10-23",
+      "profile": {
+        "leader_name": "Freundel Stuart",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57709",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q244",
+      "revision": 2544182112
+    },
+    {
+      "nation": "MNT",
+      "date": "2010-12-29",
+      "profile": {
+        "leader_name": "Igor Lukšić",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57746",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q236",
+      "revision": 2547517584
+    },
+    {
+      "nation": "BRA",
+      "date": "2011-01-01",
+      "profile": {
+        "leader_name": "Dilma Rousseff",
+        "leader_title": "Head of State",
+        "leader_entity": "Q40722",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q155",
+      "revision": 2547610501
+    },
+    {
+      "nation": "AXS",
+      "date": "2011-01-15",
+      "profile": {
+        "leader_name": "Fouad Mebazaa",
+        "leader_title": "Head of State",
+        "leader_entity": "Q152369",
+        "ruling_party": "Constitutional Democratic Rally",
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q948",
+      "revision": 2547610482
+    },
+    {
+      "nation": "ANJ",
+      "date": "2011-02-22",
+      "profile": {
+        "leader_name": "Behgjet Pacolli",
+        "leader_title": "Head of State",
+        "leader_entity": "Q123004",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1246",
+      "revision": 2547518304
+    },
+    {
+      "nation": "ANJ",
+      "date": "2011-04-07",
+      "profile": {
+        "leader_name": "Atifete Jahjaga",
+        "leader_title": "Head of State",
+        "leader_entity": "Q57509",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1246",
+      "revision": 2547518304
+    },
+    {
+      "nation": "AQU",
+      "date": "2011-04-07",
+      "profile": {
+        "leader_name": "Brigi Rafini",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57877",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1032",
+      "revision": 2542474582
+    },
+    {
+      "nation": "ABP",
+      "date": "2011-05-14",
+      "profile": {
+        "leader_name": "Joseph Michel Martelly",
+        "leader_title": "Head of State",
+        "leader_entity": "Q57512",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q790",
+      "revision": 2542359095
+    },
+    {
+      "nation": "PRU",
+      "date": "2011-07-28",
+      "profile": {
+        "leader_name": "Ollanta Humala",
+        "leader_title": "Head of State",
+        "leader_entity": "Q57254",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "AVF",
+      "date": "2011-09-23",
+      "profile": {
+        "leader_name": "Michael Sata",
+        "leader_title": "Head of State",
+        "leader_entity": "Q299173",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q953",
+      "revision": 2538617937
+    },
+    {
+      "nation": "DEN",
+      "date": "2011-10-03",
+      "profile": {
+        "leader_name": "Helle Thorning-Schmidt",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57652",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q35",
+      "revision": 2547611179
+    },
+    {
+      "nation": "ITA",
+      "date": "2011-11-16",
+      "profile": {
+        "leader_name": "Mario Monti",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q47904",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q38",
+      "revision": 2547610462
+    },
+    {
+      "nation": "BBB",
+      "date": "2011-12-01",
+      "profile": {
+        "leader_name": "Almazbek Atambaev",
+        "leader_title": "Head of State",
+        "leader_entity": "Q24692",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q813",
+      "revision": 2547610692
+    },
+    {
+      "nation": "AXS",
+      "date": "2011-12-13",
+      "profile": {
+        "leader_name": "Moncef Marzouki",
+        "leader_title": "Head of State",
+        "leader_entity": "Q4715",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q948",
+      "revision": 2547610482
+    },
+    {
+      "nation": "SPA",
+      "date": "2011-12-21",
+      "profile": {
+        "leader_name": "Mariano Rajoy",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q10819",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q29",
+      "revision": 2547610467
+    },
+    {
+      "nation": "ANI",
+      "date": "2012-01-12",
+      "profile": {
+        "leader_name": "Vjekoslav Bevanda",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57844",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q225",
+      "revision": 2546245490
+    },
+    {
+      "nation": "ADM",
+      "date": "2012-01-14",
+      "profile": {
+        "leader_name": "Otto Pérez Molina",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57539",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q774",
+      "revision": 2542359215
+    },
+    {
+      "nation": "BUL",
+      "date": "2012-01-22",
+      "profile": {
+        "leader_name": "Rosen Plevneliev",
+        "leader_title": "Head of State",
+        "leader_entity": "Q295212",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q219",
+      "revision": 2547610587
+    },
+    {
+      "nation": "BEB",
+      "date": "2012-02-07",
+      "profile": {
+        "leader_name": "Mohamed Waheed Hassan",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57515",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q826",
+      "revision": 2547084430
+    },
+    {
+      "nation": "ROM",
+      "date": "2012-02-09",
+      "profile": {
+        "leader_name": "Mihai Răzvan Ungureanu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q152362",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "FIN",
+      "date": "2012-03-01",
+      "profile": {
+        "leader_name": "Sauli Niinistö",
+        "leader_title": "Head of State",
+        "leader_entity": "Q29207",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q33",
+      "revision": 2544147998
+    },
+    {
+      "nation": "AMF",
+      "date": "2012-04-04",
+      "profile": {
+        "leader_name": "Robert Fico",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57606",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q214",
+      "revision": 2545554858
+    },
+    {
+      "nation": "ROM",
+      "date": "2012-05-07",
+      "profile": {
+        "leader_name": "Victor Ponta",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57692",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "ABF",
+      "date": "2012-05-08",
+      "profile": {
+        "leader_name": "Perry Christie",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57705",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q778",
+      "revision": 2547619141
+    },
+    {
+      "nation": "ABQ",
+      "date": "2012-08-16",
+      "profile": {
+        "leader_name": "Danilo Medina",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q57429",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q786",
+      "revision": 2547610940
+    },
+    {
+      "nation": "ETH",
+      "date": "2012-09-15",
+      "profile": {
+        "leader_name": "Hailemariam Desalegn",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q381071",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q115",
+      "revision": 2544130943
+    },
+    {
+      "nation": "AUV",
+      "date": "2012-10-08",
+      "profile": {
+        "leader_name": "Alberto Vaquina",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q34282",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1029",
+      "revision": 2531713838
+    },
+    {
+      "nation": "MNT",
+      "date": "2012-12-04",
+      "profile": {
+        "leader_name": "Milo Đukanović",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q200305",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q236",
+      "revision": 2547517584
+    },
+    {
+      "nation": "AVT",
+      "date": "2012-12-04",
+      "profile": {
+        "leader_name": "Hage Geingob",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q1568274",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1030",
+      "revision": 2534567985
+    },
+    {
+      "nation": "ANL",
+      "date": "2012-12-23",
+      "profile": {
+        "leader_name": "Borut Pahor",
+        "leader_title": "Head of State",
+        "leader_entity": "Q206471",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q215",
+      "revision": 2545555029
+    },
+    {
+      "nation": "BCE",
+      "date": "2013-02-25",
+      "profile": {
+        "leader_name": "Park Geun-hye",
+        "leader_title": "Head of State",
+        "leader_entity": "Q138048",
+        "ruling_party": "Liberty Korea Party",
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q884",
+      "revision": 2547611655
+    },
+    {
+      "nation": "ITA",
+      "date": "2013-04-28",
+      "profile": {
+        "leader_name": "Enrico Letta",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q674957",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q38",
+      "revision": 2547610462
+    },
+    {
+      "nation": "ANV",
+      "date": "2013-05-30",
+      "profile": {
+        "leader_name": "Iurie Leancă",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q58087",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q217",
+      "revision": 2547610550
+    },
+    {
+      "nation": "AME",
+      "date": "2013-06-25",
+      "profile": {
+        "leader_name": "Jiří Rusnok",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q12025475",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q213",
+      "revision": 2546330872
+    },
+    {
+      "nation": "BAS",
+      "date": "2013-06-26",
+      "profile": {
+        "leader_name": "Abdullah bin Nasser bin Khalifa Al Thani",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q4666105",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q846",
+      "revision": 2547611290
+    },
+    {
+      "nation": "AST",
+      "date": "2013-06-27",
+      "profile": {
+        "leader_name": "Kevin Rudd",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q43135",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "PER",
+      "date": "2013-08-03",
+      "profile": {
+        "leader_name": "Hassan Rouhani",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q348144",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q794",
+      "revision": 2547610803
+    },
+    {
+      "nation": "AST",
+      "date": "2013-09-18",
+      "profile": {
+        "leader_name": "Tony Abbott",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q348577",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "BEB",
+      "date": "2013-11-17",
+      "profile": {
+        "leader_name": "Abdulla Yameen",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q4665896",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q826",
+      "revision": 2547084430
+    },
+    {
+      "nation": "LUX",
+      "date": "2013-12-04",
+      "profile": {
+        "leader_name": "Xavier Bettel",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q561213",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q32",
+      "revision": 2544155503
+    },
+    {
+      "nation": "AWI",
+      "date": "2014-01-25",
+      "profile": {
+        "leader_name": "Hery Rajaonarimampianina",
+        "leader_title": "Head of State",
+        "leader_entity": "Q15382355",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1019",
+      "revision": 2544596087
+    },
+    {
+      "nation": "ADN",
+      "date": "2014-01-27",
+      "profile": {
+        "leader_name": "Juan Orlando Hernández",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q5951723",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q783",
+      "revision": 2544186688
+    },
+    {
+      "nation": "AOF",
+      "date": "2014-01-28",
+      "profile": {
+        "leader_name": "Serhii Arbuzov",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q1711587",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q212",
+      "revision": 2547610423
+    },
+    {
+      "nation": "AME",
+      "date": "2014-01-29",
+      "profile": {
+        "leader_name": "Bohuslav Sobotka",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q890971",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q213",
+      "revision": 2546330872
+    },
+    {
+      "nation": "ITA",
+      "date": "2014-02-22",
+      "profile": {
+        "leader_name": "Matteo Renzi",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q47563",
+        "ruling_party": "Democratic Party",
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q38",
+      "revision": 2547610462
+    },
+    {
+      "nation": "AOF",
+      "date": "2014-02-27",
+      "profile": {
+        "leader_name": "Arsenii Yatseniuk",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q471730",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q212",
+      "revision": 2547610423
+    },
+    {
+      "nation": "CHL",
+      "date": "2014-03-11",
+      "profile": {
+        "leader_name": "Michelle Bachelet",
+        "leader_title": "Head of State",
+        "leader_entity": "Q320",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q298",
+      "revision": 2544587426
+    },
+    {
+      "nation": "EST",
+      "date": "2014-03-26",
+      "profile": {
+        "leader_name": "Taavi Rõivas",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q3785077",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q191",
+      "revision": 2547610769
+    },
+    {
+      "nation": "ADQ",
+      "date": "2014-05-08",
+      "profile": {
+        "leader_name": "Luis Guillermo Solís",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q5983599",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q800",
+      "revision": 2544183914
+    },
+    {
+      "nation": "ADO",
+      "date": "2014-06-01",
+      "profile": {
+        "leader_name": "Salvador Sánchez Cerén",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q936831",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q792",
+      "revision": 2544185227
+    },
+    {
+      "nation": "ADR",
+      "date": "2014-07-01",
+      "profile": {
+        "leader_name": "Juan Carlos Varela",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q1134096",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q804",
+      "revision": 2547611700
+    },
+    {
+      "nation": "AQT",
+      "date": "2014-08-20",
+      "profile": {
+        "leader_name": "Yahya Ould Hademine",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q3571335",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1025",
+      "revision": 2545299929
+    },
+    {
+      "nation": "TUR",
+      "date": "2014-08-28",
+      "profile": {
+        "leader_name": "Ahmet Davutoğlu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q58198",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q43",
+      "revision": 2547610866
+    },
+    {
+      "nation": "POL",
+      "date": "2014-09-22",
+      "profile": {
+        "leader_name": "Ewa Kopacz",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q246216",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q36",
+      "revision": 2547610377
+    },
+    {
+      "nation": "SWE",
+      "date": "2014-10-03",
+      "profile": {
+        "leader_name": "Stefan Löfven",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q2740012",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q34",
+      "revision": 2547643993
+    },
+    {
+      "nation": "BGS",
+      "date": "2014-10-20",
+      "profile": {
+        "leader_name": "Joko Widodo",
+        "leader_title": "Head of State",
+        "leader_entity": "Q3318231",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q252",
+      "revision": 2547611487
+    },
+    {
+      "nation": "AVF",
+      "date": "2014-10-29",
+      "profile": {
+        "leader_name": "Guy Scott",
+        "leader_title": "Head of State",
+        "leader_entity": "Q153986",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q953",
+      "revision": 2538617937
+    },
+    {
+      "nation": "AQX",
+      "date": "2014-11-18",
+      "profile": {
+        "leader_name": "Michel Kafando",
+        "leader_title": "Head of State",
+        "leader_entity": "Q16105972",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q965",
+      "revision": 2545274078
+    },
+    {
+      "nation": "AXS",
+      "date": "2014-12-31",
+      "profile": {
+        "leader_name": "Beji Caid Essebsi",
+        "leader_title": "Head of State",
+        "leader_entity": "Q313539",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q948",
+      "revision": 2547610482
+    },
+    {
+      "nation": "BEA",
+      "date": "2015-01-09",
+      "profile": {
+        "leader_name": "Maithripala Sirisena",
+        "leader_title": "Head of State",
+        "leader_entity": "Q6737124",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q854",
+      "revision": 2547646531
+    },
+    {
+      "nation": "AUV",
+      "date": "2015-01-17",
+      "profile": {
+        "leader_name": "Carlos Agostinho do Rosário",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q19057400",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1029",
+      "revision": 2531713838
+    },
+    {
+      "nation": "AVF",
+      "date": "2015-01-25",
+      "profile": {
+        "leader_name": "Edgar Lungu",
+        "leader_title": "Head of State",
+        "leader_entity": "Q18352991",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q953",
+      "revision": 2538617937
+    },
+    {
+      "nation": "ANI",
+      "date": "2015-02-11",
+      "profile": {
+        "leader_name": "Denis Zvizdić",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q19501831",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q225",
+      "revision": 2546245490
+    },
+    {
+      "nation": "ANV",
+      "date": "2015-02-18",
+      "profile": {
+        "leader_name": "Chiril Gaburici",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q19281444",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q217",
+      "revision": 2547610550
+    },
+    {
+      "nation": "ANG",
+      "date": "2015-02-19",
+      "profile": {
+        "leader_name": "Kolinda Grabar-Kitarović",
+        "leader_title": "Head of State",
+        "leader_entity": "Q3176299",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q224",
+      "revision": 2547610554
+    },
+    {
+      "nation": "AVT",
+      "date": "2015-03-21",
+      "profile": {
+        "leader_name": "Saara Kuugongelwa",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q7395683",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1030",
+      "revision": 2534567985
+    },
+    {
+      "nation": "ASH",
+      "date": "2015-05-29",
+      "profile": {
+        "leader_name": "Muhammadu Buhari",
+        "leader_title": "Head of State",
+        "leader_entity": "Q361567",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1033",
+      "revision": 2546746665
+    },
+    {
+      "nation": "ANV",
+      "date": "2015-06-22",
+      "profile": {
+        "leader_name": "Natalia Gherman",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q6968023",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q217",
+      "revision": 2547610550
+    },
+    {
+      "nation": "DEN",
+      "date": "2015-06-28",
+      "profile": {
+        "leader_name": "Lars Løkke Rasmussen",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q182397",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q35",
+      "revision": 2547611179
+    },
+    {
+      "nation": "ANV",
+      "date": "2015-07-30",
+      "profile": {
+        "leader_name": "Valeriu Streleț",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q7911417",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q217",
+      "revision": 2547610550
+    },
+    {
+      "nation": "ADM",
+      "date": "2015-09-03",
+      "profile": {
+        "leader_name": "Alejandro Maldonado Aguirre",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q19914009",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q774",
+      "revision": 2542359215
+    },
+    {
+      "nation": "AST",
+      "date": "2015-09-15",
+      "profile": {
+        "leader_name": "Malcolm Turnbull",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q927550",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "ANV",
+      "date": "2015-10-30",
+      "profile": {
+        "leader_name": "Gheorghe Brega",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q15715802",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q217",
+      "revision": 2547610550
+    },
+    {
+      "nation": "CAN",
+      "date": "2015-11-04",
+      "profile": {
+        "leader_name": "Justin Trudeau",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q3099714",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q16",
+      "revision": 2547610960
+    },
+    {
+      "nation": "POL",
+      "date": "2015-11-16",
+      "profile": {
+        "leader_name": "Beata Szydło",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q4877021",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q36",
+      "revision": 2547610377
+    },
+    {
+      "nation": "ROM",
+      "date": "2015-11-17",
+      "profile": {
+        "leader_name": "Dacian Cioloș",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q929248",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "AQX",
+      "date": "2015-12-29",
+      "profile": {
+        "leader_name": "Roch Marc Christian Kaboré",
+        "leader_title": "Head of State",
+        "leader_entity": "Q599988",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q965",
+      "revision": 2545274078
+    },
+    {
+      "nation": "ADM",
+      "date": "2016-01-14",
+      "profile": {
+        "leader_name": "Jimmy Morales",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q17995110",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q774",
+      "revision": 2542359215
+    },
+    {
+      "nation": "ANV",
+      "date": "2016-01-20",
+      "profile": {
+        "leader_name": "Pavel Filip",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q7155601",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q217",
+      "revision": 2547610550
+    },
+    {
+      "nation": "ABP",
+      "date": "2016-02-14",
+      "profile": {
+        "leader_name": "Jocelerme Privert",
+        "leader_title": "Head of State",
+        "leader_entity": "Q6207072",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q790",
+      "revision": 2542359095
+    },
+    {
+      "nation": "AQS",
+      "date": "2016-04-06",
+      "profile": {
+        "leader_name": "Patrice Talon",
+        "leader_title": "Head of State",
+        "leader_entity": "Q16669148",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q962",
+      "revision": 2534682662
+    },
+    {
+      "nation": "BDV",
+      "date": "2016-04-06",
+      "profile": {
+        "leader_name": "Aung San Suu Kyi",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q36740",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q836",
+      "revision": 2547610398
+    },
+    {
+      "nation": "ANJ",
+      "date": "2016-04-07",
+      "profile": {
+        "leader_name": "Hashim Thaçi",
+        "leader_title": "Head of State",
+        "leader_entity": "Q57634",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1246",
+      "revision": 2547518304
+    },
+    {
+      "nation": "AOF",
+      "date": "2016-04-14",
+      "profile": {
+        "leader_name": "Volodymyr Hroisman",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q4150130",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q212",
+      "revision": 2547610423
+    },
+    {
+      "nation": "APM",
+      "date": "2016-04-22",
+      "profile": {
+        "leader_name": "Ulisses Correia e Silva",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q23899522",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1011",
+      "revision": 2542095039
+    },
+    {
+      "nation": "AUS",
+      "date": "2016-05-17",
+      "profile": {
+        "leader_name": "Christian Kern",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q18135060",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q40",
+      "revision": 2547610385
+    },
+    {
+      "nation": "BBL",
+      "date": "2016-05-20",
+      "profile": {
+        "leader_name": "Tsai Ing-wen",
+        "leader_title": "Head of State",
+        "leader_entity": "Q233984",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q865",
+      "revision": 2544190048
+    },
+    {
+      "nation": "TUR",
+      "date": "2016-05-24",
+      "profile": {
+        "leader_name": "Binali Yıldırım",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q863496",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q43",
+      "revision": 2547610866
+    },
+    {
+      "nation": "BGI",
+      "date": "2016-06-30",
+      "profile": {
+        "leader_name": "Rodrigo Duterte",
+        "leader_title": "Head of State",
+        "leader_entity": "Q457786",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q928",
+      "revision": 2547611670
+    },
+    {
+      "nation": "PRU",
+      "date": "2016-07-28",
+      "profile": {
+        "leader_name": "Pedro Pablo Kuczynski",
+        "leader_title": "Head of State",
+        "leader_entity": "Q381027",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "APF",
+      "date": "2016-08-01",
+      "profile": {
+        "leader_name": "Guðni Jóhannesson",
+        "leader_title": "Head of State",
+        "leader_entity": "Q24045706",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q189",
+      "revision": 2542332669
+    },
+    {
+      "nation": "BRA",
+      "date": "2016-08-31",
+      "profile": {
+        "leader_name": "Michel Temer",
+        "leader_title": "Head of State",
+        "leader_entity": "Q463533",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q155",
+      "revision": 2547610501
+    },
+    {
+      "nation": "EST",
+      "date": "2016-11-23",
+      "profile": {
+        "leader_name": "Jüri Ratas",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q2621730",
+        "ruling_party": "Estonian Centre Party",
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q191",
+      "revision": 2547610769
+    },
+    {
+      "nation": "MNT",
+      "date": "2016-11-28",
+      "profile": {
+        "leader_name": "Duško Marković",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q27941657",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q236",
+      "revision": 2547517584
+    },
+    {
+      "nation": "ITA",
+      "date": "2016-12-12",
+      "profile": {
+        "leader_name": "Paolo Gentiloni",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q1071031",
+        "ruling_party": "Democratic Party",
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q38",
+      "revision": 2547610462
+    },
+    {
+      "nation": "ROM",
+      "date": "2017-01-04",
+      "profile": {
+        "leader_name": "Sorin Grindeanu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q19003460",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "ABP",
+      "date": "2017-02-07",
+      "profile": {
+        "leader_name": "Jovenel Moïse",
+        "leader_title": "Head of State",
+        "leader_entity": "Q21294765",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q790",
+      "revision": 2542359095
+    },
+    {
+      "nation": "BCE",
+      "date": "2017-05-10",
+      "profile": {
+        "leader_name": "Moon Jae-in",
+        "leader_title": "Head of State",
+        "leader_entity": "Q21001",
+        "ruling_party": "Democratic Party of Korea",
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q884",
+      "revision": 2547611655
+    },
+    {
+      "nation": "ABF",
+      "date": "2017-05-11",
+      "profile": {
+        "leader_name": "Hubert Minnis",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q16732648",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q778",
+      "revision": 2547619141
+    },
+    {
+      "nation": "ROM",
+      "date": "2017-06-29",
+      "profile": {
+        "leader_name": "Mihai Tudose",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q12735517",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "BBK",
+      "date": "2017-07-10",
+      "profile": {
+        "leader_name": "Khaltmaagiin Battulga",
+        "leader_title": "Head of State",
+        "leader_entity": "Q9122260",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q711",
+      "revision": 2544103851
+    },
+    {
+      "nation": "BBB",
+      "date": "2017-11-24",
+      "profile": {
+        "leader_name": "Sooronbay Jeenbekov",
+        "leader_title": "Head of State",
+        "leader_entity": "Q23810819",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q813",
+      "revision": 2547610692
+    },
+    {
+      "nation": "AME",
+      "date": "2017-12-06",
+      "profile": {
+        "leader_name": "Andrej Babiš",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q10819807",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q213",
+      "revision": 2546330872
+    },
+    {
+      "nation": "POL",
+      "date": "2017-12-11",
+      "profile": {
+        "leader_name": "Mateusz Morawiecki",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q11771436",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q36",
+      "revision": 2547610377
+    },
+    {
+      "nation": "AUS",
+      "date": "2017-12-18",
+      "profile": {
+        "leader_name": "Sebastian Kurz",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q2262885",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q40",
+      "revision": 2547610385
+    },
+    {
+      "nation": "ROM",
+      "date": "2018-01-29",
+      "profile": {
+        "leader_name": "Viorica Dăncilă",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q9368300",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "CHL",
+      "date": "2018-03-11",
+      "profile": {
+        "leader_name": "Sebastián Piñera",
+        "leader_title": "Head of State",
+        "leader_entity": "Q306",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q298",
+      "revision": 2544587426
+    },
+    {
+      "nation": "AMF",
+      "date": "2018-03-22",
+      "profile": {
+        "leader_name": "Peter Pellegrini",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q17330556",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q214",
+      "revision": 2545554858
+    },
+    {
+      "nation": "PRU",
+      "date": "2018-03-23",
+      "profile": {
+        "leader_name": "Martín Vizcarra",
+        "leader_title": "Head of State",
+        "leader_entity": "Q24030720",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "ADQ",
+      "date": "2018-05-08",
+      "profile": {
+        "leader_name": "Carlos Alvarado Quesada",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q26996246",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q800",
+      "revision": 2544183914
+    },
+    {
+      "nation": "BFO",
+      "date": "2018-05-10",
+      "profile": {
+        "leader_name": "Mahathir Mohamad",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q181383",
+        "ruling_party": "Malaysian United Indigenous Party",
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q833",
+      "revision": 2547611053
+    },
+    {
+      "nation": "ITA",
+      "date": "2018-06-01",
+      "profile": {
+        "leader_name": "Giuseppe Conte",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q53844829",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q38",
+      "revision": 2547610462
+    },
+    {
+      "nation": "COL",
+      "date": "2018-08-07",
+      "profile": {
+        "leader_name": "Iván Duque",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q17478000",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q739",
+      "revision": 2547610699
+    },
+    {
+      "nation": "AST",
+      "date": "2018-08-24",
+      "profile": {
+        "leader_name": "Scott Morrison",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q7436908",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q408",
+      "revision": 2547610886
+    },
+    {
+      "nation": "AQT",
+      "date": "2018-10-29",
+      "profile": {
+        "leader_name": "Mohamed Salem Ould Béchir",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q58014343",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1025",
+      "revision": 2545299929
+    },
+    {
+      "nation": "BEB",
+      "date": "2018-11-17",
+      "profile": {
+        "leader_name": "Ibrahim Mohamed Solih",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q55614252",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q826",
+      "revision": 2547084430
+    },
+    {
+      "nation": "BRA",
+      "date": "2019-01-01",
+      "profile": {
+        "leader_name": "Jair Bolsonaro",
+        "leader_title": "Head of State",
+        "leader_entity": "Q10304982",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q155",
+      "revision": 2547610501
+    },
+    {
+      "nation": "AYB",
+      "date": "2019-04-11",
+      "profile": {
+        "leader_name": "Ahmed Awad Ibn Auf",
+        "leader_title": "Head of State",
+        "leader_entity": "Q22949078",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1049",
+      "revision": 2547610677
+    },
+    {
+      "nation": "ANF",
+      "date": "2019-05-12",
+      "profile": {
+        "leader_name": "Stevo Pendarovski",
+        "leader_title": "Head of State",
+        "leader_entity": "Q15967423",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q221",
+      "revision": 2547518222
+    },
+    {
+      "nation": "AUS",
+      "date": "2019-05-28",
+      "profile": {
+        "leader_name": "Hartwig Löger",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q45808771",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q40",
+      "revision": 2547610385
+    },
+    {
+      "nation": "AUS",
+      "date": "2019-06-03",
+      "profile": {
+        "leader_name": "Brigitte Bierlein",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q916162",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q40",
+      "revision": 2547610385
+    },
+    {
+      "nation": "ANV",
+      "date": "2019-06-08",
+      "profile": {
+        "leader_name": "Maia Sandu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q15071069",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q217",
+      "revision": 2547610550
+    },
+    {
+      "nation": "ADR",
+      "date": "2019-07-01",
+      "profile": {
+        "leader_name": "Laurentino Cortizo",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q28122455",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q804",
+      "revision": 2547611700
+    },
+    {
+      "nation": "AXS",
+      "date": "2019-07-25",
+      "profile": {
+        "leader_name": "Mohamed Ennaceur",
+        "leader_title": "Head of State",
+        "leader_entity": "Q3318530",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q948",
+      "revision": 2547610482
+    },
+    {
+      "nation": "AQT",
+      "date": "2019-08-05",
+      "profile": {
+        "leader_name": "Ismail Ould Bedde Ould Cheikh Sidiya",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q3155412",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1025",
+      "revision": 2545299929
+    },
+    {
+      "nation": "AOF",
+      "date": "2019-08-29",
+      "profile": {
+        "leader_name": "Olexii Honcharuk",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q64486491",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q212",
+      "revision": 2547610423
+    },
+    {
+      "nation": "ROM",
+      "date": "2019-11-04",
+      "profile": {
+        "leader_name": "Ludovic Orban",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q671955",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "ANV",
+      "date": "2019-11-14",
+      "profile": {
+        "leader_name": "Ion Chicu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q75020865",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q217",
+      "revision": 2547610550
+    },
+    {
+      "nation": "ANI",
+      "date": "2019-12-05",
+      "profile": {
+        "leader_name": "Zoran Tegeltija",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q12752078",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q225",
+      "revision": 2546245490
+    },
+    {
+      "nation": "AUS",
+      "date": "2020-01-07",
+      "profile": {
+        "leader_name": "Sebastian Kurz",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q2262885",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q40",
+      "revision": 2547610385
+    },
+    {
+      "nation": "ADM",
+      "date": "2020-01-14",
+      "profile": {
+        "leader_name": "Alejandro Giammattei",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q2134696",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q774",
+      "revision": 2542359215
+    },
+    {
+      "nation": "BFO",
+      "date": "2020-03-01",
+      "profile": {
+        "leader_name": "Muhyiddin Yassin",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q1060949",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q833",
+      "revision": 2547611053
+    },
+    {
+      "nation": "AOF",
+      "date": "2020-03-04",
+      "profile": {
+        "leader_name": "Denys Shmyhal",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q66094865",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q212",
+      "revision": 2547610423
+    },
+    {
+      "nation": "AMF",
+      "date": "2020-03-21",
+      "profile": {
+        "leader_name": "Igor Matovič",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q552706",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q214",
+      "revision": 2545554858
+    },
+    {
+      "nation": "AQT",
+      "date": "2020-08-06",
+      "profile": {
+        "leader_name": "Mohamed Ould Bilal",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q98137599",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1025",
+      "revision": 2545299929
+    },
+    {
+      "nation": "BAO",
+      "date": "2020-09-30",
+      "profile": {
+        "leader_name": "Nawaf Al-Ahmad Al-Jaber Al-Sabah",
+        "leader_title": "Head of State",
+        "leader_entity": "Q641805",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q817",
+      "revision": 2538469672
+    },
+    {
+      "nation": "PRU",
+      "date": "2020-11-10",
+      "profile": {
+        "leader_name": "Manuel Merino",
+        "leader_title": "Head of State",
+        "leader_entity": "Q5993760",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "PRU",
+      "date": "2020-11-17",
+      "profile": {
+        "leader_name": "Francisco Sagasti",
+        "leader_title": "Head of State",
+        "leader_entity": "Q20015136",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "MNT",
+      "date": "2020-12-04",
+      "profile": {
+        "leader_name": "Zdravko Krivokapić",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q97999161",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q236",
+      "revision": 2547517584
+    },
+    {
+      "nation": "ROM",
+      "date": "2020-12-23",
+      "profile": {
+        "leader_name": "Florin Cîțu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q28035183",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "ANV",
+      "date": "2020-12-31",
+      "profile": {
+        "leader_name": "Aureliu Ciocoi",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q4822275",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q217",
+      "revision": 2547610550
+    },
+    {
+      "nation": "USA",
+      "date": "2021-01-20",
+      "profile": {
+        "leader_name": "Joe Biden",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q6279",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q30",
+      "revision": 2547611009
+    },
+    {
+      "nation": "ITA",
+      "date": "2021-02-13",
+      "profile": {
+        "leader_name": "Mario Draghi",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q294460",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q38",
+      "revision": 2547610462
+    },
+    {
+      "nation": "AMF",
+      "date": "2021-04-01",
+      "profile": {
+        "leader_name": "Eduard Heger",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q46227987",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q214",
+      "revision": 2545554858
+    },
+    {
+      "nation": "AQU",
+      "date": "2021-04-03",
+      "profile": {
+        "leader_name": "Ouhoumoudou Mahamadou",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q7110324",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1032",
+      "revision": 2542474582
+    },
+    {
+      "nation": "ANJ",
+      "date": "2021-04-04",
+      "profile": {
+        "leader_name": "Vjosa Osmani",
+        "leader_title": "Head of State",
+        "leader_entity": "Q13047644",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1246",
+      "revision": 2547518304
+    },
+    {
+      "nation": "AZQ",
+      "date": "2021-06-13",
+      "profile": {
+        "leader_name": "Naftali Bennett",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q39318",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q801",
+      "revision": 2547610878
+    },
+    {
+      "nation": "ABP",
+      "date": "2021-07-20",
+      "profile": {
+        "leader_name": "Ariel Henry",
+        "leader_title": "Head of State",
+        "leader_entity": "Q107451258",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q790",
+      "revision": 2542359095
+    },
+    {
+      "nation": "PRU",
+      "date": "2021-07-28",
+      "profile": {
+        "leader_name": "Pedro Castillo",
+        "leader_title": "Head of State",
+        "leader_entity": "Q103838608",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "PER",
+      "date": "2021-08-03",
+      "profile": {
+        "leader_name": "Ebrahim Raisi",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q5947347",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q794",
+      "revision": 2547610803
+    },
+    {
+      "nation": "ANV",
+      "date": "2021-08-06",
+      "profile": {
+        "leader_name": "Natalia Gavrilița",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q105193792",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q217",
+      "revision": 2547610550
+    },
+    {
+      "nation": "BFO",
+      "date": "2021-08-21",
+      "profile": {
+        "leader_name": "Ismail Sabri Yaakob",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q6084858",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q833",
+      "revision": 2547611053
+    },
+    {
+      "nation": "AUS",
+      "date": "2021-10-11",
+      "profile": {
+        "leader_name": "Alexander Schallenberg",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q64168538",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q40",
+      "revision": 2547610385
+    },
+    {
+      "nation": "ROM",
+      "date": "2021-11-25",
+      "profile": {
+        "leader_name": "Nicolae Ciucă",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q28950289",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "AME",
+      "date": "2021-11-28",
+      "profile": {
+        "leader_name": "Petr Fiala",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q3377548",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q213",
+      "revision": 2546330872
+    },
+    {
+      "nation": "SWE",
+      "date": "2021-11-30",
+      "profile": {
+        "leader_name": "Magdalena Andersson",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q4935873",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q34",
+      "revision": 2547643993
+    },
+    {
+      "nation": "AUS",
+      "date": "2021-12-06",
+      "profile": {
+        "leader_name": "Karl Nehammer",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q42860944",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q40",
+      "revision": 2547610385
+    },
+    {
+      "nation": "AKA",
+      "date": "2021-12-08",
+      "profile": {
+        "leader_name": "Olaf Scholz",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q61053",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q183",
+      "revision": 2547645329
+    },
+    {
+      "nation": "AQX",
+      "date": "2022-01-23",
+      "profile": {
+        "leader_name": "Paul-Henri Sandaogo Damiba",
+        "leader_title": "Head of State",
+        "leader_entity": "Q110666454",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q965",
+      "revision": 2545274078
+    },
+    {
+      "nation": "ADN",
+      "date": "2022-01-27",
+      "profile": {
+        "leader_name": "Xiomara Castro",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q8044708",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q783",
+      "revision": 2544186688
+    },
+    {
+      "nation": "AUV",
+      "date": "2022-03-03",
+      "profile": {
+        "leader_name": "Adriano Maleiane",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q44275924",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q1029",
+      "revision": 2531713838
+    },
+    {
+      "nation": "CHL",
+      "date": "2022-03-11",
+      "profile": {
+        "leader_name": "Gabriel Boric",
+        "leader_title": "Head of State",
+        "leader_entity": "Q16297876",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q298",
+      "revision": 2544587426
+    },
+    {
+      "nation": "MNT",
+      "date": "2022-04-28",
+      "profile": {
+        "leader_name": "Dritan Abazović",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q16353146",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q236",
+      "revision": 2547517584
+    },
+    {
+      "nation": "ADQ",
+      "date": "2022-05-08",
+      "profile": {
+        "leader_name": "Rodrigo Chaves",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q98017689",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q800",
+      "revision": 2544183914
+    },
+    {
+      "nation": "BCE",
+      "date": "2022-05-10",
+      "profile": {
+        "leader_name": "Yoon Suk Yeol",
+        "leader_title": "Head of State",
+        "leader_entity": "Q16090635",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q884",
+      "revision": 2547611655
+    },
+    {
+      "nation": "AZQ",
+      "date": "2022-07-01",
+      "profile": {
+        "leader_name": "Yair Lapid",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q1396120",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q801",
+      "revision": 2547610878
+    },
+    {
+      "nation": "BEA",
+      "date": "2022-07-15",
+      "profile": {
+        "leader_name": "Ranil Wickremesinghe",
+        "leader_title": "Head of State",
+        "leader_entity": "Q983402",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q854",
+      "revision": 2547646531
+    },
+    {
+      "nation": "COL",
+      "date": "2022-08-07",
+      "profile": {
+        "leader_name": "Gustavo Petro",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q704022",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q739",
+      "revision": 2547610699
+    },
+    {
+      "nation": "PRU",
+      "date": "2022-12-07",
+      "profile": {
+        "leader_name": "Dina Boluarte",
+        "leader_title": "Head of State",
+        "leader_entity": "Q106474688",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "ANV",
+      "date": "2023-02-16",
+      "profile": {
+        "leader_name": "Dorin Recean",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q13407948",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q217",
+      "revision": 2547610550
+    },
+    {
+      "nation": "AMF",
+      "date": "2023-05-15",
+      "profile": {
+        "leader_name": "Ľudovít Ódor",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q96747230",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q214",
+      "revision": 2545554858
+    },
+    {
+      "nation": "ROM",
+      "date": "2023-06-15",
+      "profile": {
+        "leader_name": "Marcel Ciolacu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q21179176",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "HOL",
+      "date": "2024-07-02",
+      "profile": {
+        "leader_name": "Dick Schoof",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q22338116",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q55",
+      "revision": 2547611431
+    },
+    {
+      "nation": "BDR",
+      "date": "2024-08-08",
+      "profile": {
+        "leader_name": "Muhammad Yunus",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q43969",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q902",
+      "revision": 2547610565
+    },
+    {
+      "nation": "AUS",
+      "date": "2025-01-10",
+      "profile": {
+        "leader_name": "Alexander Schallenberg",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q64168538",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q40",
+      "revision": 2547610385
+    },
+    {
+      "nation": "ROM",
+      "date": "2025-05-07",
+      "profile": {
+        "leader_name": "Cătălin Predoiu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q1151156",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q218",
+      "revision": 2547610946
+    },
+    {
+      "nation": "AOF",
+      "date": "2025-07-17",
+      "profile": {
+        "leader_name": "Yulia Svyrydenko",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q61112536",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q212",
+      "revision": 2547610423
+    },
+    {
+      "nation": "PRU",
+      "date": "2025-10-10",
+      "profile": {
+        "leader_name": "José Jerí",
+        "leader_title": "Head of State",
+        "leader_entity": "Q107480088",
+        "ruling_party": "We Are Peru Democratic Party",
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q419",
+      "revision": 2547610762
+    },
+    {
+      "nation": "ANV",
+      "date": "2025-11-01",
+      "profile": {
+        "leader_name": "Alexandru Munteanu",
+        "leader_title": "Head of Government",
+        "leader_entity": "Q136489383",
+        "ruling_party": null,
+        "ideology": null
+      },
+      "source": "https://www.wikidata.org/wiki/Q217",
+      "revision": 2547610550
+    }
+  ]
+}

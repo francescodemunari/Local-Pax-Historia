@@ -1,0 +1,78 @@
+Flags Repository — Licensing
+=============================
+
+This repository contains three distinct layers, each under its own license.
+Please respect all three.
+
+
+1. Metadata and the database as a whole — CC BY-SA 4.0
+------------------------------------------------------
+
+The per-flag metadata (the `data/*.json` files), the aggregated index
+(`data/flags.json`), and the structured collection as a whole — including the
+schema, the curation, and the descriptive text — are licensed under the
+
+    Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)
+
+    Copyright (c) 2026 Fredrik Niemelä
+
+You are free to share and adapt this material for any purpose, including
+commercially, provided that you give appropriate credit and distribute any
+derivative database under the same license. Full legal text:
+
+    https://creativecommons.org/licenses/by-sa/4.0/legalcode
+    Summary: https://creativecommons.org/licenses/by-sa/4.0/
+
+Some descriptive and historical prose is derived from Wikipedia and other
+CC BY-SA sources; ShareAlike is chosen partly to keep that compatible.
+
+
+2. Code and tooling — MIT
+-------------------------
+
+The scripts and web application (everything under `tools/`, plus `app.js`,
+`index.html`, `styles.css`, `404.html`, and any other source code in this
+repository) are licensed under the MIT License:
+
+    MIT License
+
+    Copyright (c) 2026 Fredrik Niemelä
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+
+3. The flag images (SVGs) — original licenses retained
+------------------------------------------------------
+
+The `data/*.svg` files are, for the most part, NOT original works of this
+repository. They are sourced from Wikimedia Commons and similar repositories,
+and each retains the license under which it was originally published — most
+commonly Public Domain (many official flags are not copyrightable) or
+CC BY-SA. The source for each flag is recorded in the `sources` array of its
+companion `data/<id>.json` file; consult that source for the authoritative
+license and attribution requirements of an individual image.
+
+No blanket license is asserted over the SVGs, because this project is not in a
+position to grant one.
+
+Trademark note: some emblems that appear on these flags (for example the Red
+Cross / Red Crescent, the Olympic rings, and the NATO compass rose) are
+protected by trademark and other laws independent of copyright. A free
+copyright license on the SVG does not grant any right to use such emblems as
+marks. These restrictions are outside the scope of this repository's licenses.

@@ -57,8 +57,8 @@ class ApiClient {
 
     // ==================== Nations ====================
 
-    async getNations(saveId = null) {
-        const endpoint = saveId ? `/nations?save_id=${saveId}` : '/nations';
+    async getNations(scenarioId = null) {
+        const endpoint = scenarioId ? `/nations?scenario_id=${encodeURIComponent(scenarioId)}` : '/nations';
         return this.request(endpoint);
     }
 
@@ -80,11 +80,15 @@ class ApiClient {
 
     // ==================== Game Management ====================
 
-    async createGame(nationCode, startDate) {
+    async createGame(nationCode, startDate, scenarioId = null) {
         return this.request('/game/new', {
             method: 'POST',
-            body: { nationCode, startDate }
+            body: { nationCode, startDate, scenarioId }
         });
+    }
+
+    async getScenarios() {
+        return this.request('/game/scenarios');
     }
 
     async loadGame(saveId) {
@@ -129,16 +133,17 @@ class ApiClient {
         return this.request(`/actions/save/${saveId}/pending`);
     }
 
-    async deleteAction(actionId) {
+    async deleteAction(actionId, saveId) {
         return this.request(`/actions/${actionId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            body: { saveId }
         });
     }
 
-    async brainstormActions(saveId) {
+    async brainstormActions(saveId, goal = '') {
         return this.request('/actions/brainstorm', {
             method: 'POST',
-            body: { saveId }
+            body: { saveId, goal }
         });
     }
 
@@ -180,13 +185,14 @@ class ApiClient {
         return this.request(`/chat/save/${saveId}`);
     }
 
-    async getChatMessages(chatId) {
-        return this.request(`/chat/${chatId}/messages`);
+    async getChatMessages(chatId, saveId) {
+        return this.request(`/chat/${chatId}/messages?saveId=${encodeURIComponent(saveId)}`);
     }
 
-    async closeChat(chatId) {
+    async closeChat(chatId, saveId) {
         return this.request(`/chat/${chatId}/close`, {
-            method: 'POST'
+            method: 'POST',
+            body: { saveId }
         });
     }
 
@@ -222,6 +228,14 @@ class ApiClient {
         return this.request('/llm/settings');
     }
 
+    async getLLMProviders() {
+        return this.request('/llm/providers');
+    }
+
+    async getLLMModels(settings) {
+        return this.request('/llm/models', { method: 'POST', body: settings });
+    }
+
     async saveLLMSettings(settings) {
         return this.request('/llm/settings', {
             method: 'POST',
@@ -238,16 +252,16 @@ class ApiClient {
 
     // ==================== Map ====================
 
-    async getMapGeoJSON() {
-        return this.request('/map/geojson');
+    async getMapGeoJSON(saveId = null) {
+        return this.request(`/map/geojson${saveId ? `?saveId=${encodeURIComponent(saveId)}` : ''}`);
     }
 
-    async getMapColors() {
-        return this.request('/map/colors');
+    async getMapColors(saveId = null) {
+        return this.request(`/map/colors${saveId ? `?saveId=${encodeURIComponent(saveId)}` : ''}`);
     }
 
-    async searchMap(query) {
-        return this.request(`/map/search/${encodeURIComponent(query)}`);
+    async searchMap(query, saveId = null) {
+        return this.request(`/map/search/${encodeURIComponent(query)}${saveId ? `?saveId=${encodeURIComponent(saveId)}` : ''}`);
     }
 
     async getNationInfoForMap(code, saveId = null) {
@@ -260,6 +274,11 @@ class ApiClient {
     async getRegions(saveId = null) {
         const endpoint = saveId ? `/regions?save_id=${saveId}` : '/regions';
         return this.request(endpoint);
+    }
+
+    async getRegionStats(regionId, saveId = null) {
+        const query = saveId ? `?saveId=${encodeURIComponent(saveId)}` : '';
+        return this.request(`/regions/${encodeURIComponent(regionId)}/stats${query}`);
     }
 }
 

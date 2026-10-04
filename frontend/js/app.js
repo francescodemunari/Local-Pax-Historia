@@ -6,8 +6,17 @@
 const app = {
     currentGame: null,
     nations: [],
+    scenarios: [],
+    selectedScenarioId: null,
+    loadedNationScenarioId: null,
+    nationLoadRequest: 0,
+    scenarioLoading: false,
+    isCreatingGame: false,
     cityManager: null,
     unitManager: null,
+    lastTurnRefreshKey: null,
+    activeTurnRefresh: null,
+    lastDeploymentAnnouncementKey: null,
 
     /**
      * Initialize the application
@@ -27,14 +36,12 @@ const app = {
             // Initialize map
             gameMap.init();
 
-            // Initialize city, nation, unit, and region managers
+            // Initialize map overlays. Region selection is handled directly by
+            // GameMap's SVG controller; the old GeoJSON RegionManager was a
+            // competing click path that could immediately close the dossier.
             this.cityManager = new CityManager(gameMap.map);
             this.nationManager = new NationLabelManager(gameMap.map);
             this.unitManager = new UnitManager(gameMap.map);
-            if (typeof RegionManager !== 'undefined') {
-                this.regionManager = new RegionManager(gameMap.map);
-                this.unitManager.regionManager = this.regionManager;
-            }
 
             // Initialize panels
             actionsPanel.init();
@@ -43,8 +50,12 @@ const app = {
             eventsPanel.init();
             timelinePanel.init();
 
-            // Load nations
-            await this.loadNations();
+            // Load the scenario registry before nations. Selecting a future
+            // scenario changes the available nations without a code change.
+            await countryFlags.load();
+            await this.loadScenarios();
+            await this.loadNations(this.selectedScenarioId);
+            this.updateScenarioFilters();
 
             // Load LLM settings for footer initialization
             try {
@@ -74,13 +85,13 @@ const app = {
     /**
      * Load nations from database
      */
-    async loadNations() {
-        try {
-            this.nations = await api.getNations();
-            console.log(`Loaded ${this.nations.length} nations`);
-        } catch (error) {
-            console.error('Failed to load nations:', error);
-        }
+    async loadNations(scenarioId = null) {
+        const request = ++this.nationLoadRequest;
+        const nations = await api.getNations(scenarioId);
+        if (request !== this.nationLoadRequest) return false;
+        this.nations = nations;
+        this.loadedNationScenarioId = scenarioId;
+        return true;
     },
 
     /**
@@ -93,44 +104,13 @@ const app = {
 
         wsClient.on('time_advance_complete', async (data) => {
             console.log('Time advance complete:', data);
-
-            // 1. Update Game State
-            if (this.currentGame) {
-                this.currentGame.currentDate = data.data.new_date;
-                this.currentGame.turnNumber = data.data.turn_number;
-
-                // Update UI Header
-                document.getElementById('current-date').textContent = this.formatDate(data.data.new_date);
+            if (!this.currentGame || (data.saveId && data.saveId !== this.currentGame.saveId)) {
+                return;
             }
 
-            // 2. Show toast for most important event (eventsPanel already handled via REST response)
-            if (data.data.events && data.data.events.length > 0) {
-                const major = data.data.events.find(e => ['major', 'critical'].includes(e.severity));
-                if (major) {
-                    this.showToast(`WORLD EVENT: ${major.title}`, 'warning');
-                } else {
-                    this.showToast('Time advanced. New events available.', 'success');
-                }
-            } else {
-                this.showToast('Time advanced. No significant events.', 'info');
-            }
-
-            // 3. Refresh Map Ownership
-            try {
-                const refreshedRegions = await api.getRegions(this.currentGame.saveId);
-                const svgElement = gameMap.svgLayer ? gameMap.svgLayer.getElement() : null;
-                if (svgElement) {
-                    gameMap.applyNationColorsToSVG(svgElement, refreshedRegions);
-                }
-            } catch (e) {
-                console.error('Failed to refresh map after turn:', e);
-            }
-
-            // 4. Refresh cities and units
-            await app.loadWorldObjects();
-
-            // 5. Refresh other panels if needed
-            actionsPanel.loadPendingActions();
+            // The initiating client handles its REST result. Other clients
+            // receive the same presentation once through the socket.
+            if (!timelinePanel.isAdvancing) await timelinePanel.receiveTurn(data.data, this.currentGame.saveId);
         });
 
         wsClient.on('new_action', (data) => {
@@ -147,6 +127,9 @@ const app = {
      */
     setupEventHandlers() {
         // Main menu buttons
+        document.getElementById('home-tab-scenarios').addEventListener('click', () => this.selectHomeTab('scenarios'));
+        document.getElementById('home-tab-recent').addEventListener('click', () => this.selectHomeTab('recent'));
+        document.getElementById('btn-refresh-recent').addEventListener('click', () => this.loadRecentGames());
         document.getElementById('btn-new-game').addEventListener('click', () => {
             this.showNationSelection();
         });
@@ -177,6 +160,22 @@ const app = {
         // Nation search
         document.getElementById('nation-search').addEventListener('input', (e) => {
             this.searchNations(e.target.value);
+        });
+
+        document.getElementById('scenario-select').addEventListener('change', (e) => {
+            this.selectScenario(e.target.value);
+        });
+
+        document.getElementById('btn-fetch-models').addEventListener('click', () => this.fetchLLMModels());
+        document.getElementById('settings-model-list').addEventListener('change', event => {
+            if (event.target.value) document.getElementById('settings-model').value = event.target.value;
+        });
+        ['settings-api-url', 'settings-api-key'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                this.modelDiscoveryRequest = (this.modelDiscoveryRequest || 0) + 1;
+                document.getElementById('settings-model-list').replaceChildren(new Option('Fetch models for these settings', ''));
+            });
+            document.getElementById(id).addEventListener('change', () => this.fetchLLMModels());
         });
 
         // Header nav buttons (panels)
@@ -219,9 +218,22 @@ const app = {
             this.showToast('The game is saved automatically', 'info');
         });
 
+        document.getElementById('menu-load').addEventListener('click', () => {
+            document.getElementById('side-menu').classList.add('hidden');
+            this.showLoadGame();
+        });
+
         document.getElementById('menu-events').addEventListener('click', () => {
             document.getElementById('side-menu').classList.add('hidden');
             eventsPanel.show();
+        });
+
+        document.getElementById('menu-tutorial').addEventListener('click', () => {
+            this.showTutorial();
+        });
+
+        document.getElementById('menu-map-settings').addEventListener('click', () => {
+            this.showMapSettings();
         });
 
         document.getElementById('menu-llm-settings').addEventListener('click', () => {
@@ -260,6 +272,40 @@ const app = {
         document.getElementById('settings-provider').addEventListener('change', (e) => {
             this.handleLLMProviderChange(e.target.value);
         });
+
+        document.getElementById('btn-close-tutorial').addEventListener('click', () => {
+            this.closeAllModals();
+        });
+
+        document.getElementById('btn-apply-map-settings').addEventListener('click', () => {
+            this.applyMapSettings();
+        });
+
+        document.getElementById('btn-reset-map-from-settings').addEventListener('click', () => {
+            gameMap.resetView();
+        });
+
+    },
+
+    showTutorial() {
+        document.getElementById('side-menu').classList.add('hidden');
+        document.getElementById('tutorial-modal').classList.remove('hidden');
+    },
+
+    showMapSettings() {
+        document.getElementById('side-menu').classList.add('hidden');
+        document.getElementById('setting-nation-labels').checked = this.nationManager?.labelsVisible !== false;
+        document.getElementById('setting-city-markers').checked = this.cityManager?.citiesVisible !== false;
+        document.getElementById('setting-unit-markers').checked = this.unitManager?.unitsVisible !== false;
+        document.getElementById('map-settings-modal').classList.remove('hidden');
+    },
+
+    applyMapSettings() {
+        this.nationManager?.setVisible(document.getElementById('setting-nation-labels').checked);
+        this.cityManager?.setVisible(document.getElementById('setting-city-markers').checked);
+        this.unitManager?.toggleUnits(document.getElementById('setting-unit-markers').checked);
+        this.closeAllModals();
+        this.showToast('Map settings applied', 'success');
     },
 
     /**
@@ -287,11 +333,57 @@ const app = {
     showMainMenu() {
         document.getElementById('main-menu').classList.remove('hidden');
         document.getElementById('game-container').classList.add('hidden');
+        this.loadRecentGames();
     },
 
     /**
      * Hide main menu
      */
+    selectHomeTab(tab) {
+        for (const name of ['scenarios', 'recent']) {
+            const active = name === tab;
+            const button = document.getElementById(`home-tab-${name}`);
+            button.classList.toggle('active', active);
+            button.setAttribute('aria-pressed', String(active));
+        }
+        document.getElementById('home-scenarios-panel').classList.toggle('hidden', tab !== 'scenarios');
+        document.getElementById('recent-games-panel').classList.toggle('hidden', tab !== 'recent');
+        document.getElementById('btn-new-game').classList.toggle('hidden', tab !== 'scenarios');
+        if (tab === 'recent') this.loadRecentGames();
+    },
+
+    async loadRecentGames() {
+        const request = this.recentGamesRequest = (this.recentGamesRequest || 0) + 1;
+        const container = document.getElementById('recent-games-list');
+        if (!container) return;
+        container.textContent = 'Loading saved campaigns…';
+        try {
+            const saves = await api.getSaves();
+            if (request !== this.recentGamesRequest) return;
+            document.getElementById('recent-games-count').textContent = saves.length ? String(saves.length) : '';
+            container.replaceChildren();
+            if (!saves.length) {
+                const empty = document.createElement('div'); empty.className = 'home-empty';
+                const title = document.createElement('strong'); title.textContent = 'Your next chapter starts here';
+                const text = document.createElement('p'); text.textContent = 'Choose a scenario to begin. Your saved campaigns will appear here.';
+                empty.append(title, text); container.append(empty); return;
+            }
+            saves.slice(0, 8).forEach(save => {
+                const card = document.createElement('button'); card.type = 'button'; card.className = 'recent-game';
+                const info = document.createElement('div');
+                const title = document.createElement('strong'); title.textContent = save.nation_name;
+                const scenario = document.createElement('p'); scenario.textContent = save.scenario_name || 'Campaign';
+                const date = document.createElement('p'); date.textContent = `${this.formatDate(save.current_date)} · Turn ${save.turn_number}`;
+                const resume = document.createElement('span'); resume.className = 'resume-label'; resume.textContent = 'Resume →';
+                info.append(title, scenario, date); card.append(info, resume);
+                card.addEventListener('click', async () => { card.disabled = true; resume.textContent = 'Opening…'; try { await this.loadGame(save.id); } finally { card.disabled = false; resume.textContent = 'Resume →'; } });
+                container.append(card);
+            });
+        } catch (error) {
+            if (request === this.recentGamesRequest) container.textContent = 'Unable to load campaigns. Check the backend and press Refresh.';
+        }
+    },
+
     hideMainMenu() {
         document.getElementById('main-menu').classList.add('hidden');
     },
@@ -300,9 +392,11 @@ const app = {
      * Show nation selection modal
      */
     showNationSelection() {
+        if (this.scenarioLoading || this.loadedNationScenarioId !== this.selectedScenarioId) return;
         this.hideMainMenu();
         this.renderNationGrid();
         document.getElementById('nation-select-modal').classList.remove('hidden');
+        document.getElementById('nation-search').focus();
     },
 
     /**
@@ -312,7 +406,7 @@ const app = {
         const container = document.getElementById('nation-grid');
         container.innerHTML = '';
 
-        let filtered = this.nations;
+        let filtered = this.nations.filter(nation => nation.playable !== false);
 
         // Apply filter
         if (filter !== 'all') {
@@ -336,17 +430,34 @@ const app = {
         // Filter: Only nations with territory
         filtered = filtered.filter(n => n.has_territory !== false);
 
+        if (!filtered.length) {
+            const empty = document.createElement('p');
+            empty.className = 'nation-empty';
+            empty.textContent = this.scenarioLoading ? 'Loading nations…' : 'No nations match. Try another search or filter.';
+            container.appendChild(empty);
+        }
+
         filtered.forEach(nation => {
-            const card = document.createElement('div');
+            const card = document.createElement('button');
+            card.type = 'button';
             card.className = `nation-card ${nation.is_major_power ? 'major' : ''}`;
             card.dataset.code = nation.code;
-            card.innerHTML = `
-                <div class="nation-flag" style="background-color: ${nation.color}"></div>
-                <div class="nation-info">
-                    <div class="nation-name">${nation.name}</div>
-                    <div class="nation-leader">${nation.leader_name || ''}</div>
-                </div>
-            `;
+            const selected = document.getElementById('btn-start-game').dataset.nation === nation.code;
+            card.classList.toggle('selected', selected);
+            card.setAttribute('aria-pressed', String(selected));
+            const flag = document.createElement('span');
+            flag.className = 'nation-flag';
+            countryFlags.paint(flag,nation.code,this.selectedScenarioId,document.getElementById('start-date').value || this.scenarios.find(s=>s.id===this.selectedScenarioId)?.defaultStartDate);
+            const info = document.createElement('span');
+            info.className = 'nation-info';
+            const name = document.createElement('span');
+            name.className = 'nation-name';
+            name.textContent = nation.name;
+            const leader = document.createElement('span');
+            leader.className = 'nation-leader';
+            leader.textContent = nation.leader_name || '';
+            info.append(name, leader);
+            card.append(flag, info);
             card.addEventListener('click', () => this.selectNation(nation.code));
             container.appendChild(card);
         });
@@ -373,15 +484,19 @@ const app = {
      * Select a nation
      */
     selectNation(code) {
+        if (this.scenarioLoading || this.isCreatingGame || this.loadedNationScenarioId !== this.selectedScenarioId ||
+            !this.nations.some(nation => nation.code === code && nation.playable !== false)) return;
         // Remove selection from all
         document.querySelectorAll('.nation-card').forEach(card => {
             card.classList.remove('selected');
+            card.setAttribute('aria-pressed', 'false');
         });
 
         // Add selection to clicked
         const card = document.querySelector(`.nation-card[data-code="${code}"]`);
         if (card) {
             card.classList.add('selected');
+            card.setAttribute('aria-pressed', 'true');
         }
 
         // Enable start button
@@ -393,6 +508,7 @@ const app = {
      * Start a new game
      */
     async startNewGame() {
+        if (this.isCreatingGame || this.scenarioLoading || this.loadedNationScenarioId !== this.selectedScenarioId) return;
         const nationCode = document.getElementById('btn-start-game').dataset.nation;
         const startDate = document.getElementById('start-date').value;
 
@@ -402,17 +518,20 @@ const app = {
         }
 
         const btn = document.getElementById('btn-start-game');
+        this.isCreatingGame = true;
+        document.getElementById('scenario-select').disabled = true;
         btn.disabled = true;
         btn.textContent = 'Creating game...';
 
         try {
-            const game = await api.createGame(nationCode, startDate);
+            const game = await api.createGame(nationCode, startDate, this.selectedScenarioId);
 
             this.currentGame = {
                 saveId: game.save_id,
                 playerNation: game.player_nation,
                 currentDate: game.current_date,
-                turnNumber: game.turn_number
+                turnNumber: game.turn_number,
+                scenario: game.scenario
             };
 
             this.closeAllModals();
@@ -422,6 +541,8 @@ const app = {
             console.error('Failed to create game:', error);
             this.showToast('Error creating game: ' + error.message, 'error');
         } finally {
+            this.isCreatingGame = false;
+            document.getElementById('scenario-select').disabled = false;
             btn.disabled = false;
             btn.textContent = 'Start Game';
         }
@@ -499,7 +620,8 @@ const app = {
                 saveId: saveId,
                 playerNation: game.playerNation,
                 currentDate: game.currentDate,
-                turnNumber: game.turnNumber
+                turnNumber: game.turnNumber,
+                scenario: game.scenario
             };
 
             // Add existing events
@@ -518,48 +640,32 @@ const app = {
      * Start the game (after create or load)
      */
     async startGame() {
+        actionsPanel.reset();
+        diplomacyPanel.reset();
         this.hideMainMenu();
         document.getElementById('game-container').classList.remove('hidden');
 
         // Update UI with game info
-        document.getElementById('scenario-name').textContent = 'World War II';
-        document.getElementById('player-nation-name').textContent = `Playing as: ${this.currentGame.playerNation.name}`;
+        document.getElementById('scenario-name').textContent = this.currentGame.scenario?.name || 'Scenario';
+        document.getElementById('player-nation-name').textContent = this.currentGame.playerNation.name;
+        countryFlags.paint(document.getElementById('player-nation-flag'),this.currentGame.playerNation.code,this.currentGame.scenario?.id,this.currentGame.currentDate);
+        document.getElementById('player-nation-button').onclick=()=>gameMap.showNationPopup(this.currentGame.playerNation.code);
         document.getElementById('current-date').textContent = this.formatDate(this.currentGame.currentDate);
 
         // Update action panel info
         actionsPanel.updatePanelInfo();
 
         // Load map data (HOI4 SVG-based)
-        await gameMap.asyncLoadMapData();
+        await gameMap.asyncLoadMapData(this.currentGame.saveId);
 
         // Setup region click handler
         gameMap.onRegionClick = (regionData) => {
             this.handleRegionClick(regionData);
         };
 
-        // LEGACY: Disable old region/unit managers for fresh start
-        /*
-        if (typeof RegionManager !== 'undefined') {
-            gameMap.regionManager = new RegionManager(gameMap.map);
-            await gameMap.regionManager.loadRegions(this.currentGame.playerNation.code);
-            gameMap.regionManager.drawRegions();
-            console.log('Regions loaded and drawn');
-        }
-
-        if (typeof UnitManager !== 'undefined') {
-            gameMap.unitManager = new UnitManager(gameMap.map);
-            gameMap.unitManager.regionManager = gameMap.regionManager;
-            await gameMap.unitManager.loadUnits(this.currentGame.playerNation.code);
-            gameMap.unitManager.displayUnits();
-            console.log('Units loaded and displayed');
-        }
-        */
-
         // Focus on player's nation - SILENT to prevent auto-opening panel
-        setTimeout(() => {
-            gameMap.refreshSize();
-            gameMap.focusOnNation(this.currentGame.playerNation.code, true);
-        }, 500);
+        gameMap.refreshSize();
+        gameMap.focusOnNation(this.currentGame.playerNation.code, true);
 
         // Load cities and units
         await this.loadWorldObjects();
@@ -572,31 +678,21 @@ const app = {
      */
     async loadWorldObjects() {
         try {
-            // Load region metadata for neighbor info
-            try {
-                const res = await fetch('/data/region_metadata.json');
-                if (res.ok) {
-                    this.regionMetadata = await res.json();
-                }
-            } catch (e) {
-                console.warn('Could not load region metadata:', e);
-            }
-
             // Load and display nation labels
             if (this.nationManager) {
-                await this.nationManager.loadNationLabels();
+                await this.nationManager.loadNationLabels(this.currentGame.saveId);
                 console.log('Nation labels loaded and displayed');
             }
 
             // Load and display cities
             if (this.cityManager) {
-                await this.cityManager.loadCities();
+                await this.cityManager.loadCities(this.currentGame.saveId);
                 console.log('Cities loaded and displayed');
             }
 
-            // Clear any default units on initial load (units spawn only via Actions)
+            // Game state owns units. Restore formations recorded in this save.
             if (this.unitManager) {
-                this.unitManager.clearUnits();
+                await this.unitManager.loadUnits(this.currentGame.saveId);
             }
         } catch (error) {
             console.error('Failed to load world objects:', error);
@@ -614,7 +710,10 @@ const app = {
 
         // Reset panels
         advisorPanel.reset();
+        actionsPanel.reset();
         diplomacyPanel.reset();
+        turnPlayback.stop();
+        timelinePanel.lastPresentedTurn = null;
         eventsPanel.reset();
     },
 
@@ -671,15 +770,16 @@ const app = {
 
         try {
             const nationCode = regionData.nation_code;
-            let nationInfo = null;
-
-            // Only fetch nation info if we have a valid 3-letter nation code (not a hex color, not empty)
-            if (nationCode && /^[A-Z]{3}$/.test(nationCode)) {
-                nationInfo = await api.getNationInfoForMap(nationCode, this.currentGame?.saveId);
-            }
+            const nationRequest = nationCode && /^[A-Z]{3}$/.test(nationCode)
+                ? api.getNationInfoForMap(nationCode, this.currentGame?.saveId).catch(() => null)
+                : Promise.resolve(null);
+            const statsRequest = this.currentGame
+                ? api.getRegionStats(regionData.id, this.currentGame.saveId).catch(() => null)
+                : Promise.resolve(null);
+            const [nationInfo, regionStats] = await Promise.all([nationRequest, statsRequest]);
 
             // Create and show popup/modal with region info
-            this.showRegionInfo(regionData, nationInfo);
+            this.showRegionInfo(regionData, nationInfo, regionStats);
         } catch (error) {
             console.error('Error handling region click:', error);
             this.showRegionInfo(regionData, null);
@@ -689,7 +789,7 @@ const app = {
     /**
      * Show region information in a modal or panel
      */
-    async showRegionInfo(region, nation) {
+    async showRegionInfo(region, nation, stats = null) {
         const popup = document.getElementById('region-popup');
         if (!popup) return;
 
@@ -697,22 +797,23 @@ const app = {
         const nameEl = document.getElementById('popup-region-name');
         const nationEl = document.getElementById('popup-region-nation');
         const typeEl = document.getElementById('popup-region-type');
+        const citiesEl = document.getElementById('popup-region-cities');
+        const capacityEl = document.getElementById('popup-region-capacity');
+        const infraEl = document.getElementById('popup-region-infra');
         const flagEl = document.getElementById('popup-region-flag');
 
         // Populate basic info
         nameEl.textContent = region.name || region.id;
         nationEl.textContent = nation ? nation.name : (region.nation_code || 'Neutral');
 
-        // Mocking some data for now as per user request to "write important cities"
-        // In a future update, this could come from a JSON mapping
-        const regionType = region.is_coastal ? 'Coastal' : 'Inland';
-        if (typeEl) typeEl.textContent = regionType;
+        if (typeEl) typeEl.textContent = stats?.terrain || (region.is_coastal ? 'Coastal' : 'Unknown');
+        if (citiesEl) citiesEl.textContent = stats?.important_cities?.join(', ') || '—';
+        if (capacityEl) capacityEl.textContent = stats?.supply_capacity ?? '—';
+        if (infraEl) infraEl.textContent = stats?.infrastructure == null ? '—' : `${stats.infrastructure}/10`;
 
         // Set Flag if available
         if (flagEl && nation && nation.code) {
-            // Assuming we have a flag service or static assets
-            // flagEl.style.backgroundImage = `url('assets/flags/${nation.code.toLowerCase()}.png')`;
-            flagEl.style.backgroundColor = nation.color || '#333';
+            countryFlags.paint(flagEl,nation.code,this.currentGame?.scenario?.id,this.currentGame?.currentDate);
         }
 
         // Actions
@@ -720,16 +821,32 @@ const app = {
         const defendBtn = document.getElementById('region-popup-btn-defend');
         const infoBtn = document.getElementById('region-popup-btn-info');
 
+        const unitsInRegion = (this.unitManager?.units || [])
+            .filter(unit => unit.region_id === region.id || unit.region_id === region.name);
+        this.renderRegionUnits(unitsInRegion);
+
         if (advisorBtn) {
             advisorBtn.onclick = () => {
-                this.showToast(`Requesting advice for ${region.name}...`, 'info');
+                popup.classList.add('hidden');
                 this.togglePanel('advisor');
+                advisorPanel.show();
+                const input = document.getElementById('advisor-input');
+                if (input) {
+                    input.value = `Assess ${region.name}: its strategic importance, vulnerabilities, and recommended preparations.`;
+                    input.focus();
+                }
             };
         }
 
         if (defendBtn) {
             defendBtn.onclick = () => {
-                this.showToast(`Defense order sent for ${region.name}`, 'success');
+                // The region dossier has a higher z-index than side panels, so
+                // close it before opening the editable order draft.
+                popup.classList.add('hidden');
+                actionsPanel.prefillAction(
+                    `Order defensive preparations in ${region.name}. Prioritise readiness, supply, and local fortifications.`
+                );
+                this.showToast('Defence order drafted for the Game Master', 'info');
             };
         }
 
@@ -748,6 +865,227 @@ const app = {
 
         // Show popup
         popup.classList.remove('hidden');
+    },
+
+    /**
+     * Keep a completed turn visible even if the WebSocket reconnects late or
+     * is unavailable. The REST result and socket notification share a key, so
+     * receiving both cannot redraw the world twice.
+     */
+    async refreshAfterTurn(turnResult) {
+        if (!this.currentGame || !turnResult?.turn_number) return;
+
+        const key = `${this.currentGame.saveId}:${turnResult.turn_number}`;
+        if (this.lastTurnRefreshKey === key && this.activeTurnRefresh) {
+            return this.activeTurnRefresh;
+        }
+        this.lastTurnRefreshKey = key;
+        this.activeTurnRefresh = (async () => {
+            try {
+                if(!turnResult.world_changed && Array.isArray(turnResult.territory_changes) && !turnResult.territory_changes.length) {
+                    await this.unitManager.loadUnits(this.currentGame.saveId);
+                    return;
+                }
+                if(turnResult.world_changed) {
+                    await gameMap.loadNationColors(this.currentGame.saveId);
+                    const player=gameMap.nationColors[this.currentGame.playerNation.code];
+                    if(player){this.currentGame.playerNation.name=player.name;document.getElementById('player-nation-name').textContent=player.name;}
+                }
+                const refreshedRegions = await api.getRegions(this.currentGame.saveId);
+                gameMap.applyNationColorsToAllSVG(refreshedRegions);
+                await this.loadWorldObjects();
+            } catch (error) {
+                console.error('Failed to refresh the world after a turn:', error);
+            } finally {
+                actionsPanel.loadPendingActions();
+            }
+        })();
+
+        return this.activeTurnRefresh;
+    },
+
+    announceGameMasterDeployments(unitChanges) {
+        const deployments = (unitChanges || [])
+            .map(change => change.unit)
+            .filter(Boolean);
+        if (!deployments.length || !this.currentGame) return;
+
+        const key = `${this.currentGame.saveId}:${this.currentGame.turnNumber}:${deployments.map(unit => `${unit.id || unit.name}:${unit.region_id}`).join(',')}`;
+        if (this.lastDeploymentAnnouncementKey === key) return;
+        this.lastDeploymentAnnouncementKey = key;
+
+        const names = deployments.map(unit => unit.name).filter(Boolean).join(', ');
+        this.showToast(`Formation update: ${names || 'new formations'}`, 'success');
+    },
+
+    renderRegionUnits(units) {
+        const container = document.getElementById('popup-unit-list');
+        if (!container) return;
+
+        if (units.length === 0) {
+            container.innerHTML = '<p class="no-units">No units stationed here.</p>';
+            return;
+        }
+
+        const icons = { infantry: '🪖', armor: '🛡️', naval: '⚓', air: '✈️' };
+        const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, character => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+        })[character]);
+        container.innerHTML = units.map(unit => `
+            <div class="unit-item">
+                <div class="unit-item-icon">${icons[unit.unit_type] || '⚔️'}</div>
+                <div class="unit-item-info">
+                    <span class="unit-item-name">${escapeHtml(unit.name || 'Unnamed unit')}</span>
+                    <span class="unit-item-stats">Str: ${unit.strength ?? 100}% | Org: ${unit.organization ?? 100}%</span>
+                </div>
+            </div>
+        `).join('');
+    },
+
+    async loadScenarios() {
+        try {
+            this.scenarios = await api.getScenarios();
+            this.scenarios.sort((a, b) => {
+                return (a.defaultStartDate || a.startDates?.[0] || '').localeCompare(b.defaultStartDate || b.startDates?.[0] || '');
+            });
+            const defaultScenario = this.scenarios.find(scenario => scenario.isDefault) || this.scenarios[0];
+            this.selectedScenarioId = defaultScenario?.id || null;
+            this.renderScenarioOptions();
+        } catch (error) {
+            console.error('Failed to load scenarios:', error);
+            this.showToast('Unable to load scenario catalog', 'error');
+        }
+    },
+
+    renderScenarioOptions() {
+        const select = document.getElementById('scenario-select');
+        if (!select) return;
+        select.innerHTML = '';
+        this.scenarios.forEach(scenario => {
+            const option = document.createElement('option');
+            option.value = scenario.id;
+            option.textContent = scenario.name;
+            select.appendChild(option);
+        });
+        select.value = this.selectedScenarioId || '';
+        this.renderScenarioCards();
+        this.updateScenarioDetails();
+    },
+
+    renderScenarioCards() {
+        const container = document.getElementById('scenario-cards');
+        if (container.children.length === this.scenarios.length && this.scenarios.length) {
+            container.querySelectorAll('.scenario-card').forEach(card => {
+                const selected = card.dataset.scenario === this.selectedScenarioId;
+                card.classList.toggle('selected', selected);
+                card.setAttribute('aria-pressed', String(selected));
+                card.querySelector('.scenario-card-state').textContent = selected ? 'Selected' : 'Select scenario';
+            });
+            return;
+        }
+        container.replaceChildren();
+        const summaries = {
+            'ww1-1910': 'Shape the years before the Great War through diplomacy, reform, and preparation.',
+            'ww2-geographic': 'A fragile peace, rising powers, and a world approaching war.',
+            'world-2010': 'Lead a nation through a connected world of competing powers and new possibilities.',
+
+        };
+        this.scenarios.forEach(scenario => {
+            const card = document.createElement('button');
+            card.type = 'button';
+            card.className = 'scenario-card';
+            card.dataset.scenario = scenario.id;
+            const selected = scenario.id === this.selectedScenarioId;
+            card.classList.toggle('selected', selected);
+            card.setAttribute('aria-pressed', String(selected));
+            const year = document.createElement('span');
+            year.className = 'scenario-year';
+            year.textContent = (scenario.defaultStartDate || scenario.startDates?.[0] || scenario.era || '').slice(0, 4);
+            const name = document.createElement('span');
+            name.className = 'scenario-card-name';
+            name.textContent = scenario.name;
+            const summary = document.createElement('span');
+            summary.className = 'scenario-card-summary';
+            summary.textContent = summaries[scenario.id] || scenario.description || '';
+            const state = document.createElement('span');
+            state.className = 'scenario-card-state';
+            state.textContent = selected ? 'Selected' : 'Select scenario';
+            card.append(year, name, summary, state);
+            card.addEventListener('click', () => this.selectScenario(scenario.id));
+            container.appendChild(card);
+        });
+    },
+
+    async selectScenario(scenarioId) {
+        if (this.isCreatingGame || !this.scenarios.some(scenario => scenario.id === scenarioId)) return;
+        this.selectedScenarioId = scenarioId;
+        this.scenarioLoading = true;
+        this.loadedNationScenarioId = null;
+        this.nations = [];
+        document.getElementById('scenario-select').value = scenarioId;
+        document.getElementById('btn-start-game').disabled = true;
+        delete document.getElementById('btn-start-game').dataset.nation;
+        document.getElementById('btn-new-game').disabled = true;
+        document.getElementById('nation-search').value = '';
+        document.querySelectorAll('#nation-select-modal .filter-btn').forEach(button => {
+            button.classList.toggle('active', button.dataset.filter === 'all');
+        });
+        this.renderScenarioCards();
+        this.renderNationGrid();
+        this.updateScenarioDetails();
+        const setStatus = message => {
+            document.getElementById('scenario-load-status').textContent = message;
+            document.getElementById('nation-load-status').textContent = message;
+        };
+        setStatus('Loading nations…');
+        const request = this.nationLoadRequest + 1;
+        try {
+            if (!await this.loadNations(scenarioId)) return;
+            this.scenarioLoading = false;
+            this.renderNationGrid();
+            this.updateScenarioFilters();
+            document.getElementById('btn-new-game').disabled = false;
+            setStatus(`${this.nations.filter(nation => nation.playable !== false && nation.has_territory !== false).length} nations available. Choose a nation to begin.`);
+        } catch (error) {
+            if (request !== this.nationLoadRequest) return;
+            this.scenarioLoading = false;
+            setStatus('Could not load nations. Select the scenario again to retry.');
+            document.getElementById('nation-grid').textContent = 'Nation list unavailable.';
+        }
+    },
+
+    updateScenarioFilters() {
+        document.querySelectorAll('#nation-select-modal .filter-btn').forEach(button => {
+            const filter = button.dataset.filter;
+            button.hidden = !['all', 'major'].includes(filter) && !this.nations.some(nation => nation.ideology === filter);
+        });
+    },
+
+    updateScenarioDetails() {
+        const scenario = this.scenarios.find(item => item.id === this.selectedScenarioId);
+        const description = document.getElementById('scenario-description');
+        const dateInput = document.getElementById('start-date');
+        if (!scenario) return;
+
+        description.textContent = scenario.description || '';
+        const briefing = document.getElementById('scenario-briefing-text');
+        if (briefing) briefing.textContent = scenario.worldContext || 'Starting context is supplied by this scenario.';
+        const dates = scenario.startDates || [];
+        dateInput.innerHTML = '';
+        dates.forEach(date => {
+            const option = document.createElement('option');
+            option.value = date;
+            option.textContent = this.formatDate(date);
+            dateInput.appendChild(option);
+        });
+        if (dates.length) dateInput.value = scenario.defaultStartDate || dates[0];
+
+        const era = scenario.era ? ` • ${scenario.era}` : '';
+        const menuSubtitle = document.getElementById('menu-scenario-subtitle');
+        const tacticalId = document.getElementById('menu-tactical-id');
+        if (menuSubtitle) menuSubtitle.textContent = `${scenario.name}${era}`;
+        if (tacticalId) tacticalId.textContent = `Command Operations // ${scenario.era || scenario.name}`;
+        document.title = `Pax Historia — ${scenario.name}`;
     },
 
     /**
@@ -789,9 +1127,10 @@ const app = {
 
         toast.innerHTML = `
             <span class="toast-icon">${icons[type] || icons.info}</span>
-            <span class="toast-message">${message}</span>
+            <span class="toast-message"></span>
             <button class="toast-close">&times;</button>
         `;
+        toast.querySelector('.toast-message').textContent = String(message ?? '');
 
         toast.querySelector('.toast-close').addEventListener('click', () => {
             toast.remove();
@@ -816,13 +1155,24 @@ const app = {
         statusEl.textContent = '';
 
         try {
-            const settings = await api.getLLMSettings();
+            const [settings, providers] = await Promise.all([api.getLLMSettings(), api.getLLMProviders()]);
+            this.llmProviders = providers;
+            this.savedLLMSettings = settings;
+            this.llmDrafts = {};
+            this.activeLLMProvider = settings.provider;
+            const select = document.getElementById('settings-provider');
+            select.replaceChildren();
+            for (const group of ['Local', 'Cloud', 'Custom']) {
+                const optgroup = document.createElement('optgroup'); optgroup.label = group;
+                providers.filter(provider => provider.group === group).forEach(provider => optgroup.appendChild(new Option(provider.name, provider.id)));
+                select.appendChild(optgroup);
+            }
             document.getElementById('settings-provider').value = settings.provider || 'lm-studio';
             document.getElementById('settings-api-url').value = settings.apiUrl || '';
             document.getElementById('settings-api-key').value = settings.apiKey || '';
             document.getElementById('settings-model').value = settings.model || '';
 
-            this.handleLLMProviderChange(settings.provider);
+            this.handleLLMProviderChange(settings.provider, true);
         } catch (error) {
             console.error('Failed to load LLM settings:', error);
             this.showToast('Failed to load AI settings', 'error');
@@ -834,43 +1184,53 @@ const app = {
     /**
      * Handle LLM provider selection change
      */
-    handleLLMProviderChange(provider) {
-        const keyGroup = document.getElementById('group-api-key');
-        const urlInput = document.getElementById('settings-api-url');
-        const modelInput = document.getElementById('settings-model');
-
-        // Show/hide API Key
-        const needsKey = ['openai', 'google', 'anthropic'].includes(provider);
-        if (needsKey) {
-            keyGroup.style.display = 'flex';
-        } else {
-            keyGroup.style.display = 'none';
+    handleLLMProviderChange(provider, opening = false) {
+        const config = this.llmProviders?.find(item => item.id === provider);
+        if (!config) return;
+        const url = document.getElementById('settings-api-url');
+        const key = document.getElementById('settings-api-key');
+        const model = document.getElementById('settings-model');
+        if (!opening) {
+            this.llmDrafts[this.activeLLMProvider] = { apiUrl: url.value, apiKey: key.value, model: model.value };
+            const draft = this.llmDrafts[provider];
+            url.value = draft?.apiUrl ?? config.apiUrl;
+            key.value = draft?.apiKey ?? '';
+            model.value = draft?.model ?? '';
         }
+        this.activeLLMProvider = provider;
+        key.placeholder = provider === this.savedLLMSettings?.provider && this.savedLLMSettings.hasApiKey
+            ? 'Saved key retained for the same endpoint' : config.requiresKey ? 'Enter this provider’s API key' : 'Optional server API key';
+        document.getElementById('group-api-key').style.display = 'flex';
+        document.getElementById('test-connection-status').classList.add('hidden');
+        this.fetchLLMModels();
+    },
 
-        // Prefill default URLs and models if changing providers
-        const defaults = {
-            'lm-studio': { url: 'http://127.0.0.1:1234/v1', model: 'qwen3-vl-8b' },
-            'ollama': { url: 'http://127.0.0.1:11434/v1', model: 'llama3' },
-            'llama.cpp': { url: 'http://127.0.0.1:8080/v1', model: 'default' },
-            'vllm': { url: 'http://127.0.0.1:8000/v1', model: 'default' },
-            'openai': { url: 'https://api.openai.com/v1', model: 'gpt-4o' },
-            'google': { url: 'https://generativelanguage.googleapis.com/v1beta/openai/', model: 'gemini-1.5-flash' },
-            'anthropic': { url: 'https://api.anthropic.com/v1/messages', model: 'claude-3-5-sonnet-20240620' }
-        };
-
-        const config = defaults[provider];
-        if (config) {
-            // Only update URL if empty or if it matches one of the other defaults to avoid overwriting user edits
-            const defaultUrls = Object.values(defaults).map(d => d.url);
-            if (!urlInput.value || defaultUrls.includes(urlInput.value)) {
-                urlInput.value = config.url;
-            }
-            
-            // Only update model if empty or if it matches one of the other defaults
-            const defaultModels = Object.values(defaults).map(d => d.model);
-            if (!modelInput.value || defaultModels.includes(modelInput.value)) {
-                modelInput.value = config.model;
-            }
+    async fetchLLMModels() {
+        const request = this.modelDiscoveryRequest = (this.modelDiscoveryRequest || 0) + 1;
+        const provider = document.getElementById('settings-provider').value;
+        const apiUrl = document.getElementById('settings-api-url').value;
+        const apiKey = document.getElementById('settings-api-key').value;
+        const config = this.llmProviders?.find(item => item.id === provider);
+        const list = document.getElementById('settings-model-list');
+        const status = document.getElementById('model-discovery-status');
+        list.replaceChildren(new Option('Choose an available model', ''));
+        list.disabled = true;
+        if (!apiUrl || (config?.requiresKey && !apiKey && !(this.savedLLMSettings?.provider === provider && this.savedLLMSettings?.hasApiKey))) {
+            status.textContent = !apiUrl ? 'Enter your server’s API base URL.' : 'Enter an API key to fetch models. You can also type a model ID.';
+            return;
+        }
+        status.textContent = 'Fetching models from this provider…';
+        try {
+            const { models } = await api.getLLMModels({ provider, apiUrl, apiKey });
+            if (request !== this.modelDiscoveryRequest) return;
+            models.forEach(model => list.appendChild(new Option(model.name === model.id ? model.id : `${model.name} — ${model.id}`, model.id)));
+            const input = document.getElementById('settings-model');
+            list.value = models.some(model => model.id === input.value) ? input.value : '';
+            list.disabled = models.length === 0;
+            status.textContent = models.length ? `${models.length} models returned. Choose a chat model, or enter its ID below. Availability does not guarantee access or game compatibility.` : 'No chat models returned. Load a model in your server or enter an ID manually.';
+        } catch (error) {
+            if (request !== this.modelDiscoveryRequest) return;
+            status.textContent = `Could not fetch models: ${error.message}`;
         }
     },
 
@@ -965,7 +1325,7 @@ const app = {
             'anthropic': 'Anthropic Claude'
         };
 
-        const providerName = providerNames[settings.provider] || 'AI';
+        const providerName = this.llmProviders?.find(provider => provider.id === settings.provider)?.name || providerNames[settings.provider] || settings.provider || 'AI';
         const modelName = settings.model ? ` • ${settings.model}` : '';
         footerEl.textContent = `Powered by ${providerName}${modelName}`;
     }

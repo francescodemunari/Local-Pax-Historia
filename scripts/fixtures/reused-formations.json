@@ -1,0 +1,143 @@
+{
+  "action_resolutions": [
+    {
+      "action_id": "standing_order",
+      "summary": "The Italian East African Campaign continues with the full-scale southern advance from Somaliland while northern forces push deeper into Tigray.",
+      "operation": {
+        "kind": "invasion",
+        "status": "proceed",
+        "target_nation_code": "ETH",
+        "reason": "Executing ongoing full-scale invasion of Ethiopia from Eritrea and Somaliland.",
+        "fronts": [
+          {
+            "id": "front_north",
+            "name": "Eritrean Front",
+            "region_id": "g531_aETH-3110_f8",
+            "status": "ready"
+          },
+          {
+            "id": "front_south",
+            "name": "Somaliland Front",
+            "region_id": "g5200_aETH-3134_f0",
+            "status": "ready"
+          }
+        ],
+        "formations": [
+          {
+            "formation_ref": "saved_north",
+            "unit_type": "infantry",
+            "name": "1st Eritrean Corps",
+            "region_id": "g531_aETH-3110_f8"
+          },
+          {
+            "formation_ref": "saved_south",
+            "unit_type": "infantry",
+            "name": "1st Somali Corps",
+            "region_id": "g5200_aETH-3134_f0"
+          },
+          {
+            "formation_ref": "saved_air",
+            "unit_type": "air",
+            "name": "Regia Aeronautica East Africa",
+            "region_id": "g531_aERI-1562_f0"
+          }
+        ],
+        "air_support_reason": "Air support requested for ongoing operations in the Eritrean and Somaliland fronts to secure air superiority and conduct tactical bombing.",
+        "reports": [
+          {
+            "action": "battle",
+            "title": "The Southern Push from Somaliland",
+            "report": "The 1st Somali Corps initiates its long-awaited offensive crossing the border into Ethiopian Ogaden. Facing scattered tribal irregulars and difficult arid terrain, the Italian forces establish a secure bridgehead while overcoming minor rearguard skirmishes. Regia Aeronautica provides vital aerial reconnaissance and logistical backing over the vast expanses.",
+            "outcome": "advance",
+            "day_offset": 15,
+            "front_ids": [
+              "front_south"
+            ],
+            "movements": [
+              {
+                "formation_ref": "saved_south",
+                "region_id": "g530_aETH-3134_f0"
+              }
+            ],
+            "support": [
+              {
+                "formation_ref": "saved_air",
+                "region_id": "g530_aETH-3134_f0",
+                "mission": "Reconnaissance"
+              }
+            ]
+          },
+          {
+            "action": "battle",
+            "title": "Consolidation in Tigray",
+            "report": "The 1st Eritrean Corps consolidates its positions in Tigray province, beating back coordinated Ethiopian counter-offensives launched from the mountainous interior. Despite heavy rains and stubborn defensive works manned by Imperial forces, Italian engineers and infantry hold their ground and push local defenders back.",
+            "outcome": "hold",
+            "day_offset": 45,
+            "front_ids": [
+              "front_north"
+            ],
+            "movements": [],
+            "support": [
+              {
+                "formation_ref": "saved_air",
+                "region_id": "g531_aETH-3110_f8",
+                "mission": "Air Support"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "title": "International Condemnation of the Ethiopian War",
+      "description": "As Italian forces press their offensive deeper into Ethiopian territory from both Eritrea and Somaliland, the League of Nations intensifies diplomatic pressure and debates further economic sanctions against Rome.",
+      "game_date": "1936-02-15",
+      "event_type": "political",
+      "severity": "moderate",
+      "affected_nations": [
+        "ITA",
+        "ETH",
+        "ENG",
+        "FRA"
+      ]
+    },
+    {
+      "title": "Rhineland Crisis Looms",
+      "description": "Reports circulate in European capitals of German military preparations near the demilitarized Rhineland zone, causing deep anxiety in Paris and London and threatening to divert international attention away from the conflict in East Africa.",
+      "game_date": "1936-03-01",
+      "event_type": "political",
+      "severity": "major",
+      "affected_nations": [
+        "GER",
+        "FRA",
+        "ENG",
+        "ITA"
+      ]
+    },
+    {
+      "title": "Popular Front Electoral Victory in Spain",
+      "description": "The Popular Front coalition secures a narrow electoral victory in the Spanish parliamentary elections, paving the way for a left-wing government under Manuel Azaña and intensifying domestic political polarization across the country.",
+      "game_date": "1936-02-20",
+      "event_type": "political",
+      "severity": "moderate",
+      "affected_nations": [
+        "SPA"
+      ]
+    },
+    {
+      "title": "Takahashi's Fiscal Reforms in Japan",
+      "description": "Japanese Finance Minister Korekiyo Takahashi attempts to rein in the military budget to curb inflation, sparking intense friction with the Imperial Japanese Army and heightening domestic political instability.",
+      "game_date": "1936-02-10",
+      "event_type": "political",
+      "severity": "minor",
+      "affected_nations": [
+        "JAP"
+      ]
+    }
+  ],
+  "unit_changes": [],
+  "campaign_orders": [],
+  "diplomatic_changes": []
+}

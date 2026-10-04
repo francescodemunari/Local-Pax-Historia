@@ -1,0 +1,21 @@
+**/node_modules/
+.env
+.env.local
+.env.*
+!.env.example
+backend/.env
+data/llm_settings.json
+data/debug/
+data/saves/
+*.tmp
+# Generated browser-review captures; keep documentation and required scripts.
+/docs/map-review/
+
+__pycache__/
+
+# Re-downloadable pinned flag source index; retain the selected catalog and assets.
+data/flags/source-index.json
+
+# Optional map editing/build caches; ship game-ready JSON and SVG bundles.
+/data/geography/sources/
+/data/scenarios/*/geography.geojson

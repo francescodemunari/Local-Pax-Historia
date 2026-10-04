@@ -1,0 +1,195 @@
+{
+  "generated": "2026-09-20T11:30:38.497Z",
+  "scenarios": {
+    "ww1-1910": {
+      "total": 63,
+      "withLeader": 63,
+      "withPortrait": 61,
+      "missingLeaders": [],
+      "missingPortraits": [
+        {
+          "code": "HOL",
+          "name": "Netherlands",
+          "leader": "Theodorus Heemskerk"
+        },
+        {
+          "code": "NOR",
+          "name": "Norway",
+          "leader": "Haakon VII"
+        }
+      ]
+    },
+    "ww2-geographic": {
+      "total": 75,
+      "withLeader": 75,
+      "withPortrait": 68,
+      "missingLeaders": [],
+      "missingPortraits": [
+        {
+          "code": "AAV",
+          "name": "Newfoundland",
+          "leader": "Commission of Government"
+        },
+        {
+          "code": "MEX",
+          "name": "Mexico",
+          "leader": "Lázaro Cárdenas"
+        },
+        {
+          "code": "AUS",
+          "name": "Austria",
+          "leader": "Kurt Schuschnigg"
+        },
+        {
+          "code": "LIT",
+          "name": "Lithuania",
+          "leader": "Antanas Smetona"
+        },
+        {
+          "code": "CHI",
+          "name": "China",
+          "leader": "Chiang Kai-shek"
+        },
+        {
+          "code": "NEP",
+          "name": "Nepal",
+          "leader": "Juddha Shumsher Rana"
+        },
+        {
+          "code": "KWT",
+          "name": "Sheikhdom of Kuwait",
+          "leader": "Ahmad Al-Jaber Al-Sabah"
+        }
+      ]
+    },
+    "world-2010": {
+      "total": 173,
+      "withLeader": 173,
+      "withPortrait": 149,
+      "missingLeaders": [],
+      "missingPortraits": [
+        {
+          "code": "ADC",
+          "name": "Belize",
+          "leader": "Dean Barrow"
+        },
+        {
+          "code": "AEG",
+          "name": "Guyana",
+          "leader": "Bharrat Jagdeo"
+        },
+        {
+          "code": "ENG",
+          "name": "United Kingdom",
+          "leader": "Gordon Brown"
+        },
+        {
+          "code": "SPA",
+          "name": "Spain",
+          "leader": "José Luis Rodríguez Zapatero"
+        },
+        {
+          "code": "MNT",
+          "name": "Montenegro",
+          "leader": "Milo Đukanović"
+        },
+        {
+          "code": "SWE",
+          "name": "Sweden",
+          "leader": "Fredrik Reinfeldt"
+        },
+        {
+          "code": "AQQ",
+          "name": "Mali",
+          "leader": "Amadou Toumani Touré"
+        },
+        {
+          "code": "AQR",
+          "name": "Senegal",
+          "leader": "Abdoulaye Wade"
+        },
+        {
+          "code": "AQT",
+          "name": "Mauritania",
+          "leader": "Moulaye Ould Mohamed Laghdaf"
+        },
+        {
+          "code": "AQW",
+          "name": "Guinea",
+          "leader": "Sékouba Konaté"
+        },
+        {
+          "code": "AQX",
+          "name": "Burkina Faso (Upper Volta)",
+          "leader": "Blaise Compaoré"
+        },
+        {
+          "code": "ASD",
+          "name": "Cameroon",
+          "leader": "Philémon Yang"
+        },
+        {
+          "code": "ATH",
+          "name": "Kenya",
+          "leader": "Mwai Kibaki"
+        },
+        {
+          "code": "AVF",
+          "name": "Zambia",
+          "leader": "Rupiah Banda"
+        },
+        {
+          "code": "AVZ",
+          "name": "Botswana",
+          "leader": "Seretse Khama Ian Khama"
+        },
+        {
+          "code": "AZN",
+          "name": "Jordan",
+          "leader": "Abdullah II"
+        },
+        {
+          "code": "BAQ",
+          "name": "Bahrain",
+          "leader": "Khalifa bin Salman Al Khalifa"
+        },
+        {
+          "code": "BAU",
+          "name": "United Arab Emirates",
+          "leader": "Khalifa bin Zayed Al Nahyan"
+        },
+        {
+          "code": "BAW",
+          "name": "Oman",
+          "leader": "Qaboos bin Said"
+        },
+        {
+          "code": "BCE",
+          "name": "Korea, Republic of",
+          "leader": "Lee Myung-bak"
+        },
+        {
+          "code": "IND",
+          "name": "India",
+          "leader": "Manmohan Singh"
+        },
+        {
+          "code": "BHU",
+          "name": "Bhutan",
+          "leader": "Jigme Khesar Namgyel Wangchuck"
+        },
+        {
+          "code": "NEP",
+          "name": "Nepal",
+          "leader": "Ram Baran Yadav"
+        },
+        {
+          "code": "SIA",
+          "name": "Thailand",
+          "leader": "Abhisit Vejjajiva"
+        }
+      ]
+    }
+  },
+  "errors": []
+}

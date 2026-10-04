@@ -1,0 +1,33 @@
+{
+  "id": "ww1-1914",
+  "version": "1.0.0",
+  "name": "The Great War",
+  "era": "1914–1918",
+  "description": "Europe enters the First World War.",
+  "isDefault": false,
+  "defaultStartDate": "1914-07-28",
+  "startDates": [
+    "1914-07-28",
+    "1916-01-01"
+  ],
+  "worldContext": "Replace this with the historical starting situation for this scenario.",
+  "simulationRules": "Replace this with era-appropriate political, military, and economic rules.",
+  "renderer": {
+    "type": "svg-overlay",
+    "svgUrl": "/maps/ww1-1914.svg"
+  },
+  "assets": {
+    "map": "scenarios/ww1-1914/map.json",
+    "nations": "scenarios/ww1-1914/nations.json",
+    "cities": "scenarios/ww1-1914/cities.json",
+    "regionMetadata": "scenarios/ww1-1914/region_metadata.json",
+    "roadmaps": "scenarios/ww1-1914/roadmaps.json"
+  },
+  "unitCatalog": {
+    "infantry": {
+      "label": "Infantry Division",
+      "manpower": 12000,
+      "treasury": 50
+    }
+  }
+}

@@ -4,24 +4,37 @@ const GameEngine = require('../services/game-engine');
 
 const engine = new GameEngine();
 
+const respondWithGameError = require('../services/http-error');
+
 // Create new game
 router.post('/new', async (req, res) => {
     try {
-        const { nationCode, startDate } = req.body;
+        const { nationCode, startDate, scenarioId } = req.body;
 
-        if (!nationCode) {
+        if (typeof nationCode !== 'string' || !nationCode.trim()) {
             return res.status(400).json({ error: 'nationCode is required' });
         }
 
         const game = await engine.createGame(
-            nationCode.toUpperCase(),
-            startDate || '1936-01-01'
+            nationCode.trim().toUpperCase(),
+            startDate ?? null,
+            scenarioId || null
         );
 
         res.json(game);
     } catch (error) {
         console.error('Error creating game:', error);
-        res.status(500).json({ error: error.message });
+        respondWithGameError(res, error);
+    }
+});
+
+// List scenario bundles available for new games
+router.get('/scenarios', (req, res) => {
+    try {
+        res.json(engine.scenarios.listScenarios());
+    } catch (error) {
+        console.error('Error fetching scenarios:', error);
+        respondWithGameError(res, error);
     }
 });
 
@@ -32,7 +45,7 @@ router.get('/load/:saveId', async (req, res) => {
         res.json(game);
     } catch (error) {
         console.error('Error loading game:', error);
-        res.status(500).json({ error: error.message });
+        respondWithGameError(res, error);
     }
 });
 
@@ -43,18 +56,19 @@ router.get('/saves', async (req, res) => {
         res.json(saves);
     } catch (error) {
         console.error('Error fetching saves:', error);
-        res.status(500).json({ error: error.message });
+        respondWithGameError(res, error);
     }
 });
 
 // Delete save
 router.delete('/saves/:saveId', async (req, res) => {
     try {
-        await engine.deleteSave(req.params.saveId);
+        const deleted = await engine.deleteSave(req.params.saveId);
+        if (!deleted) return res.status(404).json({ error: 'Save not found' });
         res.json({ success: true });
     } catch (error) {
         console.error('Error deleting save:', error);
-        res.status(500).json({ error: error.message });
+        respondWithGameError(res, error);
     }
 });
 
@@ -63,7 +77,7 @@ router.post('/advance', async (req, res) => {
     try {
         const { saveId, timeJump } = req.body;
 
-        if (!saveId || !timeJump) {
+        if (typeof saveId !== 'string' || typeof timeJump !== 'string') {
             return res.status(400).json({ error: 'saveId and timeJump are required' });
         }
 
@@ -90,7 +104,10 @@ router.post('/advance', async (req, res) => {
         res.json(result);
     } catch (error) {
         console.error('Error advancing time:', error);
-        res.status(500).json({ error: error.message });
+        if (['GAME_MASTER_UNAVAILABLE', 'GAME_MASTER_INVALID_RESPONSE'].includes(error.code)) {
+            return res.status(503).json({ error: error.message });
+        }
+        respondWithGameError(res, error);
     }
 });
 
@@ -101,7 +118,7 @@ router.get('/state/:saveId', async (req, res) => {
         res.json(context);
     } catch (error) {
         console.error('Error fetching game state:', error);
-        res.status(500).json({ error: error.message });
+        respondWithGameError(res, error);
     }
 });
 
@@ -115,7 +132,7 @@ router.patch('/saves/:saveId', async (req, res) => {
         res.json({ success: true });
     } catch (error) {
         console.error('Error renaming save:', error);
-        res.status(500).json({ error: error.message });
+        respondWithGameError(res, error);
     }
 });
 

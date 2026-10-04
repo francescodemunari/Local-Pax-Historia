@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.0"
+   width="900"
+   height="600"
+   id="svg2"
+   sodipodi:docname="Flag_of_Venezuela_(1863–1905).svg"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview983"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="0.55625734"
+     inkscape:cx="459.31978"
+     inkscape:cy="365.83787"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     inkscape:pageshadow="2"
+     width="900px" />
+  <defs
+     id="defs22" />
+  <rect
+     width="900"
+     height="600"
+     x="0"
+     y="0"
+     id="yellow"
+     style="fill:#f7d117;stroke-width:1.99999" />
+  <rect
+     width="900"
+     height="400"
+     x="0"
+     y="200"
+     id="blue"
+     style="fill:#0033ab;stroke-width:1.99999" />
+  <rect
+     width="900"
+     height="200"
+     x="0"
+     y="400"
+     id="red"
+     style="fill:#cf142b;stroke-width:1.99999" />
+  <path
+     d="m 434.66512,323.60404 5.75664,-17.9994 -15.2396,-11.17464 18.89736,-0.0872 5.91838,-17.94684 5.92256,17.9455 18.89738,0.0828 -15.237,11.17816 5.76082,17.99806 -15.33956,-11.037 z"
+     id="path3932"
+     style="fill:#ffffff;stroke-width:1.99999" />
+  <use
+     transform="translate(0,-55.60404)"
+     id="use2390"
+     x="0"
+     y="0"
+     width="450"
+     height="300"
+     xlink:href="#path3932" />
+  <use
+     transform="matrix(-1,0,0,1,900,56.39596)"
+     id="use2392"
+     x="0"
+     y="0"
+     width="450"
+     height="300"
+     xlink:href="#path3932" />
+  <use
+     transform="translate(58,-37.00001)"
+     id="use2394"
+     x="0"
+     y="0"
+     width="450"
+     height="300"
+     xlink:href="#path3932" />
+  <use
+     transform="translate(58,28.99999)"
+     id="use2396"
+     x="0"
+     y="0"
+     width="450"
+     height="300"
+     xlink:href="#path3932" />
+  <use
+     transform="translate(-57.525332,-37.00001)"
+     id="use2398"
+     x="0"
+     y="0"
+     width="450"
+     height="300"
+     xlink:href="#path3932" />
+  <use
+     transform="translate(-58,28.99999)"
+     id="use2400"
+     x="0"
+     y="0"
+     width="450"
+     height="300"
+     xlink:href="#path3932" />
+</svg>

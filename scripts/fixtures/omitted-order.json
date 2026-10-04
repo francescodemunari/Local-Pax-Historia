@@ -1,0 +1,28 @@
+{
+  "consequences": "Italy initiates its mobilization and preliminary staging for the East African campaign, prompting immediate diplomatic condemnation from the League of Nations.",
+  "action_resolutions": [],
+  "events": [
+    {
+      "title": "League of Nations Condemns Italian Aggression",
+      "game_date": "1936-01-14",
+      "description": "As Italian forces build up along the borders of Eritrea and Italian Somaliland, the League of Nations issues a formal condemnation and warns of impending economic sanctions if hostilities commence.",
+      "event_type": "diplomatic",
+      "severity": "major",
+      "affected_nations": [
+        "ITA",
+        "ETH",
+        "ENG",
+        "FRA"
+      ],
+      "location": {
+        "name": "Geneva",
+        "longitude": 6.1432,
+        "latitude": 46.2044
+      }
+    }
+  ],
+  "campaign_orders": [],
+  "diplomatic_changes": [],
+  "unit_changes": [],
+  "elapsed_days": 14
+}

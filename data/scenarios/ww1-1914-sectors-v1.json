@@ -1,0 +1,40 @@
+{
+  "id": "ww1-1914-sectors-v1",
+  "version": "1.0.0",
+  "name": "July Crisis — 1914 (original sectors)",
+  "era": "1914",
+  "isDefault": false,
+  "defaultStartDate": "1914-07-01",
+  "startDates": [
+    "1914-07-01"
+  ],
+  "description": "Dated geographic atlas sandbox (1914-07-01). Capitals use geographic coordinates; operational sectors are generated, not historical provinces. Colonial control follows an explicit scenario overlay.",
+  "worldContext": "The July Crisis is unfolding after the Sarajevo assassination. Alliances and mobilization decisions must be adjudicated from this date, not assumed to have already escalated into world war.",
+  "simulationRules": "Use the selected date and nation catalog. Some map entities are dependent administrations, not independent sovereign countries. Do not treat every territory as independent. Recruitment starts only through approved actions. Resources are game-balance defaults.",
+  "renderer": {
+    "type": "svg-overlay",
+    "svgUrl": "/maps/ww1-1914-sectors-v1.svg"
+  },
+  "assets": {
+    "map": "scenarios/ww1-1914-sectors-v1/map.json",
+    "nations": "scenarios/ww1-1914-sectors-v1/nations.json",
+    "cities": "scenarios/ww1-1914-sectors-v1/cities.json"
+  },
+  "unitCatalog": {
+    "infantry": {
+      "label": "Infantry Division",
+      "manpower": 10000,
+      "treasury": 50,
+      "landSpeed": 2,
+      "landKmPerDay": 40
+    },
+    "cavalry": {
+      "label": "Cavalry Brigade",
+      "manpower": 4000,
+      "treasury": 40,
+      "landSpeed": 3,
+      "landKmPerDay": 60
+    }
+  },
+  "hidden": true
+}

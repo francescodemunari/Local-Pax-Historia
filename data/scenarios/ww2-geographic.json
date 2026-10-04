@@ -1,0 +1,53 @@
+{
+  "id": "ww2-geographic",
+  "version": "2.0.0",
+  "name": "World War II — Geographic Map",
+  "era": "1936",
+  "isDefault": true,
+  "defaultStartDate": "1936-01-01",
+  "startDates": [
+    "1936-01-01"
+  ],
+  "description": "Dated geographic atlas sandbox (1936-01-01). Capitals use geographic coordinates; modern province boundaries are clipped to dated national borders; historical internal divisions are approximate. Colonial control follows an explicit scenario overlay.",
+  "worldContext": "Start: 1 January 1936. Germany is rearming under Nazi rule, but the Rhineland remilitarization of March 1936 has not yet happened. Austria and Czechoslovakia remain separate states. Italy is fighting Ethiopia; the campaign is not yet concluded. The League of Nations and competing security commitments shape diplomatic responses. Spain has not yet entered its later civil war. Do not assume later annexations, alliances or the outcome of a future world war. Distinguish immediate diplomatic decisions from training, industrial conversion and transport that take months. Technology and communications must fit 1936. Domestic political coercion and persecution have human and diplomatic consequences, not abstract resource bonuses.",
+  "simulationRules": "Orders are queued immediately and their practical consequences are simulated during time advancement. Do not approve, partially approve or reject orders as a separate process. Explain unfulfilled intentions through events and concrete obstacles. There are no numerical treasury, stability, war-support, political-power or manpower mechanics. Judge capacity qualitatively from history, logistics and elapsed time. Never invent starting tracked formations; create them only from explicit player orders. Map colonies and dependent administrations are not automatically sovereign states. Respect actual diplomatic autonomy. Later historical events are possibilities, never mandatory scripted outcomes. Persisted campaign events and diplomacy override the starting briefing. Include exact geographic event locations when known; use null when uncertain.",
+  "renderer": {
+    "type": "svg-overlay",
+    "svgUrl": "/maps/ww2-geographic.svg"
+  },
+  "assets": {
+    "map": "scenarios/ww2-geographic/map.json",
+    "nations": "scenarios/ww2-geographic/nations.json",
+    "cities": "scenarios/ww2-geographic/cities.json"
+  },
+  "unitCatalog": {
+    "infantry": {
+      "label": "Infantry Division",
+      "manpower": 10000,
+      "treasury": 50,
+      "landSpeed": 2,
+      "landKmPerDay": 40
+    },
+    "armor": {
+      "label": "Armored Brigade",
+      "manpower": 4000,
+      "treasury": 120,
+      "landSpeed": 4,
+      "landKmPerDay": 80
+    },
+    "naval": {
+      "label": "Naval Squadron",
+      "landSpeed": 0
+    },
+    "air": {
+      "label": "Air Wing",
+      "landSpeed": 0
+    }
+  },
+  "initialWars": [
+    [
+      "ITA",
+      "ETH"
+    ]
+  ]
+}

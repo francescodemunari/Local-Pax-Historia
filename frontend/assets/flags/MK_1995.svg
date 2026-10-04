@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="300" viewBox="-300 -150 600 300" fill="#FFE600">
+	<title>Flag of the Republic of Macedonia (1992–1995)</title>
+	<path d="m-300-150h600v300h-600z" fill="#D20000"/>
+	<circle r="19.5"/>
+	<g id="r8"><g id="r4"><g id="r2">
+		<path d="M-7.473,32.632a7.5,7.5,189.668,1,1,14.946,0L0,121zM12.989,45.687a5.5,5.5,188.962,1,1,10.132-4.197L44.831,108.232z"/>
+	</g><use xlink:href="#r2" transform="rotate(45)"/>
+	</g><use xlink:href="#r4" transform="rotate(90)"/>
+	</g><use xlink:href="#r8" transform="rotate(180)"/>
+</svg>

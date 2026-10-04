@@ -1,0 +1,108 @@
+{
+  "action_resolutions": [
+    {
+      "action_id": "timeline_order",
+      "summary": "Italy launched a full-scale offensive against Ethiopia from both Eritrea in the north and Italian Somaliland in the south, deploying motorized columns, infantry divisions, and tactical air support to overwhelm Ethiopian defensive positions.",
+      "operation": {
+        "kind": "invasion",
+        "status": "proceed",
+        "target_nation_code": "ETH",
+        "reason": "Forces mobilized and launched coordinated offensives across northern and southern fronts.",
+        "fronts": [
+          {
+            "id": "northern_front",
+            "name": "Eritrean Front",
+            "region_id": "g531_aERI-1560_f0",
+            "status": "ready"
+          },
+          {
+            "id": "southern_front",
+            "name": "Somalian Front",
+            "region_id": "g5200_aETH-3134_f0",
+            "status": "ready"
+          }
+        ],
+        "formations": [
+          {
+            "formation_ref": "ita_north_army",
+            "unit_type": "infantry",
+            "name": "1st Italian Northern Army",
+            "region_id": "g531_aERI-1560_f0"
+          },
+          {
+            "formation_ref": "ita_south_army",
+            "unit_type": "infantry",
+            "name": "1st Italian Southern Army",
+            "region_id": "g5200_aETH-3134_f0"
+          },
+          {
+            "formation_ref": "ita_air_corps",
+            "unit_type": "air",
+            "name": "Regia Aeronautica East Africa",
+            "region_id": "g531_aERI-1562_f0"
+          }
+        ],
+        "reports": [
+          {
+            "action": "battle",
+            "title": "The Advance from Eritrea",
+            "report": "Italian forces under Marshal Badoglio surged across the border from Eritrea into Tigray. Backed by heavy aerial bombardment and chemical agents, the Italian columns overcame fierce but poorly equipped Ethiopian provincial levies, securing key staging ground beyond the frontier against sporadic counter-attacks.",
+            "outcome": "advance",
+            "day_offset": 25,
+            "front_ids": [
+              "northern_front"
+            ],
+            "movements": [
+              {
+                "formation_ref": "ita_north_army",
+                "region_id": "g531_aETH-3110_f8"
+              }
+            ],
+            "support": [
+              {
+                "formation_ref": "ita_air_corps",
+                "region_id": "g531_aETH-3110_f8",
+                "mission": "Reconnaissance"
+              }
+            ]
+          },
+          {
+            "action": "battle",
+            "title": "The Southern Push into the Ogaden",
+            "report": "In the south, Italian and colonial forces pushed out from Italian Somaliland into the Ogaden desert. Despite logistical bottlenecks and punishing heat, motorized detachments and Blackshirt units flanked Ethiopian defensive lines, forcing local commanders to retreat toward the interior highlands.",
+            "outcome": "advance",
+            "day_offset": 40,
+            "front_ids": [
+              "southern_front"
+            ],
+            "movements": [
+              {
+                "formation_ref": "ita_south_army",
+                "region_id": "g5200_aETH-3134_f5"
+              }
+            ],
+            "support": []
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "title": "League of Nations Condemns Italian Aggression",
+      "description": "In response to the full-scale invasion of Ethiopia, the Council of the League of Nations denounces Italian military actions and debates expanding economic sanctions, intensifying diplomatic friction between Italy and Western democracies.",
+      "game_date": "1936-01-15",
+      "event_type": "diplomatic",
+      "severity": "major",
+      "affected_nations": [
+        "ITA",
+        "ETH",
+        "ENG",
+        "FRA"
+      ]
+    }
+  ],
+  "unit_changes": [],
+  "campaign_orders": [],
+  "diplomatic_changes": []
+}

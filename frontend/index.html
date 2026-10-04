@@ -4,19 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pax Historia - WW2 Grand Strategy</title>
+    <title>Pax Historia — Grand Strategy</title>
     <meta name="description"
-        content="A grand strategy game set in World War II, featuring generative AI for events and diplomacy.">
+        content="A scenario-driven historical grand strategy game featuring generative AI for events and diplomacy.">
 
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="/vendor/leaflet/leaflet.css" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
-        rel="stylesheet">
+        rel="stylesheet" media="print" onload="this.media='all'">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -27,7 +27,7 @@
     <div id="loading-screen" class="loading-screen">
         <div class="loading-content">
             <h1 class="loading-title">Pax Historia</h1>
-            <p class="loading-subtitle">World War II</p>
+            <p class="loading-subtitle">Historical Grand Strategy</p>
             <div class="loading-spinner"></div>
             <div class="loading-bar"></div>
             <p class="loading-text">Initializing Command Console</p>
@@ -41,21 +41,35 @@
             <div class="ambient-glow cyan"></div>
         </div>
         <div class="menu-content">
+            <p class="menu-eyebrow">An alternate history sandbox</p>
             <h1 class="menu-title">Pax Historia</h1>
-            <p class="menu-subtitle">World War II • 1935-1945</p>
-            <span class="tactical-id">Command Operations // 1935-1945</span>
+            <p class="menu-subtitle" id="menu-scenario-subtitle">Historical Grand Strategy</p>
+            <span class="tactical-id" id="menu-tactical-id">Command Operations</span>
 
+            <nav class="home-tabs" aria-label="Home sections">
+                <button type="button" id="home-tab-scenarios" class="home-tab active" aria-pressed="true">Scenarios</button>
+                <button type="button" id="home-tab-recent" class="home-tab" aria-pressed="false">Recent Games <span id="recent-games-count"></span></button>
+            </nav>
+            <section id="recent-games-panel" class="hidden" aria-labelledby="recent-games-title">
+                <div class="scenario-library-heading"><div><h2 id="recent-games-title">Continue your history</h2><p>Your saved campaigns, most recently played first.</p></div><button type="button" id="btn-refresh-recent" class="btn btn-secondary">Refresh</button></div>
+                <div id="recent-games-list" class="recent-games-list" aria-live="polite"></div>
+            </section>
+            <section id="home-scenarios-panel" class="scenario-library" aria-labelledby="scenario-library-title">
+                <div class="scenario-library-heading">
+                    <div><h2 id="scenario-library-title">Choose your scenario</h2><p>Pick an era. Choose a nation. Write what happens next.</p></div>
+                    <span class="setup-step">Step 1 of 2</span>
+                </div>
+                <div id="scenario-cards" class="scenario-cards" aria-label="Available scenarios"></div>
+                <p id="scenario-load-status" class="scenario-load-status" role="status" aria-live="polite"></p>
+            </section>
             <div class="menu-buttons">
                 <button id="btn-new-game" class="menu-btn primary">
-                    <span class="btn-icon">🌍</span>
-                    New Game
+                    Choose Nation
                 </button>
                 <button id="btn-load-game" class="menu-btn">
-                    <span class="btn-icon">📂</span>
                     Load Game
                 </button>
                 <button id="btn-llm-settings" class="menu-btn">
-                    <span class="btn-icon">⚙️</span>
                     AI Settings
                 </button>
             </div>
@@ -70,8 +84,17 @@
     <div id="nation-select-modal" class="modal hidden">
         <div class="modal-content large">
             <div class="modal-header">
-                <h2>Choose Your Nation</h2>
-                <button class="modal-close">&times;</button>
+                <h2>Choose Your Nation <span class="setup-step">Step 2 of 2</span></h2>
+                <button class="modal-close" aria-label="Back to scenarios">&times;</button>
+            </div>
+            <div class="scenario-setup">
+                <div class="form-group">
+                    <label for="scenario-select">Change scenario</label>
+                    <select id="scenario-select" class="form-select"></select>
+                    <p id="scenario-description" class="panel-hint"></p>
+                    <details class="scenario-briefing"><summary>Starting situation</summary><p id="scenario-briefing-text"></p></details>
+                </div>
+                <p id="nation-load-status" role="status" aria-live="polite"></p>
             </div>
             <div class="modal-body">
                 <div class="nation-filters">
@@ -79,7 +102,7 @@
                     <div class="filter-buttons">
                         <button class="filter-btn active" data-filter="all">All</button>
                         <button class="filter-btn" data-filter="major">Great Powers</button>
-                        <button class="filter-btn" data-filter="fascist">Fascist</button>
+                        <button class="filter-btn" data-filter="fascism">Fascist</button>
                         <button class="filter-btn" data-filter="democratic">Democratic</button>
                         <button class="filter-btn" data-filter="communist">Communist</button>
                     </div>
@@ -90,8 +113,8 @@
             </div>
             <div class="modal-footer">
                 <div class="start-date-picker">
-                    <label>Start date:</label>
-                    <input type="date" id="start-date" value="1935-12-01" min="1935-01-01" max="1939-09-01">
+                    <label for="start-date">Start date:</label>
+                    <select id="start-date" class="form-select"></select>
                 </div>
                 <button id="btn-start-game" class="btn primary" disabled>Start Game</button>
             </div>
@@ -121,7 +144,7 @@
                 <button id="btn-menu" class="header-btn" title="Menu">
                     <span class="icon">☰</span>
                 </button>
-                <h1 class="game-title">Pax Historia <span class="header-status-dot"></span></h1>
+                <h1 class="game-title">Pax Historia</h1>
             </div>
 
             <nav class="header-nav">
@@ -146,7 +169,7 @@
             <div class="header-right">
                 <div class="date-display">
                     <button id="btn-prev-turn" class="date-btn" disabled>&lt;</button>
-                    <span id="current-date">December 1, 1935</span>
+                    <span id="current-date">—</span>
                     <button id="btn-advance-time" class="date-btn advance" title="Advance time">≫</button>
                 </div>
             </div>
@@ -156,7 +179,7 @@
         <aside id="side-menu" class="side-menu hidden">
             <div class="menu-header">
                 <span id="scenario-name">World War II</span>
-                <span id="player-nation-name">Playing as: Italy</span>
+
             </div>
             <nav class="menu-nav">
                 <button class="menu-item" id="menu-tutorial">
@@ -187,6 +210,8 @@
         <!-- Map Container -->
         <main class="map-container">
             <div id="map"></div>
+            <button id="player-nation-button" class="btn secondary" title="Your nation"><span id="player-nation-flag"></span><span id="player-nation-name">Your nation</span></button>
+            <a id="map-source-credit" class="hidden" href="/map-sources.html" target="_blank" rel="noopener" style="position:absolute;bottom:8px;right:14px;z-index:1500;font-size:11px;color:#d4dce7;background:#152134;padding:3px 8px;border-radius:4px">Map data &amp; licence</a>
 
             <!-- Map Controls -->
             <div class="map-controls">
@@ -197,7 +222,7 @@
 
             <!-- Map Search -->
             <div class="map-search">
-                <input type="text" id="map-search-input" placeholder="Search countries, regions...">
+                <input type="text" id="map-search-input" placeholder="Search countries, cities, regions...">
                 <div id="map-search-results" class="search-results hidden"></div>
             </div>
         </main>
@@ -212,27 +237,21 @@
                 </div>
                 <div class="panel-body">
                     <p class="panel-info">Issue actions for <span id="actions-nation">Italy</span> for the day <span
-                            id="actions-date">December 1, 1935</span>.</p>
-                    <p class="panel-hint">Your actions will influence world events.</p>
+                            id="actions-date">—</span>.</p>
+                    <p class="panel-hint">Describe orders for the Game Master to resolve; it decides their outcome.</p>
 
                     <button id="btn-brainstorm" class="btn secondary full-width">
                         ✨ Help me plan actions
                     </button>
 
+                    <div id="action-suggestions" aria-live="polite"></div>
+                    <div id="active-campaigns"></div>
                     <div id="pending-actions" class="pending-actions">
                         <!-- Pending actions will appear here -->
                     </div>
 
                     <div class="action-input-container">
-                        <div class="search-map-toggle">
-                            <button id="btn-toggle-map-search" class="btn-icon-only">🔍</button>
-                            <span>Search on map</span>
-                        </div>
-                        <div id="actions-map-search" class="mini-search hidden">
-                            <input type="text" placeholder="Search countries, regions...">
-                            <div class="mini-search-results"></div>
-                        </div>
-                        <textarea id="action-input" placeholder="Enter your action..." rows="3"></textarea>
+                        <textarea id="action-input" placeholder="Describe an order for the Game Master (e.g. Raise an infantry division in Hinterpommern)..." rows="3"></textarea>
                         <div class="action-buttons">
                             <button id="btn-send-action" class="btn primary">
                                 <span class="icon">➤</span> Send Action
@@ -360,7 +379,7 @@
                     <button class="modal-close">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p class="modal-info">From: <span id="time-from-date">December 1, 1935</span></p>
+                    <p class="modal-info">From: <span id="time-from-date">—</span></p>
                     <div class="time-options">
                         <button class="time-btn" data-jump="1_week">
                             <span class="time-date" id="time-1week"></span>
@@ -385,6 +404,10 @@
                         <button class="time-btn custom" data-jump="custom">
                             <span class="time-label">Custom</span>
                         </button>
+                        <button class="time-btn" data-jump="next_event">
+                            <span class="time-label">Next important event</span>
+                            <span>Strategic milestones · up to one year</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -401,27 +424,39 @@
                 <button class="popup-close">&times;</button>
             </div>
             <div class="popup-body">
+                <div class="leader-profile">
+                    <div class="portrait-frame"><img id="leader-portrait" alt="Leader portrait" hidden>
+                    <div id="leader-initials" aria-hidden="true"></div></div>
+                    <div><div class="stat leader-heading"><span class="stat-label">Leader</span><h3 id="popup-leader"></h3></div><p id="nation-government"></p><p id="nation-head-of-state"></p></div>
+                </div>
+                <a id="portrait-credit" class="panel-hint" target="_blank" rel="noopener" hidden></a>
+                <a id="portrait-license" class="panel-hint" target="_blank" rel="noopener" hidden>Image licence</a>
+                <details id="portrait-controls" hidden><summary>Portrait options</summary>
+                    <label class="btn secondary" for="portrait-upload">Upload portrait</label>
+                    <input id="portrait-upload" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+                    <button id="portrait-remove" class="btn secondary">Remove portrait</button>
+                    <details><summary>Create a portrait with an image AI</summary><p>Use this prompt in your image generator, then upload the result. Your chat provider is not used for image generation.</p><textarea id="portrait-prompt" rows="4" readonly></textarea></details>
+                    <p class="panel-hint">Use your own image or one licensed for your intended use. Stored only in this save.</p>
+                </details>
                 <div class="popup-stats">
                     <div class="stat">
-                        <span class="stat-label">Leader</span>
-                        <span class="stat-value" id="popup-leader">Adolf Hitler</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">Ideology</span>
+                        <span class="stat-label">Ruling party</span>
                         <span class="stat-value" id="popup-ideology">Fascist</span>
                     </div>
+                    <div class="stat"><span class="stat-label">Political ideology</span><span class="stat-value" id="nation-political-ideology"></span></div>
                     <div class="stat">
-                        <span class="stat-label">Population</span>
+                        <span class="stat-label">Controlled provinces</span>
                         <span class="stat-value" id="popup-population">67,000,000</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-label">Military Strength</span>
+                        <span class="stat-label">Formations</span>
                         <span class="stat-value" id="popup-military">85/100</span>
                     </div>
                 </div>
+                <p id="popup-diplomatic-status" class="panel-hint"></p>
                 <div class="popup-actions">
                     <button class="btn secondary" id="nation-popup-btn-chat">💬 Open Chat</button>
-                    <button class="btn secondary" id="nation-popup-btn-info">📊 Details</button>
+                    <button class="btn secondary" id="nation-popup-btn-info">⌖ Focus Nation</button>
                 </div>
             </div>
         </div>
@@ -452,38 +487,13 @@
                     <p class="empty-msg">No events found for this region.</p>
                 </div>
 
-                <!-- Details Section -->
-                <div class="popup-section">
-                    <h4>Details</h4>
-                    <div class="details-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">Type</span>
-                            <span class="detail-value" id="popup-region-type">Coastal</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Units Section (Old Stats) -->
-                <div class="popup-section hidden">
-                    <div class="popup-stats">
-                        <div class="stat">
-                            <span class="stat-label">Capacity</span>
-                            <span class="stat-value" id="popup-region-capacity">15</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Infrastructure</span>
-                            <span class="stat-value" id="popup-region-infra">5/10</span>
-                        </div>
-                    </div>
-                </div>
-
                 <div id="popup-unit-list" class="popup-unit-list">
                 </div>
 
                 <div class="popup-footer-actions">
                     <button class="btn secondary" id="region-popup-btn-advisor">Advisor Report</button>
                     <button class="btn info" id="region-popup-btn-info">State Info</button>
-                    <button class="btn primary" id="region-popup-btn-defend">Defend</button>
+
                 </div>
             </div>
         </div>
@@ -520,7 +530,12 @@
                         </div>
                         <div class="form-group">
                             <label for="settings-model">Model Name</label>
-                            <input type="text" id="settings-model" placeholder="qwen3-vl-8b">
+                            <div class="model-discovery-controls">
+                                <select id="settings-model-list" class="form-select" aria-label="Available models"><option value="">Fetch models to choose one</option></select>
+                                <button type="button" id="btn-fetch-models" class="btn secondary">Fetch Models</button>
+                            </div>
+                            <input type="text" id="settings-model" placeholder="Or enter a model ID manually" autocomplete="off">
+                            <p id="model-discovery-status" class="panel-hint" role="status" aria-live="polite">Choose a provider, then fetch its available models.</p>
                         </div>
                         <div id="test-connection-status" class="test-status hidden"></div>
                     </form>
@@ -535,22 +550,71 @@
             </div>
         </div>
 
+        <!-- Tutorial Modal -->
+        <div id="tutorial-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+            <div class="modal-content large">
+                <div class="modal-header">
+                    <h2 id="tutorial-title">Command Briefing</h2>
+                    <button class="modal-close" aria-label="Close tutorial">&times;</button>
+                </div>
+                <div class="modal-body tutorial-body">
+                    <p class="modal-info">Your decisions are orders. The Game Master resolves their consequences.</p>
+                    <ol class="tutorial-steps">
+                        <li><strong>Read the map.</strong> Click a region to inspect its controller, related events, and formations. Use the map search or zoom controls to orient yourself.</li>
+                        <li><strong>Issue an order.</strong> Open Actions and write a clear political, military, economic, or diplomatic instruction. Orders remain pending until time advances.</li>
+                        <li><strong>Request formations.</strong> Ask to raise a division in a controlled region. You do not create it directly: the Game Master considers the order, resources, realism, and the scenario unit catalog.</li>
+                        <li><strong>Advance time.</strong> Choose a time jump. The Game Master resolves pending orders, world events, map control, and any approved formations.</li>
+                        <li><strong>Respond to the world.</strong> Review Events, consult the Advisor, and use Diplomacy to negotiate with other nations before committing to the next turn.</li>
+                    </ol>
+                </div>
+                <div class="modal-footer">
+                    <span class="modal-info">Tip: precise places and objectives produce better resolutions.</span>
+                    <button id="btn-close-tutorial" class="btn primary">Begin Commanding</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Settings Modal -->
+        <div id="map-settings-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="map-settings-title">
+            <div class="modal-content compact">
+                <div class="modal-header">
+                    <h2 id="map-settings-title">Map Settings</h2>
+                    <button class="modal-close" aria-label="Close map settings">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-info">Choose the information density that suits your planning.</p>
+                    <div class="map-settings-options">
+                        <label class="map-setting-toggle"><input id="setting-nation-labels" type="checkbox" checked> <span>Nation labels</span></label>
+                        <label class="map-setting-toggle"><input id="setting-city-markers" type="checkbox" checked> <span>City and capital markers</span></label>
+                        <label class="map-setting-toggle"><input id="setting-unit-markers" type="checkbox" checked> <span>Formation markers</span></label>
+                    </div>
+                    <button id="btn-reset-map-from-settings" class="btn secondary full-width">Reset World View</button>
+                </div>
+                <div class="modal-footer">
+                    <span></span>
+                    <button id="btn-apply-map-settings" class="btn primary">Apply</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Toast Notifications -->
         <div id="toast-container" class="toast-container"></div>
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/vendor/leaflet/leaflet.js"></script>
     <script src="js/api.js"></script>
+    <script src="js/map-tiles.js"></script>
     <script src="js/map.js"></script>
     <script src="js/panels/actions-panel.js"></script>
     <script src="js/panels/advisor-panel.js"></script>
     <script src="js/panels/diplomacy-panel.js"></script>
     <script src="js/panels/events-panel.js"></script>
+    <script src="js/turn-playback.js"></script>
     <script src="js/panels/timeline-panel.js"></script>
-    <script src="js/regions.js"></script>
     <script src="js/units.js"></script>
     <script src="js/nations.js"></script>
     <script src="js/cities.js"></script>
+    <script src="js/flags.js"></script>
     <script src="js/app.js"></script>
 </body>
 

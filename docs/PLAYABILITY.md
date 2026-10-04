@@ -1,0 +1,31 @@
+# Playability scope
+
+Updated 4 October 2026. The game is a local AI-adjudicated sandbox. Automated checks establish executable behavior; they cannot certify every model-generated situation or historical judgment.
+
+## Supported campaign flow
+
+- Start 1910, 1936 or 2010; select a nation; queue orders and edit suggested drafts.
+- Resolve fixed periods or search up to a year for a strategic milestone. Routine battles do not prematurely end the strategic skip. Later proposals are excluded from the selected interval and unfinished orders continue.
+- Mobilise formations from orders; use saved IDs on later turns; advance along connected land fronts with real travel time and attach air/naval support to real formations.
+- Apply AI-authored strength/organization losses and destruction, including during held battles. Apply enemy counterattacks to connected player-held provinces after stationed formations retreat or are explicitly destroyed. No automatic defenders or combat rolls are added.
+- Persist explicit surrender and territorial settlement without inventing a march to the capital. An annexation objective can remain unfinished.
+- Apply dated diplomatic effects alongside military reports. Peace ends the offensive, clears outstanding campaign notes and support missions, and leaves territorial control intact. Combat after the settlement is rejected; restarting a war requires a new pending player order. Annexed governments cannot enter new wars or alliances.
+- Rename existing nations, change recorded politics/leadership, add mapped cities and relocate capitals. Context includes saved names, formation condition, named neutral countries and their mapped provinces.
+- Save/reload state; preserve pending orders and valid partial campaign progress; reject invalid executable effects atomically.
+- Resolve country identity from scenario codes, saved names and declared aliases. Recover omitted targets only from unambiguous operation/order/map evidence, including continuing fronts; retain the AI's actual battle decisions.
+
+## Verification
+
+Run `npm test --prefix backend`. Tests use mocked model replies; no browser or live-provider session is required. The suite covers the actual repeated operation failures, timing selection, formation reuse, successive ground movements, both fronts and air support, political changes, scenario geometry, UI playback logic, saves, API errors and concurrent-request protection.
+
+`scripts/test_campaign_lifecycle.js` uses real geography in all three public scenarios for named neutral-country context, dated battle/peace ordering, peace without a battle, war restart rejection, formation condition, ownership counts and save/reload. `scripts/test_battle_losses.js` tests retreat, destruction and connected enemy captures with independent maps for each era; it rejects invented units, invalid condition values, occupied captures and disconnected counterattacks. Playback checks confirm that losses and enemy gains are revealed in their battle card.
+
+The user performs the final browser and live-model walkthrough. Provider connection success does not establish reliable turn adjudication. An omitted order stays pending; the engine cannot force a model to supply a meaningful outcome. Quantitative performance measurements do not replace hardware-specific map testing.
+
+`scripts/test_nation_references.js` checks name/code normalization, ambiguity, saved campaign binding and future-effect exclusion. `scripts/test_target_recovery.js` replays the actual missing-target response on the WWII map without a corrective inference, stops for the earlier Rhineland world event, continues the same operation without another player order, and verifies dated movement, air support and explicit annexation. It also resolves the full reply during a fixed six-month interval. These are mocked execution checks, not a guarantee of historical plausibility.
+
+## Remaining limits
+
+Sea transport, naval movement, aircraft rebasing, arbitrary new sovereign states/geometry and character custody remain unsupported. Country provinces use modern administrative geometry clipped to dated borders; historical internal divisions are approximate. Formation strength/organization are abstract condition values, not a complete casualty or logistics simulator. Battle plausibility, prose and pacing depend on the model. Campaign endings remain deferred at the user's request.
+
+See [campaigns](CAMPAIGNS.md), [operation contract](OPERATION_CONTRACT.md), [AI reliability](AI_RELIABILITY.md) and [release readiness](RELEASE_READINESS.md).

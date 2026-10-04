@@ -1,6 +1,6 @@
 /**
  * Nation Label Manager
- * Handles visualization of HOI4-style dynamic nation name overlays on the map.
+ * Handles visualization of geographic dynamic nation name overlays on the map.
  * Nation labels are angled, scaled, and styled dynamically along national territory footprints.
  */
 
@@ -9,6 +9,8 @@ class NationLabelManager {
         this.map = map;
         this.nationLabels = [];
         this.nationsData = {};
+        this.labelsVisible = true;
+        // Labels travel with Leaflet's pane; panning needs no DOM rebuild.
 
         // Dedicated pane for nation labels (above SVG map overlay, below cities/units)
         if (!this.map.getPane('nationsPane')) {
@@ -17,72 +19,15 @@ class NationLabelManager {
             pane.style.pointerEvents = 'none';
         }
 
-        // Exact SVG home territory coordinates [x, y], sizing tiers, orientation angles, and letter spacings
-        this.nationCoordinates = {
-            // Huge Nations
-            'USA': { coords: [315.0, 150.0], size: 'huge', angle: 0, letterSpacing: '0.35em', label: 'UNITED STATES' },
-            'SOV': { coords: [890.0, 110.0], size: 'huge', angle: -5, letterSpacing: '0.4em', label: 'SOVIET UNION' },
-            'BRA': { coords: [485.0, 332.0], size: 'huge', angle: -45, letterSpacing: '0.3em', label: 'BRAZIL' },
-            'AST': { coords: [1240.0, 426.0], size: 'huge', angle: -10, letterSpacing: '0.3em', label: 'AUSTRALIA' },
-            'CHI': { coords: [1145.0, 220.0], size: 'huge', angle: -15, letterSpacing: '0.3em', label: 'CHINA' },
 
-            // Big Powers & Large Countries
-            'GER': { coords: [745.0, 123.0], size: 'large', angle: -15, letterSpacing: '0.2em', label: 'GERMAN REICH' },
-            'FRA': { coords: [708.0, 150.0], size: 'large', angle: -25, letterSpacing: '0.2em', label: 'FRANCE' },
-            'ENG': { coords: [692.0, 105.0], size: 'large', angle: -50, letterSpacing: '0.25em', label: 'UNITED KINGDOM' },
-            'JAP': { coords: [1245.0, 205.0], size: 'large', angle: -45, letterSpacing: '0.25em', label: 'JAPAN' },
-            'ARG': { coords: [445.0, 425.0], size: 'large', angle: -75, letterSpacing: '0.3em', label: 'ARGENTINA' },
-            'MEX': { coords: [260.0, 210.0], size: 'large', angle: -30, letterSpacing: '0.25em', label: 'MEXICO' },
-            'RAJ': { coords: [980.0, 260.0], size: 'large', angle: -15, letterSpacing: '0.25em', label: 'INDIA' },
-            'CAN': { coords: [331.0, 55.0], size: 'large', angle: 0, letterSpacing: '0.35em', label: 'CANADA' },
-
-            // Medium Nations
-            'ITA': { coords: [762.0, 195.0], size: 'medium', angle: -55, letterSpacing: '0.2em', label: 'ITALY' },
-            'SPR': { coords: [681.0, 188.0], size: 'medium', angle: -15, letterSpacing: '0.2em', label: 'SPAIN' },
-            'POL': { coords: [785.0, 121.0], size: 'medium', angle: -10, letterSpacing: '0.2em', label: 'POLAND' },
-            'TUR': { coords: [831.0, 185.0], size: 'medium', angle: 5, letterSpacing: '0.25em', label: 'TURKEY' },
-            'PER': { coords: [910.0, 210.0], size: 'medium', angle: 15, letterSpacing: '0.25em', label: 'IRAN' },
-            'SAU': { coords: [870.0, 250.0], size: 'medium', angle: 20, letterSpacing: '0.25em', label: 'SAUDI ARABIA' },
-            'SWE': { coords: [760.0, 70.0], size: 'medium', angle: -70, letterSpacing: '0.25em', label: 'SWEDEN' },
-            'NOR': { coords: [730.0, 70.0], size: 'medium', angle: -75, letterSpacing: '0.25em', label: 'NORWAY' },
-            'FIN': { coords: [800.0, 60.0], size: 'medium', angle: -60, letterSpacing: '0.25em', label: 'FINLAND' },
-            'EGY': { coords: [820.0, 230.0], size: 'medium', angle: -45, letterSpacing: '0.25em', label: 'EGYPT' },
-            'SAF': { coords: [780.0, 480.0], size: 'medium', angle: 0, letterSpacing: '0.25em', label: 'SOUTH AFRICA' },
-            'MAN': { coords: [1182.0, 155.0], size: 'medium', angle: -20, letterSpacing: '0.25em', label: 'MANCHUKUO' },
-            'SIA': { coords: [1090.0, 295.0], size: 'medium', angle: -70, letterSpacing: '0.2em', label: 'SIAM' },
-            'COL': { coords: [411.0, 277.0], size: 'medium', angle: -20, letterSpacing: '0.2em', label: 'COLOMBIA' },
-            'CHL': { coords: [422.0, 440.0], size: 'medium', angle: -85, letterSpacing: '0.35em', label: 'CHILE' },
-
-            // Small Nations
-            'CZE': { coords: [765.0, 135.0], size: 'small', angle: -10, letterSpacing: '0.12em', label: 'CZECHOSLOVAKIA' },
-            'HUN': { coords: [773.0, 146.0], size: 'small', angle: 0, letterSpacing: '0.15em', label: 'HUNGARY' },
-            'ROM': { coords: [810.0, 155.0], size: 'small', angle: 15, letterSpacing: '0.15em', label: 'ROMANIA' },
-            'YUG': { coords: [770.0, 161.0], size: 'small', angle: -20, letterSpacing: '0.15em', label: 'YUGOSLAVIA' },
-            'BUL': { coords: [795.0, 168.0], size: 'small', angle: 0, letterSpacing: '0.15em', label: 'BULGARIA' },
-            'GRE': { coords: [789.0, 186.0], size: 'small', angle: -60, letterSpacing: '0.15em', label: 'GREECE' },
-            'IRQ': { coords: [869.0, 212.0], size: 'small', angle: 30, letterSpacing: '0.15em', label: 'IRAQ' },
-            'AFG': { coords: [957.0, 207.0], size: 'small', angle: 20, letterSpacing: '0.15em', label: 'AFGHANISTAN' },
-            'ETH': { coords: [870.0, 345.0], size: 'small', angle: -25, letterSpacing: '0.15em', label: 'ETHIOPIA' },
-            'PHI': { coords: [1175.0, 303.0], size: 'small', angle: -60, letterSpacing: '0.15em', label: 'PHILIPPINES' },
-            'NZL': { coords: [1375.0, 478.0], size: 'small', angle: -45, letterSpacing: '0.15em', label: 'NEW ZEALAND' },
-            'PRC': { coords: [1115.0, 185.0], size: 'small', angle: -15, letterSpacing: '0.12em', label: 'COMMUNIST CHINA' },
-
-            // Tiny / Compact Nations
-            'POR': { coords: [665.0, 188.0], size: 'tiny', angle: -75, letterSpacing: '0.12em', label: 'PORTUGAL' },
-            'HOL': { coords: [715.0, 126.0], size: 'tiny', angle: -20, letterSpacing: '0.1em', label: 'NETHERLANDS' },
-            'BEL': { coords: [710.0, 133.0], size: 'tiny', angle: -20, letterSpacing: '0.1em', label: 'BELGIUM' },
-            'SWI': { coords: [721.0, 148.0], size: 'tiny', angle: 0, letterSpacing: '0.1em', label: 'SWITZERLAND' },
-            'AUS': { coords: [755.0, 144.0], size: 'tiny', angle: -10, letterSpacing: '0.1em', label: 'AUSTRIA' },
-            'DEN': { coords: [738.0, 105.0], size: 'tiny', angle: -45, letterSpacing: '0.1em', label: 'DENMARK' }
-        };
     }
 
     /**
      * Load nation data and render labels on map
      */
-    async loadNationLabels() {
+    async loadNationLabels(saveId = null) {
         try {
-            const response = await fetch('/api/map/colors');
+            const response = await fetch(`/api/map/colors${saveId ? `?saveId=${encodeURIComponent(saveId)}` : ''}`);
             if (!response.ok) throw new Error('Failed to fetch nation colors');
             this.nationsData = await response.json();
             console.log('Loaded nation data for labels:', Object.keys(this.nationsData).length);
@@ -93,68 +38,70 @@ class NationLabelManager {
     }
 
     /**
-     * Display HOI4-style nation name labels on map (with 3-copy world wrapping replication)
+     * Display geographic nation name labels on map (with 3-copy world wrapping replication)
      */
     displayNationLabels() {
+        this._visibilityZoom=null;
         this.clearLabels();
 
-        const scale = gameMap.scaleFactor || 1.0;
-        const mapHeight = (gameMap && gameMap.svgHeight) ? gameMap.svgHeight : 600;
         const mapWidth = (gameMap && gameMap.svgWidth) ? gameMap.svgWidth : 1400.16;
 
         // Combine defined nation coordinates with all nations from API data
+        const pathsByNation = new Map();
+        for (const path of gameMap.svgLayer.getElement().querySelectorAll('path')) {
+            const code = path.regionData?.nation_code || path.regionData?.nation;
+            if (!code) continue;
+            if (!pathsByNation.has(code)) pathsByNation.set(code, []);
+            pathsByNation.get(code).push(path);
+        }
+        const territoryCodes = new Set(pathsByNation.keys());
         const allNationCodes = new Set([
-            ...Object.keys(this.nationCoordinates),
             ...Object.keys(this.nationsData)
         ]);
 
         allNationCodes.forEach(code => {
-            const nationData = this.nationsData[code] || {};
-            const info = this.nationCoordinates[code] || {};
+            // A label without territory is both misleading and a frequent source
+            // of overlap. It will be shown once a scenario actually supplies a
+            // matching region instead of being drawn at a stale hard-coded point.
+            if (!territoryCodes.has(code)) return;
 
-            let coords = info.coords;
+            const nationData = this.nationsData[code] || {};
+            const info = {};
+
+            let coords = info.coords || nationData.label_anchor;
             let text = info.label || (nationData.name ? nationData.name.toUpperCase() : code);
-            let sizeClass = info.size || 'small';
+            // Labels without a scenario-curated anchor are usually compact
+            // states or fragmented colonial holdings. Keep them until a close
+            // zoom instead of allowing a stack of approximate centroids to
+            // obscure the main map labels.
+            let sizeClass = info.size || 'tiny';
             let angle = info.angle || 0;
             let letterSpacing = info.letterSpacing || '0.15em';
 
-            // FALLBACK: Calculate centroid from SVG map paths if no hardcoded coordinates
-            if (!coords) {
-                const paths = Array.from(document.querySelectorAll('.map-svg-overlay path'))
-                    .filter(p => p.regionData && (p.regionData.nation_code === code || p.regionData.nation === code));
-
-                if (paths.length > 0) {
-                    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-                    paths.forEach(p => {
-                        try {
-                            const bbox = p.getBBox();
-                            if (bbox && bbox.width > 0 && bbox.height > 0) {
-                                minX = Math.min(minX, bbox.x);
-                                maxX = Math.max(maxX, bbox.x + bbox.width);
-                                minY = Math.min(minY, bbox.y);
-                                maxY = Math.max(maxY, bbox.y + bbox.height);
-                            }
-                        } catch (e) {}
-                    });
-
-                    if (minX !== Infinity) {
-                        coords = [(minX + maxX) / 2, (minY + maxY) / 2];
-                    }
-                }
+            const paths = pathsByNation.get(code) || [];
+            // Curated anchors may become foreign territory after a turn.
+            if (!coords || !paths.some(path => path.isPointInFill(new DOMPoint(...coords)))) {
+                const capitalPath = paths.find(path => path.regionData.id === nationData.capital?.region_id);
+                const ranked = paths.sort((a, b) => {
+                    const first = a.getBBox(), second = b.getBBox();
+                    return second.width * second.height - first.width * first.height;
+                });
+                coords = capitalPath ? nationData.capital.coords : ranked.map(path => gameMap.getInteriorAnchor(path)).find(Boolean);
             }
 
             if (!coords) return; // Skip if position cannot be resolved
+            const span = this.getTerritorySpan(paths, coords, angle);
+            // Uncurated nations must not all inherit the tiny-state zoom tier.
+            if (!info.size) sizeClass = span > 80 ? 'huge' : span > 30 ? 'large' : span > 12 ? 'medium' : span > 4 ? 'small' : 'tiny';
 
-            const scaledX = coords[0] * scale;
-            const scaledY = coords[1] * scale;
-            const baseLat = mapHeight - scaledY;
 
             // Render 3 copies for world wrapping: middle, left (-mapWidth), right (+mapWidth)
             const xOffsets = [0, -mapWidth, mapWidth];
 
             xOffsets.forEach(xOffset => {
-                const iconClass = `nation-label-container ${sizeClass}`;
-                const labelHtml = `<div class="nation-label" data-angle="${angle}" style="transform: rotate(${angle}deg); letter-spacing: ${letterSpacing};">${text}</div>`;
+                const iconClass = `nation-label-container ${sizeClass} geographic-label`;
+                const safeText = text.replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+                const labelHtml = `<div class="nation-label" data-angle="${angle}" style="--label-angle: ${angle}deg; --label-spacing: ${letterSpacing};">${safeText}</div>`;
 
                 const icon = L.divIcon({
                     className: iconClass,
@@ -163,7 +110,7 @@ class NationLabelManager {
                     iconAnchor: [100, 20]
                 });
 
-                const position = [baseLat, scaledX + xOffset];
+                const position = gameMap.svgToLatLng(coords, xOffset);
 
                 const marker = L.marker(position, {
                     icon: icon,
@@ -171,33 +118,90 @@ class NationLabelManager {
                     interactive: false
                 });
 
-                marker.addTo(this.map);
-                this.nationLabels.push(marker);
+                this.nationLabels.push({ marker, sizeClass, nationCode: code, coords, span });
             });
         });
 
         console.log(`Rendered ${this.nationLabels.length} HOI4 nation labels on map (including world wrap copies).`);
         this.updateVisibility(this.map.getZoom());
+        // Leaflet creates marker DOM nodes on the next frame. Apply visibility a
+        // second time once those nodes exist, otherwise every label flashes and
+        // remains visible until the player manually zooms.
+        requestAnimationFrame(() => this.updateVisibility(this.map.getZoom()));
     }
 
     /**
      * Clear all nation label markers
      */
+    getTerritorySpan(paths, coords, angle) {
+        const boxes = paths.map(path => ({ path, box: path.getBBox() }));
+        const seed = boxes.find(item => item.path.isPointInFill(new DOMPoint(...coords)));
+        if (!seed) return 0;
+        const connected = [seed], remaining = new Set(boxes.filter(item => item !== seed));
+        for (let i = 0; i < connected.length; i++) {
+            const a = connected[i].box;
+            for (const item of remaining) {
+                const b = item.box;
+                if (a.x <= b.x + b.width + 0.5 && a.x + a.width + 0.5 >= b.x &&
+                    a.y <= b.y + b.height + 0.5 && a.y + a.height + 0.5 >= b.y) {
+                    connected.push(item); remaining.delete(item);
+                }
+            }
+        }
+        const minX = Math.min(...connected.map(item => item.box.x));
+        const maxX = Math.max(...connected.map(item => item.box.x + item.box.width));
+        const minY = Math.min(...connected.map(item => item.box.y));
+        const maxY = Math.max(...connected.map(item => item.box.y + item.box.height));
+        const radians = angle * Math.PI / 180;
+        const width = 2 * Math.min(coords[0] - minX, maxX - coords[0]);
+        const height = 2 * Math.min(coords[1] - minY, maxY - coords[1]);
+        const horizontalSpan = width / Math.max(0.01, Math.abs(Math.cos(radians)));
+        const verticalSpan = height / Math.max(0.01, Math.abs(Math.sin(radians)));
+        return Math.max(0, Math.min(horizontalSpan, verticalSpan)) * 0.85;
+    }
+
     clearLabels() {
-        this.nationLabels.forEach(marker => this.map.removeLayer(marker));
+        this.nationLabels.forEach(({ marker }) => this.map.removeLayer(marker));
         this.nationLabels = [];
+    }
+
+    setVisible(visible) {
+        this.labelsVisible = Boolean(visible);
+        this.updateVisibility(this.map.getZoom());
     }
 
     /**
      * Update label font scaling smoothly on map zoom while preserving rotation
      */
     updateVisibility(zoom) {
-        const labels = document.querySelectorAll('.nation-label');
-        const zoomScale = Math.min(2.2, Math.max(0.75, 1 + (zoom - 1) * 0.25));
-        labels.forEach(label => {
-            const angle = label.getAttribute('data-angle') || 0;
-            label.style.transform = `rotate(${angle}deg) scale(${zoomScale})`;
+        if (this._visibilityZoom === zoom && this._visibilityCount === this.nationLabels.length && this._visibilityEnabled === this.labelsVisible) return;
+        this._visibilityZoom=zoom; this._visibilityCount=this.nationLabels.length; this._visibilityEnabled=this.labelsVisible;
+        const minimumZoomBySize = {
+            huge: -Infinity,
+            large: 0.75,
+            medium: 1.25,
+            small: 2.5,
+            tiny: 3.5
+        };
+        const zoomScale = Math.min(1.6, Math.max(0.8, 1 + (zoom - 1.25) * 0.16));
+
+        const visibleLabels = [];
+        this.nationLabels.forEach(({ marker, sizeClass, span }) => {
+            const inView = true;
+            const visible = this.labelsVisible && inView && zoom >= (minimumZoomBySize[sizeClass] ?? 1.9);
+            if (!visible) { if (this.map.hasLayer(marker)) this.map.removeLayer(marker); return; }
+            if (!this.map.hasLayer(marker)) marker.addTo(this.map);
+            const element = marker.getElement();
+            if (!element) return;
+            element.classList.toggle('nation-label-hidden', !visible);
+            if (visible) { const label = element.querySelector('.nation-label'); if (label) visibleLabels.push({label,span}); }
         });
+        // Batch layout reads before style writes; alternating them for every
+        // label forced a new layout hundreds of times after each zoom.
+        const measurements = visibleLabels.map(({label,span}) => ({ label,
+            scale: Math.max(10 / Math.max(1,parseFloat(getComputedStyle(label).fontSize)),
+                Math.min(zoomScale,span * Math.pow(2,zoom) / Math.max(1,label.offsetWidth))) }));
+        measurements.forEach(({label,scale})=>label.style.setProperty('--label-scale',scale));
     }
 }
 

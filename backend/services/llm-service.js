@@ -1,6 +1,8 @@
 const OpenAI = require('openai');
 const fs = require('fs');
 const path = require('path');
+const ScenarioService = require('./scenario-service');
+const providerCatalog = require('./ai-providers');
 
 const https = require('https');
 const http = require('http');
@@ -16,6 +18,7 @@ let currentSettings = {
 };
 
 let openai = null;
+const scenarios = new ScenarioService();
 
 function loadSettings() {
     try {
@@ -33,29 +36,12 @@ function loadSettings() {
 }
 
 function updateClients() {
-    const isOpenAICompatible = [
-        'openai',
-        'google',
-        'lm-studio',
-        'ollama',
-        'llama.cpp',
-        'vllm'
-    ].includes(currentSettings.provider);
-
+    const isOpenAICompatible = providerCatalog.providers.some(provider => provider.id === currentSettings.provider && provider.protocol === 'openai');
     if (isOpenAICompatible) {
-        let baseURL = currentSettings.apiUrl;
-        if (baseURL) {
-            // Do not append /v1 to Gemini API which uses googleapis.com endpoint
-            if (baseURL.includes('/api/v1')) {
-                // Keep it as is
-            } else if (!baseURL.endsWith('/v1') && !baseURL.includes('googleapis.com')) {
-                baseURL = baseURL.replace(/\/$/, '') + '/v1';
-            }
-        }
-        
+        const baseURL = providerCatalog.normalizeEndpoint(currentSettings.provider, currentSettings.apiUrl);
         openai = new OpenAI({
             baseURL: baseURL || undefined,
-            apiKey: currentSettings.apiKey || 'not-needed'
+            apiKey: currentSettings.apiKey || 'not-needed', timeout: 120000, maxRetries: 0
         });
     } else {
         openai = null;
@@ -66,25 +52,18 @@ function getCurrentSettings() {
     return currentSettings;
 }
 
+function getPublicSettings() {
+    const { apiKey, ...safeSettings } = currentSettings;
+    return { ...safeSettings, apiKey: '', hasApiKey: Boolean(apiKey) };
+}
+
 function saveSettings(settings) {
-    currentSettings = {
-        provider: settings.provider || 'lm-studio',
-        apiUrl: settings.apiUrl || '',
-        apiKey: settings.apiKey || '',
-        model: settings.model || ''
-    };
-
-    try {
-        const dir = path.dirname(SETTINGS_FILE);
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-        fs.writeFileSync(SETTINGS_FILE, JSON.stringify(currentSettings, null, 2), 'utf8');
-        console.log('[LLM] Saved settings successfully.');
-    } catch (e) {
-        console.error('[LLM] Error saving settings:', e.message);
-    }
-
+    const next = providerCatalog.resolveSettings(settings, currentSettings);
+    if (!next.model) throw new Error('Select or enter a model ID');
+    fs.mkdirSync(path.dirname(SETTINGS_FILE), { recursive: true });
+    fs.writeFileSync(SETTINGS_FILE + '.tmp', JSON.stringify(next, null, 2), 'utf8');
+    fs.renameSync(SETTINGS_FILE + '.tmp', SETTINGS_FILE);
+    currentSettings = next;
     updateClients();
 }
 
@@ -119,6 +98,7 @@ function makeHttpRequest(url, options, postData) {
                 });
             });
 
+            req.setTimeout(120000, () => req.destroy(new Error('Provider request timed out')));
             req.on('error', (err) => reject(err));
             if (postData) {
                 req.write(JSON.stringify(postData));
@@ -140,7 +120,7 @@ async function callAnthropic(options) {
         content: m.content
     }));
 
-    const url = currentSettings.apiUrl || 'https://api.anthropic.com/v1/messages';
+    const url = providerCatalog.normalizeEndpoint('anthropic', currentSettings.apiUrl) + '/messages';
     const headers = {
         'x-api-key': currentSettings.apiKey || '',
         'anthropic-version': '2023-06-01',
@@ -183,12 +163,7 @@ async function executeChatCompletion(messages, temperature = 0.7, max_tokens = 3
         };
     } else {
         const modelName = currentSettings.model || 'qwen3-vl-8b';
-        const response = await openai.chat.completions.create({
-            model: modelName,
-            messages: messages,
-            temperature: temperature,
-            max_tokens: max_tokens
-        });
+        const response = await openai.chat.completions.create(providerCatalog.completionOptions(currentSettings, messages, temperature, max_tokens));
 
         return {
             content: response.choices[0].message.content,
@@ -199,12 +174,14 @@ async function executeChatCompletion(messages, temperature = 0.7, max_tokens = 3
 
 async function testConnectionWithSettings(tempSettings) {
     try {
+        tempSettings = providerCatalog.resolveSettings(tempSettings, currentSettings);
+        if (!tempSettings.model) throw new Error('Select or enter a model ID');
         let responseContent;
         let responseModel;
         
         if (tempSettings.provider === 'anthropic') {
             const messages = [{ role: 'user', content: 'Hello' }];
-            const url = tempSettings.apiUrl || 'https://api.anthropic.com/v1/messages';
+            const url = tempSettings.apiUrl + '/messages';
             const headers = {
                 'x-api-key': tempSettings.apiKey || '',
                 'anthropic-version': '2023-06-01',
@@ -225,26 +202,14 @@ async function testConnectionWithSettings(tempSettings) {
                 throw new Error('Unexpected format: ' + JSON.stringify(res));
             }
         } else {
-            let baseURL = tempSettings.apiUrl;
-            if (baseURL) {
-                if (baseURL.includes('/api/v1')) {
-                    // Keep it as is
-                } else if (!baseURL.endsWith('/v1') && !baseURL.includes('googleapis.com')) {
-                    baseURL = baseURL.replace(/\/$/, '') + '/v1';
-                }
-            }
+            const baseURL = tempSettings.apiUrl;
             const tempOpenai = new OpenAI({
                 baseURL: baseURL || undefined,
-                apiKey: tempSettings.apiKey || 'not-needed'
+                apiKey: tempSettings.apiKey || 'not-needed', timeout: 20000, maxRetries: 0
             });
 
             const modelName = tempSettings.model || 'qwen3-vl-8b';
-            const response = await tempOpenai.chat.completions.create({
-                model: modelName,
-                messages: [{ role: 'user', content: 'Hello' }],
-                max_tokens: 10,
-                temperature: 0.7
-            });
+            const response = await tempOpenai.chat.completions.create(providerCatalog.completionOptions(tempSettings, [{ role: 'user', content: 'Hello' }], 0.7, 128));
 
             responseContent = response.choices[0].message.content;
             responseModel = response.model || modelName;
@@ -267,47 +232,7 @@ async function testConnectionWithSettings(tempSettings) {
 
 // System prompts for different contexts
 const PROMPTS = {
-    GAME_MASTER: `You are the Game Master of "Pax Historia", a high-fidelity grand strategy simulator set in 1935-1945.
-YOUR ROLE: You are the architect of destiny. You must work out the consequences of the player's actions and generate realistic world events.
-
-SIMULATION RULES:
-1. CONSEQUENTIALITY: Every action carries weight. If Italy attacks Ethiopia, the United Kingdom must react. If the player mobilizes troops, tensions rise.
-2. DYNAMIC HISTORICAL REALISM: Follow history, but allow plausible deviations (Alt-History). Do not block the player, but punish/reward them with realistic events.
-3. STATE OF THE WORLD: Carefully analyze the current situation, the map, and the chronology of events.
-
-GENERATION RULES:
-1. **HISTORICAL CHRONOLOGY**: Always consult the HISTORICAL ROADMAP of the nation ({nation_code}) and of neighboring nations. If it is {current_date}, events must reflect the historical reality of that period (e.g., the Ethiopian War is active if 1935).
-2. **GEOGRAPHIC SPECIFICITY**: Do not say "the army advances". Say "General Badoglio's troops advance toward Makalè" or "Ethiopian forces dig in on Amba Alagi". Cite real cities, rivers, and mountain ranges.
-3. **MANDATORY TAGS**: Always use nation tags in square brackets (e.g., [ITA], [ETH]).
-4. **MILITARY DETAIL**: Events must mention specific units (e.g., 2nd Eritrean Division, Alpini, Imperial Guards).
-
-RELEVANT HISTORICAL ROADMAP: {historical_context}
-CURRENT WORLD CONTEXT: {world_context}
-
-RESPONSE FORMAT (JSON):
-{
-    "consequences": "Analysis in English...",
-    "events": [
-        {
-            "title": "Title in English",
-            "description": "Description in English",
-            "event_type": "political|military|economic|diplomatic|social",
-            "severity": "minor|moderate|major|critical",
-            "affected_nations": ["GER", "ITA"],
-            "state_changes": {
-                "NATION_CODE": {
-                    "stability": +/-X,
-                    "war_support": +/-X,
-                    "treasury": +/-X,
-                    "occupied_regions": ["REGION_ID", ...]
-                }
-            }
-        }
-    ],
-    "global_tension_delta": X
-}
- Make sure you use exactly the keys "events", "title", "description", "event_type", "severity", "affected_nations", and "state_changes".
-IMPORTANT: Do not use the '+' sign for positive numbers in the JSON (e.g., use 5 instead of +5).`,
+    GAME_MASTER: require('./turn-prompt').RULES,
 
     ADVISOR: `You are the High Strategic Advisor of {nation_name} on {current_date}.
 YOUR MANDATE: Provide COLD, PRECISE, and HISTORICALLY GROUNDED analyses, acting as a strategic compass that helps the leader avoid the failures of the past and pursue national goals with wisdom.
@@ -320,7 +245,7 @@ IRON RULES:
 2. **MISTAKE PREVENTION**: Use the "HISTORICAL MISTAKES TO AVOID" section to warn the player. If the player is taking a path that historically led to disaster, intervene firmly.
 3. **STRATEGIC DILEMMAS**: Consider the nation's real historical dilemmas when offering your advice.
 4. **REAL GEOGRAPHY**: Every piece of advice must be anchored to real locations (e.g., "Fortify the Mai Ceu pass", "Protect the supply lines to Massawa").
-5. **TAGS**: Always use [TAG] for nations.
+5. **NAMES**: Use complete nation names in prose, never bracketed internal nation codes.
 6. **CONCISE MODE**: If the player sends ONLY a short, informal message (e.g., "OK", "Hi", "Understood", "Good", "Fine"), respond with ONE VERY SHORT SENTENCE (maximum 10-15 words). DO NOT use the full sectioned format. Examples: "Excellent. I await your orders, Excellency." or "At your command, my lord."
 
 ALWAYS RESPOND FOLLOWING THIS SCHEMA (EXCEPT for short messages, see rule 6):
@@ -329,14 +254,14 @@ ALWAYS RESPOND FOLLOWING THIS SCHEMA (EXCEPT for short messages, see rule 6):
 [Analysis based on the real roadmap, historical dilemmas, and the current situation. Cite specific events.]
 
 ### 🎯 MILITARY AND DIPLOMATIC ORDERS
-1. [Specific action with Location and TAG]
-2. [Specific action with Location and TAG]
+1. [Specific action with location and full nation name]
+2. [Specific action with location and full nation name]
 
 ### ⚠️ INTELLIGENCE AND MISTAKE PREVENTION
 - [Provide a warning based specifically on the nation's historical mistakes if applicable, or on real risks of the period]
 ---`,
 
-    DIPLOMACY: `We are making a turn-based strategy game where the player can engage in diplomacy. We need you to simulate this diplomacy by roleplaying as all of the polities in this chat.
+    DIPLOMACY: `We are making a turn-based strategy game where the player can engage in diplomacy. We need you to simulate this diplomacy by roleplaying only as {responding_polity_name}, speaking to the other participants.
 
 PARTICIPANTS: {participants}
 PLAYER POLITY: {player_polity}
@@ -348,9 +273,8 @@ CURRENT DATE: {current_date}
 3. TONE MATCHING: Your tone should MATCH the tone of the player ({player_polity}), leaning towards professionalism over slang.
 4. CHARACTERS: No random math symbols orhashtags. No third-person speaking.
 
-**Output Length Rule (CRITICAL):**
-No matter what, the size of your message will ALWAYS match the average size of the player's messages in this specific chat ({player_avg_length} characters).
-Match the characters count, plus or minus 10 Percent. NEVER BREAK THIS RULE.
+**Useful diplomatic replies:**
+Use complete nation names, never internal IDs. A greeting can receive a brief greeting and a relevant diplomatic opening. For substantive proposals, give a clear position, your interests, concrete terms or a counterproposal, and any unresolved conditions in 1–3 concise paragraphs. Match the complexity of the request, not its character count. Do not claim a treaty, transfer or military action has taken effect merely because it was discussed. Do not speak for other participants.
 
 **World Context:**
 World Context Before Round One:
@@ -369,12 +293,9 @@ Responding as: {responding_polity_name}`
 /**
  * Load historical roadmap from file
  */
-function loadHistoricalRoadmap() {
+function loadHistoricalRoadmap(scenarioId) {
     try {
-        const roadmapPath = path.join(__dirname, '../../data/historical_roadmaps.json');
-        if (fs.existsSync(roadmapPath)) {
-            return JSON.parse(fs.readFileSync(roadmapPath, 'utf8'));
-        }
+        return scenarios.getRoadmaps(scenarioId);
     } catch (error) {
         console.error('[LLM] Failed to load historical roadmap:', error.message);
     }
@@ -384,13 +305,14 @@ function loadHistoricalRoadmap() {
 /**
  * Get historical context for a nation
  */
-function getHistoricalRoadmapContext(nationCode) {
-    const roadmaps = loadHistoricalRoadmap();
+function getHistoricalRoadmapContext(nationCode, scenarioId) {
+    const roadmaps = loadHistoricalRoadmap(scenarioId);
     const data = roadmaps[nationCode];
+    const scenarioEra = scenarios.getScenario(scenarioId).era || 'configured historical era';
 
     if (!data) {
         return `There are no specific milestones for the nation ${nationCode} in this archive.
-Keep a realistic tone consistent with the 1935-1945 period regardless.`;
+Keep a realistic tone consistent with the ${scenarioEra} scenario period.`;
     }
 
     if (Array.isArray(data)) {
@@ -424,79 +346,65 @@ Keep a realistic tone consistent with the 1935-1945 period regardless.`;
  * Process world turn and generate events
  */
 async function generateEvents(timeJump, gameContext) {
-    const nationCode = gameContext.playerNation?.code || 'ITA';
-    const historicalContext = getHistoricalRoadmapContext(nationCode);
-
-    const systemPrompt = PROMPTS.GAME_MASTER
-        .replace(/{nation_code}/g, nationCode)
-        .replace(/{current_date}/g, gameContext.currentDate)
-        .replace(/{historical_context}/g, historicalContext)
-        .replace(/{world_context}/g, gameContext.worldContext || 'None');
-
-    const messages = [
-        { role: 'system', content: systemPrompt },
-        {
-            role: 'user',
-            content: `TURN SIMULATION:
-Time jump: ${timeJump}
-Start date: ${gameContext.currentDate}
-Player Nation: ${gameContext.playerNation.name}
-
-PLAYER'S PENDING ACTIONS:
-${JSON.stringify(gameContext.actions, null, 2)}
-
-RECENT EVENT HISTORY:
-${JSON.stringify(gameContext.recentEvents, null, 2)}
-
-WORLD STATE:
-${JSON.stringify(gameContext.worldState, null, 2)}
-
-SIMULATION RULES:
-${gameContext.simulationRules || 'None'}
-
-Generate at least 3-6 significant events and the consequences for this period (${timeJump}).
-Every event MUST be realistic, impactful, and consistent with the current situation.
-Respond ONLY in JSON conforming to the required format.`
-        }
-    ];
+    const nationCode=gameContext.playerNation?.code || 'ITA';
+    const historicalContext=getHistoricalRoadmapContext(nationCode,gameContext.scenarioId);
+    const messages=require('./turn-prompt').buildTurnMessages(timeJump,gameContext,historicalContext);
+    const started=Date.now();
+    const diagnostics={requests:0,prompt_characters:messages.reduce((n,m)=>n+m.content.length,0),repair_prompt_characters:0,
+        initial_request_ms:0,repair_request_ms:0};
+    const complete = async (requestMessages, temperature, phase) => {
+        const requestStarted = Date.now();
+        diagnostics.requests++;
+        try { return await executeChatCompletion(requestMessages, temperature, 8000); }
+        finally { diagnostics[phase + '_request_ms'] = Date.now() - requestStarted; }
+    };
+    const recordDiagnostics = (deferredOrders, failed) => {
+        const elapsed = Date.now() - started;
+        const info = {...diagnostics,elapsed_ms:elapsed,
+            validation_ms:Math.max(0,elapsed-diagnostics.initial_request_ms-diagnostics.repair_request_ms),
+            deferred_orders:deferredOrders,failed:Number(failed)};
+        try {
+            const directory = path.join(__dirname, '../../data/debug');
+            if (!fs.existsSync(directory)) fs.mkdirSync(directory, {recursive:true});
+            fs.writeFileSync(path.join(directory, 'last_turn_diagnostics.json'), JSON.stringify(info, null, 2));
+        } catch {}
+        return info;
+    };
 
     try {
-        const response = await executeChatCompletion(messages, 0.7, 3000);
-
-        let content = response.content;
-
-        // DEBUG: Save raw response for inspection
-        try {
-            const debugDir = path.join(__dirname, '../../data/debug');
-            if (!fs.existsSync(debugDir)) fs.mkdirSync(debugDir, { recursive: true });
-            fs.writeFileSync(path.join(debugDir, 'last_ai_response.txt'), content);
-        } catch (e) {
-            console.warn('[LLM] Failed to save debug log:', e.message);
-        }
-
-        // Clean markdown if present
-        if (content.includes('```json')) {
-            content = content.split('```json')[1].split('```')[0];
-        } else if (content.includes('```')) {
-            content = content.split('```')[1].split('```')[0];
-        }
-
-        // Fix common AI JSON errors: leading '+' signs on numbers
-        content = content.replace(/:\s*\+(\d+(\.\d*)?)/g, ': $1');
-
-        try {
-            return JSON.parse(content);
-        } catch (e) {
-            // Robust regex fallback if JSON.parse fails
-            const jsonMatch = content.match(/\{[\s\S]*\}/);
-            if (jsonMatch) {
-                return JSON.parse(jsonMatch[0]);
+        let response = await complete(messages, 0.7, 'initial');
+        let parsed, repairBase=null;
+        for(let attempt=0;attempt<2;attempt++) {
+            try {
+                // Retain failed replies too; otherwise the diagnostic points at
+                // an unrelated older successful turn.
+                try {const dir=path.join(__dirname,'../../data/debug');if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'last_ai_response.txt'),response.content);}catch{}
+                parsed=require('./model-json').parseModelJSON(response.content,{requireEvents:!repairBase,allowMissingEvents:!repairBase});
+                if(repairBase)parsed=require('./turn-validation').mergeMilitaryRepair(repairBase,parsed);
+                const original=structuredClone(parsed);
+                try {require('./turn-validation').validateTurn(parsed,gameContext,{allowUnresolved:attempt===1,allowIncomplete:gameContext.nextImportantEvent || attempt===1});}
+                catch(error) {error.original=original;throw error;}
+                break;
+            } catch(error) {
+                if(attempt===1)throw error;
+                repairBase=error.scope==='military'?error.original:null;
+                const repair=repairBase
+                    ? 'Repair the order resolutions and military section only. Return action_resolutions for every pending order and standing operation, and unit_changes/campaign_orders for any standalone orders. Civilian resolutions need action_id and summary, without operation. Prefer nested operation.formations and operation.reports. Do not return or change events, diplomatic_changes, consequences or elapsed_days; they are preserved by the engine. Keep unrelated valid orders. Resolve every issue below together.'
+                    : 'Repair the entire JSON response. Preserve valid developments where timing allows, and resolve every issue below together.';
+                const correctionMessages=[...messages,{role:'assistant',content:response.content},{role:'user',content:`${repair}\nValidation issues:\n${error.message}\nUse declared formation_ref values for new troops and actual unit_id values for existing troops. Never replace missing movements/support with victory prose.`}];
+                diagnostics.repair_prompt_characters=correctionMessages.reduce((n,m)=>n+m.content.length,0);
+                response=await complete(correctionMessages,0.3,'repair');
             }
-            throw e;
         }
+
+        const selected=require('./next-event').getTimelineSelection(parsed);
+        diagnostics.future_events=selected.future_events;diagnostics.future_effects=selected.future_effects;
+        parsed.generation_info=recordDiagnostics(parsed.deferred_action_ids?.length||0, false);
+        return parsed;
+
     } catch (error) {
-        console.error('Event Generation Error:', error);
-        return { events: [], error: error.message };
+        console.error('Event Generation Error:', error.message);
+        return { events: [], error: error.message, generation_info:recordDiagnostics(0, true) };
     }
 }
 
@@ -522,7 +430,7 @@ async function diplomaticChat(message, fromNation, toNation, chatHistory = [], c
 
     const messages = [
         { role: 'system', content: systemPrompt },
-        ...chatHistory.map(msg => ({
+        ...chatHistory.slice(-24).filter((msg,index,history)=>!(index===history.length-1 && msg.sender_is_player && msg.message_text===message)).map(msg => ({
             role: msg.sender_is_player ? 'user' : 'assistant',
             content: msg.message_text
         })),
@@ -535,7 +443,9 @@ async function diplomaticChat(message, fromNation, toNation, chatHistory = [], c
         return response.content;
     } catch (error) {
         console.error('Diplomacy Error:', error);
-        return `[Communication Error: ${error.message}]`;
+        const unavailable = new Error(`Diplomatic model is unavailable: ${error.message}`);
+        unavailable.code = 'LLM_UNAVAILABLE';
+        throw unavailable;
     }
 }
 
@@ -544,7 +454,7 @@ async function diplomaticChat(message, fromNation, toNation, chatHistory = [], c
  */
 async function getAdvisorResponse(question, advContext) {
     const nation = advContext.playerNation;
-    const historicalContext = getHistoricalRoadmapContext(nation.code);
+    const historicalContext = getHistoricalRoadmapContext(nation.code, advContext.scenarioId);
 
     const systemPrompt = PROMPTS.ADVISOR
         .replace(/{nation_name}/g, nation.name)
@@ -555,7 +465,9 @@ async function getAdvisorResponse(question, advContext) {
         { role: 'system', content: systemPrompt },
         {
             role: 'user',
-            content: `CURRENT SITUATION (${advContext.currentDate}):
+            content: `SCENARIO BRIEFING: ${advContext.worldContext || ""}
+SIMULATION RULES: ${advContext.simulationRules || ""}
+CURRENT SITUATION (${advContext.currentDate}):
 Nation: ${nation.name} (${nation.code})
 Ongoing wars: ${nation.atWar ? 'Yes' : 'No'}
 Occupied regions: ${nation.occupied_regions?.join(', ') || 'None'}
@@ -579,8 +491,24 @@ THE SOVEREIGN'S QUESTION: "${question}"`
         return response.content;
     } catch (error) {
         console.error('Advisor Error:', error);
-        return `Advisor error: ${error.message}`;
+        const unavailable = new Error(`Advisor model is unavailable: ${error.message}`);
+        unavailable.code = 'LLM_UNAVAILABLE';
+        throw unavailable;
     }
+}
+
+async function planActions(goal, context) {
+    const response = await executeChatCompletion([
+        { role: 'system', content: 'Draft 3 to 5 concrete orders for the player to issue. Return ONLY JSON: {"actions":["Order text", "Order text"]}. Write each item as a self-contained imperative order, not advice, analysis, an answer, or a question. Match the selected era and nation. Include location, purpose and practical first steps. No invented budgets, stability scores or approval requirements. Do not duplicate pending orders. Suggestions are drafts, never submitted automatically.' },
+        { role: 'user', content: JSON.stringify({ goal: goal || 'Suggest useful next steps for my nation.', ...context }) }
+    ], 0.7);
+    const raw = response.content.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+    let parsed;
+    try { parsed = JSON.parse(raw); } catch { throw new Error('The planner did not return action drafts. Please try again.'); }
+    if (!Array.isArray(parsed.actions) || !parsed.actions.length || parsed.actions.some(a => typeof a !== 'string' || !a.trim() || a.length > 2000)) {
+        throw new Error('The planner returned invalid action drafts. Please try again.');
+    }
+    return [...new Set(parsed.actions.map(a => a.trim()))].slice(0, 5);
 }
 
 /**
@@ -605,12 +533,16 @@ async function testConnection() {
 
 module.exports = {
     generateEvents,
+    planActions,
     diplomaticChat,
     getAdvisorResponse,
     testConnection,
     getCurrentSettings,
+    getPublicSettings,
     saveSettings,
     testConnectionWithSettings,
+    providers: providerCatalog.providers,
+    discoverModels: settings => providerCatalog.discoverModels(providerCatalog.resolveSettings(settings, currentSettings)),
     PROMPTS
 };
 

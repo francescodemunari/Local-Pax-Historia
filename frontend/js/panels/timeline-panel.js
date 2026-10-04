@@ -45,6 +45,7 @@ const timelinePanel = {
 
     showTimeModal() {
         if (!app.currentGame) return;
+        if (turnPlayback.queue?.length) { app.showToast('Finish event playback before advancing again.', 'info'); return; }
 
         const currentDate = new Date(app.currentGame.currentDate);
 
@@ -62,23 +63,23 @@ const timelinePanel = {
     },
 
     updateTargetDates(fromDate) {
-        const jumps = {
-            '1_week': 7,
-            '1_month': 30,
-            '3_months': 90,
-            '6_months': 180,
-            '1_year': 365
-        };
+        const jumps = ['1_week','1_month','3_months','6_months','1_year'];
+        for (const jump of jumps) {
+            const element=document.getElementById(`time-${jump.replace('_','')}`);
+            if(element)element.textContent=app.formatDate(this.targetDate(fromDate,jump));
+        }
+    },
 
-        Object.entries(jumps).forEach(([key, days]) => {
-            const targetDate = new Date(fromDate);
-            targetDate.setDate(targetDate.getDate() + days);
-
-            const element = document.getElementById(`time-${key.replace('_', '')}`);
-            if (element) {
-                element.textContent = app.formatDate(targetDate);
-            }
-        });
+    targetDate(fromDate,jump) {
+        const date=new Date(fromDate),[amount,unit]=jump.split('_'),count=Number(amount);
+        if(unit.startsWith('day') || unit.startsWith('week')) date.setUTCDate(date.getUTCDate()+count*(unit.startsWith('week')?7:1));
+        else {
+            const day=date.getUTCDate();date.setUTCDate(1);
+            date.setUTCMonth(date.getUTCMonth()+count*(unit.startsWith('year')?12:1));
+            const last=new Date(date);last.setUTCMonth(last.getUTCMonth()+1,0);
+            date.setUTCDate(Math.min(day,last.getUTCDate()));
+        }
+        return date;
     },
 
     showCustomTimeInput() {
@@ -94,6 +95,7 @@ const timelinePanel = {
     async advanceTime(timeJump) {
         if (!app.currentGame || this.isAdvancing) return;
 
+        const saveId = app.currentGame.saveId;
         this.hideTimeModal();
         this.isAdvancing = true;
 
@@ -106,32 +108,12 @@ const timelinePanel = {
         app.showToast('Simulating world events...', 'info');
 
         try {
-            const result = await api.advanceTime(app.currentGame.saveId, timeJump);
-
-            // Update game state
-            app.currentGame.currentDate = result.new_date;
-            app.currentGame.turnNumber = result.turn_number;
-
-            // Update UI
-            this.updateDateDisplay();
-
-            // Show new events
-            if (result.events && result.events.length > 0) {
-                eventsPanel.addEvents(result.events);
-                app.showToast(`${result.events.length} new events!`, 'success');
-
-                // Automatically show events panel
-                eventsPanel.show();
-            } else {
-                app.showToast('Time advanced. No significant events.', 'info');
-            }
-
-            // Reload pending actions
-            actionsPanel.loadPendingActions();
+            const result = await api.advanceTime(saveId, timeJump);
+            await this.receiveTurn(result, saveId);
 
         } catch (error) {
             console.error('Failed to advance time:', error);
-            app.showToast('Error advancing time', 'error');
+            app.showToast(error.message || 'Unable to resolve this turn. Pending orders were preserved.', 'error');
 
             // Restore date display
             this.updateDateDisplay();
@@ -140,6 +122,23 @@ const timelinePanel = {
             btn.disabled = false;
             btn.innerHTML = '≫';
         }
+    },
+
+    async receiveTurn(result, saveId) {
+        if (app.currentGame?.saveId !== saveId) return;
+        const key = `${saveId}:${result.turn_number}`;
+        if (this.lastPresentedTurn === key) return;
+        this.lastPresentedTurn = key;
+        app.currentGame.currentDate = result.new_date;
+        app.currentGame.turnNumber = result.turn_number;
+        this.updateDateDisplay();
+        await app.refreshAfterTurn(result);
+        if (app.currentGame?.saveId !== saveId) return;
+        eventsPanel.addEvents(result.events || []);
+        if(result.next_event_horizon_reached)app.showToast(`Advanced ${result.next_event_horizon_days || 365} days. No strategic milestone was found; standing operations continue.`, 'info');
+        if(result.resolution_notes?.length)app.showToast('Some orders are still awaiting an outcome. They remain available in Actions.', 'info');
+        document.getElementById('action-suggestions')?.replaceChildren();
+        await turnPlayback.play(result.events, saveId, result);
     },
 
     updateDateDisplay() {

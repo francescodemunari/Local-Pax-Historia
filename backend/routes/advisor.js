@@ -5,6 +5,11 @@ const GameEngine = require('../services/game-engine');
 
 const engine = new GameEngine();
 
+function respondWithAdvisorError(res, error) {
+    const status = error.code === 'LLM_UNAVAILABLE' ? 503 : 500;
+    res.status(status).json({ error: error.message });
+}
+
 // Ask the advisor a question
 router.post('/ask', async (req, res) => {
     try {
@@ -24,7 +29,7 @@ router.post('/ask', async (req, res) => {
         });
     } catch (error) {
         console.error('Error getting advisor response:', error);
-        res.status(500).json({ error: error.message });
+        respondWithAdvisorError(res, error);
     }
 });
 
@@ -47,7 +52,7 @@ router.get('/summary/:saveId', async (req, res) => {
         });
     } catch (error) {
         console.error('Error getting game summary:', error);
-        res.status(500).json({ error: error.message });
+        respondWithAdvisorError(res, error);
     }
 });
 
@@ -66,7 +71,7 @@ router.post('/strategic', async (req, res) => {
         });
     } catch (error) {
         console.error('Error getting strategic advice:', error);
-        res.status(500).json({ error: error.message });
+        respondWithAdvisorError(res, error);
     }
 });
 
@@ -98,7 +103,7 @@ router.get('/suggestions/:saveId', async (req, res) => {
         });
     } catch (error) {
         console.error('Error getting suggestions:', error);
-        res.status(500).json({ error: error.message });
+        respondWithAdvisorError(res, error);
     }
 });
 

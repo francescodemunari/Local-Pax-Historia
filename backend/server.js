@@ -28,6 +28,7 @@ app.locals.wss = wss;
 
 // Middleware
 app.use(cors());
+app.use('/api/nations/portrait',express.json({limit:'550kb'}));
 app.use(express.json());
 
 // Request logging middleware
@@ -55,9 +56,11 @@ app.get('/api/ping', (req, res) => {
     res.json({ pong: true, time: new Date().toISOString(), message: "Server is running with latest Pax Historia routes" });
 });
 
-// Static files (MOVE AFTER API ROUTES)
-app.use('/data', express.static(path.join(__dirname, '../data')));
+// Static files (MOVE AFTER API ROUTES). Game data, saves, debug output, and
+// provider credentials are deliberately served only through scoped API routes.
+app.use('/vendor/leaflet', express.static(path.join(__dirname, 'node_modules/leaflet/dist')));
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/data', (req, res) => res.sendStatus(404));
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -65,6 +68,10 @@ app.get('/api/health', (req, res) => {
 });
 
 // Serve frontend
+app.use('/api', (req, res) => res.status(404).json({ error: 'API endpoint not found' }));
+app.use((error, req, res, next) => {
+    res.status(error.status || 500).json({ error: error.status === 400 ? 'Invalid JSON request body' : 'Request failed' });
+});
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
@@ -93,11 +100,29 @@ app.locals.broadcast = (data) => {
 
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => {
+if (require.main === module) {
+    // ws forwards HTTP listen errors. Handle both emitters without reporting
+    // the same failure twice or throwing an unhandled WebSocket error.
+    const reportedErrors = new WeakSet();
+    const reportServerError = error => {
+        if (reportedErrors.has(error)) return;
+        reportedErrors.add(error);
+        if (error.code === 'EADDRINUSE') {
+            console.error(`\nPort ${PORT} is already in use. Pax Historia could not start.`);
+            console.error(`If Pax Historia is already running, open http://localhost:${PORT} in your browser.`);
+            console.error('Otherwise close the application using that port, or set PORT in backend/.env.');
+        } else {
+            console.error(`Pax Historia server error: ${error.message}`);
+        }
+        process.exitCode = 1;
+    };
+    server.on('error', reportServerError);
+    wss.on('error', reportServerError);
+    server.listen(PORT, () => {
     console.log(`
 ╔══════════════════════════════════════════════════════════╗
 ║                    PAX HISTORIA                          ║
-║              WW2 Grand Strategy Game                     ║
+║          Scenario-Driven Grand Strategy Game             ║
 ╠══════════════════════════════════════════════════════════╣
 ║  Server running on: http://localhost:${PORT}               ║
 ║  System: File-Based (HOI4 Data)                          ║
@@ -111,3 +136,6 @@ process.on('SIGTERM', () => {
     console.log('Shutting down gracefully...');
     server.close(() => process.exit(0));
 });
+}
+
+module.exports = { app, server, wss };

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg  xmlns="http://www.w3.org/2000/svg" width="750" height="500">
+<rect fill="#c00" width="750" height="500"/>
+<rect fill="none" stroke="white" stroke-width="10" x="250" y="120" width="250" height="250"/>
+<g fill="white"><rect x="347.5" y="222.5" width="55" height="55"/>
+<rect x="222" y="92" width="55" height="55"/>
+<rect x="472" y="92" width="55" height="55"/>
+<rect x="222" y="342" width="55" height="55"/>
+<rect x="472" y="342" width="55" height="55"/></g></svg>

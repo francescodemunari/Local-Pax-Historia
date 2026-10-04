@@ -1,0 +1,22 @@
+{
+  "ww1-1910": {
+    "total": 64,
+    "withFlags": 62,
+    "withoutVerifiedFlag": [
+      "Bhutan",
+      "Arabian local administrations"
+    ]
+  },
+  "ww2-geographic": {
+    "total": 75,
+    "withFlags": 74,
+    "withoutVerifiedFlag": [
+      "Bhutan"
+    ]
+  },
+  "world-2010": {
+    "total": 173,
+    "withFlags": 173,
+    "withoutVerifiedFlag": []
+  }
+}

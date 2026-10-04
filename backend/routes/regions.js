@@ -2,23 +2,9 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const fs = require('fs');
+const GameEngine = require('../services/game-engine');
 
-const mapDataPath = path.join(__dirname, '../../data/hoi4_map.json');
-const regionMetadataPath = path.join(__dirname, '../../data/region_metadata.json');
-
-function getMapData() {
-    if (fs.existsSync(mapDataPath)) {
-        return JSON.parse(fs.readFileSync(mapDataPath, 'utf-8'));
-    }
-    return { regions: [] };
-}
-
-function getRegionMetadata() {
-    if (fs.existsSync(regionMetadataPath)) {
-        return JSON.parse(fs.readFileSync(regionMetadataPath, 'utf-8'));
-    }
-    return {};
-}
+const engine = new GameEngine();
 
 /**
  * GET /api/regions
@@ -27,38 +13,19 @@ function getRegionMetadata() {
 router.get('/', async (req, res) => {
     try {
         const { nation_code, save_id } = req.query;
-        const mapData = getMapData();
-        const metadata = getRegionMetadata();
-
-        // If save_id is provided, we need to load occupations
-        let occupations = {};
-        if (save_id) {
-            try {
-                const GameEngine = require('../services/game-engine');
-                const engine = new GameEngine();
-                const gameState = await engine.loadGame(save_id);
-
-                // Build a map of region -> occupant
-                Object.keys(gameState.nations).forEach(code => {
-                    const nationState = gameState.nations[code];
-                    if (nationState.occupied_regions) {
-                        nationState.occupied_regions.forEach(regId => {
-                            occupations[regId] = code;
-                        });
-                    }
-                });
-            } catch (e) {
-                console.warn(`[Regions] Could not load save ${save_id} for occupations:`, e.message);
-            }
-        }
+        let gameState = null;
+        if (save_id) gameState = await engine.loadGame(save_id);
+        const scenarioId = gameState?.scenarioId;
+        const mapData = gameState ? engine.getMapWithControl(gameState) : engine.scenarios.getMap(scenarioId);
+        const metadata = engine.scenarios.getRegionMetadata(scenarioId);
 
         let regions = mapData.regions.map(r => {
             const meta = metadata[r.name] || metadata[r.id] || {};
             return {
                 id: r.id,
                 name: r.name,
-                nation_code: occupations[r.id] || occupations[r.name] || r.nation_code || null,
-                ...meta
+                ...meta,
+                nation_code: r.nation_code || null
             };
         });
 
@@ -80,8 +47,9 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const mapData = getMapData();
-        const metadata = getRegionMetadata();
+        const gameState = req.query.saveId ? await engine.loadGame(req.query.saveId) : null;
+        const mapData = gameState ? engine.getMapWithControl(gameState) : engine.scenarios.getMap(gameState?.scenarioId);
+        const metadata = engine.scenarios.getRegionMetadata(gameState?.scenarioId);
 
         const region = mapData.regions.find(r => r.id === id || r.name === id);
 
@@ -94,8 +62,8 @@ router.get('/:id', async (req, res) => {
         res.json({
             id: region.id,
             name: region.name,
-            nation_code: region.nation_code || null,
-            ...meta
+            ...meta,
+            nation_code: region.nation_code || null
         });
     } catch (error) {
         console.error('Error fetching region:', error);
@@ -110,8 +78,9 @@ router.get('/:id', async (req, res) => {
 router.get('/:id/stats', async (req, res) => {
     try {
         const { id } = req.params;
-        const mapData = getMapData();
-        const metadata = getRegionMetadata();
+        const gameState = req.query.saveId ? await engine.loadGame(req.query.saveId) : null;
+        const mapData = gameState ? engine.getMapWithControl(gameState) : engine.scenarios.getMap(gameState?.scenarioId);
+        const metadata = engine.scenarios.getRegionMetadata(gameState?.scenarioId);
 
         const region = mapData.regions.find(r => r.id === id || r.name === id);
 
@@ -121,14 +90,22 @@ router.get('/:id/stats', async (req, res) => {
 
         const meta = metadata[region.name] || metadata[region.id] || {};
 
-        // Mocking some stats for the preview
+        const nations = engine.getNations(gameState?.scenarioId);
+        const cities = engine.scenarios.getCities(gameState?.scenarioId)
+            .filter(city => city.region_id === region.id || city.region_id === region.name)
+            .map(city => ({ id: city.id, name: city.name, type: city.type }));
+
         res.json({
             id: region.id,
             name: region.name,
             nation_code: region.nation_code || null,
-            infrastructure: meta.infrastructure || 5,
-            supply_capacity: meta.supply_capacity || 15,
-            unit_count: 0
+            nation_name: nations[region.nation_code]?.name || null,
+            terrain: meta.terrain || (region.is_coastal ? 'Coastal' : 'Unknown'),
+            infrastructure: Number.isFinite(meta.infrastructure) ? meta.infrastructure : null,
+            supply_capacity: Number.isFinite(meta.supply_capacity) ? meta.supply_capacity : null,
+            important_cities: Array.isArray(meta.important_cities) ? meta.important_cities : cities.map(city => city.name),
+            cities,
+            unit_count: (gameState?.units || []).filter(unit => unit.region_id === region.id || unit.region_id === region.name).length
         });
     } catch (error) {
         console.error('Error fetching region stats:', error);

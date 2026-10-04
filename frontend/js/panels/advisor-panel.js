@@ -71,11 +71,25 @@ const advisorPanel = {
     },
 
     formatMessage(text) {
-        return text
+        return this.escapeHtml(text)
             .replace(/\n/g, '<br>')
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
             .replace(/^- /gm, '• ');
+    },
+
+    escapeHtml(value) {
+        return (typeof countryFlags !== 'undefined' ? countryFlags.prose(value) : String(value ?? '')).replace(/[&<>'"]/g, character => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+        })[character]);
+    },
+
+    getErrorMessage(error) {
+        const message = String(error?.message || '');
+        if (/model is unavailable|connection error/i.test(message)) {
+            return 'The Game Master model is unavailable. Open AI Settings to connect it before requesting advice or advancing time.';
+        }
+        return message ? `Advisor request failed: ${message}` : 'Advisor request failed. Please try again.';
     },
 
     showTyping() {
@@ -118,7 +132,7 @@ const advisorPanel = {
         } catch (error) {
             this.hideTyping();
             console.error('Advisor error:', error);
-            this.addMessage('I apologize, but I am unable to respond at the moment. Please try again later.', 'system');
+            this.addMessage(this.getErrorMessage(error), 'system');
         }
     },
 
@@ -162,7 +176,7 @@ const advisorPanel = {
         } catch (error) {
             this.hideTyping();
             console.error('Quick action error:', error);
-            this.addMessage('Error retrieving information.', 'system');
+            this.addMessage(this.getErrorMessage(error), 'system');
         }
     },
 

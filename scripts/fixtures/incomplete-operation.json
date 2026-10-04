@@ -1,0 +1,98 @@
+{
+  "consequences": "During the opening weeks of 1936, Italy initiates its full-scale dual-pronged offensive against the Empire of Ethiopia. Operating from the northern colony of Eritrea and the southern territory of Somaliland, Italian forces advance into hostile territory while facing rugged terrain and Ethiopian resistance.",
+  "action_resolutions": [
+    {
+      "action_id": "fixture_action",
+      "summary": "Full-scale offensive launched in East Africa with separate northern and southern fronts.",
+      "operation": {
+        "kind": "invasion",
+        "status": "proceed",
+        "target_nation_code": "ETH",
+        "reason": "Italian forces advance systematically along the northern and southern axes.",
+        "fronts": [
+          {
+            "id": "north_front",
+            "name": "Northern Front (Eritrea)",
+            "region_id": "g531_aERI-1564_f0",
+            "status": "ready"
+          },
+          {
+            "id": "south_front",
+            "name": "Southern Front (Somaliland)",
+            "region_id": "g5200_aSOM-2409_f0",
+            "status": "ready"
+          }
+        ],
+        "formations": [
+          {
+            "formation_ref": "north_ground",
+            "unit_type": "infantry",
+            "name": "1st Eritrean Division",
+            "region_id": "g531_aERI-1564_f0"
+          },
+          {
+            "formation_ref": "south_ground",
+            "unit_type": "infantry",
+            "name": "1st Somaliland Division",
+            "region_id": "g5200_aSOM-2409_f0"
+          },
+          {
+            "formation_ref": "east_air_wing",
+            "unit_type": "air",
+            "name": "Regia Aeronautica East Africa Wing",
+            "region_id": "g531_aERI-1564_f0"
+          }
+        ],
+        "reports": [
+          {
+            "action": "battle",
+            "title": "Battle of Tigray",
+            "report": "The 1st Eritrean Division, supported by close air support from the Regia Aeronautica, pushes across the border from Maekel into Tigray, engaging Ethiopian defenders.",
+            "outcome": "advance",
+            "day_offset": 25,
+            "front_ids": [
+              "north_front"
+            ],
+            "movements": [
+              {
+                "unit_id": "north_ground",
+                "region_id": "g531_aETH-3110_f0",
+                "strength": 95,
+                "organization": 85
+              }
+            ],
+            "support": [
+              {
+                "unit_id": "east_air_wing",
+                "region_id": "g531_aETH-3110_f0",
+                "mission": "Close air support and reconnaissance"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "title": "Opening of the East African Offensive",
+      "game_date": "1936-01-25",
+      "description": "Italian forces launch their coordinated offensive into northern Ethiopia from Eritrean staging areas, marking the beginning of major combat operations for the year.",
+      "event_type": "military",
+      "severity": "major",
+      "affected_nations": [
+        "ITA",
+        "ETH"
+      ],
+      "location": {
+        "name": "Tigray",
+        "longitude": 39.7,
+        "latitude": 14.4
+      }
+    }
+  ],
+  "campaign_orders": [],
+  "diplomatic_changes": [],
+  "unit_changes": [],
+  "elapsed_days": 25
+}

@@ -78,18 +78,22 @@ const eventsPanel = {
         filtered.forEach(event => {
             const div = document.createElement('div');
             div.className = `event-item ${event.event_type} ${event.severity}`;
+            const affectedNations = (event.affected_nations || [])
+                .map(nation => this.escapeHtml(countryFlags.name(nation)))
+                .join(', ');
             div.innerHTML = `
                 <div class="event-header">
-                    <span class="event-title">${this.getEventIcon(event.event_type)} ${event.title}</span>
+                    <span class="event-title">${this.getEventIcon(event.event_type)} ${this.escapeHtml(event.title)}</span>
                     <span class="event-date">${app.formatDate(event.game_date)}</span>
                 </div>
-                <p class="event-description">${event.description}</p>
+                <p class="event-description">${this.escapeHtml(event.description)}</p>
                 <div class="event-tags">
-                    <span class="event-tag">${this.formatEventType(event.event_type)}</span>
-                    <span class="event-tag">${this.formatSeverity(event.severity)}</span>
-                    ${event.affected_nations?.length ?
-                    `<span class="event-tag">${event.affected_nations.join(', ')}</span>` : ''}
+                    <span class="event-tag">${event.source === 'engine' ? 'Engine result' : 'AI narrative'}</span>
+                    <span class="event-tag">${this.escapeHtml(this.formatEventType(event.event_type))}</span>
+                    <span class="event-tag">${this.escapeHtml(this.formatSeverity(event.severity))}</span>
+                    ${affectedNations ? `<span class="event-tag">${affectedNations}</span>` : ''}
                 </div>
+                ${this.renderAppliedEffects(event)}
             `;
             container.appendChild(div);
         });
@@ -125,6 +129,20 @@ const eventsPanel = {
             critical: 'Critical'
         };
         return severities[severity] || severity;
+    },
+
+    renderAppliedEffects(event) {
+        const changes = Array.isArray(event.applied_state_changes) ? event.applied_state_changes : [];
+        const effects = changes.flatMap(change => Object.entries(change).filter(([field]) => field !== 'nation_code')
+            .map(([field, value]) => `${change.nation_code}: ${field.replace(/_/g, ' ')} ${Array.isArray(value) ? value.join(', ') : (value > 0 ? '+' : '') + value}`));
+        if (!effects.length) return '';
+        return `<p class="event-description"><strong>Applied changes:</strong> ${this.escapeHtml(effects.join('; '))}</p>`;
+    },
+
+    escapeHtml(value) {
+        return (typeof countryFlags !== 'undefined' ? countryFlags.prose(value) : String(value ?? '')).replace(/[&<>'"]/g, character => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+        })[character]);
     },
 
     addEvents(newEvents) {

@@ -1,0 +1,111 @@
+{
+  "action_resolutions": [
+    {
+      "action_id": "surrender_order",
+      "summary": "Italy launched a full-scale invasion against Ethiopia from Eritrea and Somaliland, utilizing land forces, air support, and Blackshirt special units to conquer and annex Ethiopia.",
+      "operation": {
+        "kind": "annexation",
+        "status": "proceed",
+        "target_nation_code": "ETH",
+        "reason": "Italian forces executed a synchronized two-front invasion, overwhelming Ethiopian defenses and capturing key positions.",
+        "fronts": [
+          {
+            "id": "front_north",
+            "name": "Northern Front (Eritrea)",
+            "region_id": "g531_aERI-1562_f0",
+            "status": "ready"
+          },
+          {
+            "id": "front_south",
+            "name": "Southern Front (Somaliland)",
+            "region_id": "g5200_aETH-3134_f0",
+            "status": "ready"
+          }
+        ],
+        "formations": [
+          {
+            "formation_ref": "ITA_inf_north_1",
+            "unit_type": "infantry",
+            "name": "1st Eritrean Corps",
+            "region_id": "g531_aERI-1562_f0"
+          },
+          {
+            "formation_ref": "ITA_inf_south_1",
+            "unit_type": "infantry",
+            "name": "1st Somaliland Corps",
+            "region_id": "g5200_aETH-3134_f0"
+          },
+          {
+            "formation_ref": "ITA_cc_special_1",
+            "unit_type": "infantry",
+            "name": "Blackshirt Special Division",
+            "region_id": "g531_aERI-1562_f0"
+          },
+          {
+            "formation_ref": "ITA_air_wing_1",
+            "unit_type": "air",
+            "name": "Regia Aeronautica East Africa",
+            "region_id": "g531_aERI-1562_f0"
+          }
+        ],
+        "reports": [
+          {
+            "action": "battle",
+            "title": "The Battles of Tembien and Amba Aradam",
+            "report": "Massed Italian divisions pushing south from Eritrea met fierce resistance from Ethiopian defenders entrenched in the rugged highlands of Tigray. Backed by extensive bombing runs from the Regia Aeronautica, the 1st Eritrean Corps ground through mountain passes, breaking defensive lines after weeks of bitter attrition and heavy logistical strain.",
+            "outcome": "advance",
+            "day_offset": 60,
+            "front_ids": [
+              "front_north"
+            ],
+            "movements": [
+              {
+                "formation_ref": "ITA_inf_north_1",
+                "region_id": "g531_aETH-3110_f0"
+              },
+              {
+                "formation_ref": "ITA_cc_special_1",
+                "region_id": "g531_aETH-3110_f0"
+              }
+            ],
+            "support": [
+              {
+                "formation_ref": "ITA_air_wing_1",
+                "region_id": "g531_aETH-3110_f0",
+                "mission": "Ground Attack"
+              }
+            ]
+          },
+          {
+            "action": "battle",
+            "title": "The Advance through the Ogaden",
+            "report": "From Italian Somaliland, the 1st Somaliland Corps advanced across the harsh Ogaden desert, defeating local Ethiopian garrisons and securing crucial territory.",
+            "outcome": "advance",
+            "day_offset": 75,
+            "front_ids": [
+              "front_south"
+            ],
+            "movements": [
+              {
+                "formation_ref": "ITA_inf_south_1",
+                "region_id": "g5200_aSOM-2412_f0"
+              }
+            ],
+            "support": []
+          },
+          {
+            "action": "annex",
+            "surrendered": true,
+            "title": "Fall of Addis Ababa and Annexation of Ethiopia",
+            "report": "Following the collapse of the northern and southern defensive rings, Italian forces converging from Tigray and the Ogaden entered Addis Ababa. Blackshirt special units secured key administrative nodes, forcing the formal dissolution of the Ethiopian Empire and its complete annexation by Italy.",
+            "day_offset": 120
+          }
+        ]
+      }
+    }
+  ],
+  "unit_changes": [],
+  "campaign_orders": [],
+  "diplomatic_changes": [],
+  "events": []
+}

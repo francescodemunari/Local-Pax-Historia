@@ -101,7 +101,9 @@ const diplomacyPanel = {
         if (!app.currentGame) return;
 
         try {
-            const chats = await api.getChats(app.currentGame.saveId);
+            const saveId=app.currentGame.saveId;
+            const chats = await api.getChats(saveId);
+            if(app.currentGame?.saveId!==saveId)return;
             this.chats = chats;
             this.renderChatsList();
         } catch (error) {
@@ -125,12 +127,13 @@ const diplomacyPanel = {
             
             const participantsText = chat.participant_nations
                 .filter(n => n !== app.currentGame.playerNation.code)
-                .join(', ');
+                .map(code=>countryFlags.name(code)).join(', ');
+            const title = !chat.topic || chat.topic === 'Diplomacy' ? participantsText : `${participantsText} — ${chat.topic}`;
 
             div.innerHTML = `
                 <div class="chat-item-info">
-                    <div class="chat-item-title">${chat.topic || 'Negotiation with ' + participantsText}</div>
-                    <div class="chat-item-last-msg">${chat.last_message || 'No messages'}</div>
+                    <div class="chat-item-title">${this.escapeHtml(title)}</div>
+                    <div class="chat-item-last-msg">${this.escapeHtml(chat.last_message || 'No messages')}</div>
                 </div>
                 <div class="chat-item-meta">
                     <span class="chat-msg-count">${chat.message_count}</span>
@@ -138,11 +141,18 @@ const diplomacyPanel = {
             `;
 
             div.addEventListener('click', () => {
-                this.openChat(chat.id, chat.topic || 'Chat with ' + participantsText);
+                this.openChat(chat.id, title);
             });
 
-            container.appendChild(div);
+            const flags=document.createElement('div');flags.className='chat-item-flags';
+            for(const code of chat.participant_nations.filter(code=>code!==app.currentGame.playerNation.code))flags.append(this.flag(code));
+            div.prepend(flags);container.appendChild(div);
         });
+    },
+
+    flag(code) {
+        const flag=document.createElement('span');flag.className='diplomatic-flag';
+        countryFlags.paint(flag,code,app.currentGame.scenario?.id,app.currentGame.currentDate);return flag;
     },
 
     async showNewChatModal() {
@@ -173,12 +183,13 @@ const diplomacyPanel = {
             div.innerHTML = `
                 <div class="nation-flag-mini" style="background-color: ${nation.color}"></div>
                 <div class="nation-select-info">
-                    <div class="nation-select-name">${nation.name}</div>
-                    <div class="nation-select-leader">${nation.leader_name}</div>
+                    <div class="nation-select-name">${this.escapeHtml(nation.name)}</div>
+                    <div class="nation-select-leader">${this.escapeHtml(nation.leader_name)}</div>
                 </div>
                 <div class="nation-select-check"></div>
             `;
 
+            div.querySelector('.nation-flag-mini').replaceWith(this.flag(nation.code));
             div.addEventListener('click', () => {
                 this.toggleNationSelection(div, nation.code);
             });
@@ -228,7 +239,7 @@ const diplomacyPanel = {
             
             this.hideNewChatModal();
             this.loadChats();
-            this.openChat(chat.id, 'New Conversation');
+            this.openChat(chat.id, participants.filter(code=>code!==app.currentGame.playerNation.code).map(code=>countryFlags.name(code)).join(', '));
         } catch (error) {
             console.error('Failed to start chat:', error);
             app.showToast('Error opening chat', 'error');
@@ -242,7 +253,9 @@ const diplomacyPanel = {
         document.getElementById('chat-messages').innerHTML = '<div class="loading-spinner-mini"></div>';
         
         try {
-            const messages = await api.getChatMessages(chatId);
+            const saveId=app.currentGame.saveId;
+            const messages = await api.getChatMessages(chatId, saveId);
+            if(app.currentGame?.saveId!==saveId || this.currentChatId!==chatId)return;
             this.renderMessages(messages);
         } catch (error) {
             console.error('Failed to load messages:', error);
@@ -253,6 +266,7 @@ const diplomacyPanel = {
     hideChatModal() {
         document.getElementById('chat-modal').classList.add('hidden');
         this.currentChatId = null;
+        if(app.currentGame)this.loadChats();
     },
 
     renderMessages(messages) {
@@ -270,11 +284,12 @@ const diplomacyPanel = {
             div.className = `chat-message ${isPlayer ? 'player' : 'ai'}`;
             
             div.innerHTML = `
-                <div class="message-sender">${msg.sender_name} (${msg.leader_name})</div>
-                <div class="message-text">${msg.message_text}</div>
+                <div class="message-sender">${this.escapeHtml(msg.sender_name || countryFlags.name(msg.sender_nation))}${msg.leader_name ? ` — ${this.escapeHtml(msg.leader_name)}` : ''}</div>
+                <div class="message-text">${this.escapeHtml(msg.message_text)}</div>
                 <div class="message-date">${app.formatDate(msg.game_date)}</div>
             `;
             
+            div.querySelector('.message-sender').prepend(this.flag(msg.sender_nation));
             container.appendChild(div);
         });
 
@@ -283,6 +298,7 @@ const diplomacyPanel = {
 
     async sendMessage() {
         if (!this.currentChatId) return;
+        const saveId=app.currentGame.saveId,chatId=this.currentChatId;
         
         const input = document.getElementById('chat-input');
         const message = input.value.trim();
@@ -299,7 +315,7 @@ const diplomacyPanel = {
             this.addMessageToUI({
                 sender_nation: playerNation,
                 sender_name: app.currentGame.playerNation.name,
-                leader_name: app.currentGame.playerNation.leader_name || 'Leader',
+                leader_name: app.currentGame.playerNation.leader_name || '',
                 message_text: message,
                 game_date: app.currentGame.currentDate
             });
@@ -307,11 +323,12 @@ const diplomacyPanel = {
             input.value = '';
             
             const result = await api.sendDiplomaticMessage(
-                this.currentChatId,
-                app.currentGame.saveId,
+                chatId,
+                saveId,
                 message,
                 playerNation
             );
+            if(app.currentGame?.saveId!==saveId || this.currentChatId!==chatId)return;
             
             if (result.success && result.responses) {
                 result.responses.forEach(resp => {
@@ -326,7 +343,15 @@ const diplomacyPanel = {
             }
         } catch (error) {
             console.error('Failed to send message:', error);
-            app.showToast('Error sending message', 'error');
+            if(app.currentGame?.saveId!==saveId || this.currentChatId!==chatId)return;
+            input.value = message;
+            try {
+                const messages = await api.getChatMessages(this.currentChatId, app.currentGame.saveId);
+                this.renderMessages(messages);
+            } catch (refreshError) {
+                console.error('Failed to restore chat after send error:', refreshError);
+            }
+            app.showToast(error.message || 'The diplomatic model is unavailable', 'error');
         } finally {
             sendBtn.disabled = false;
         }
@@ -344,12 +369,19 @@ const diplomacyPanel = {
         div.className = `chat-message ${isPlayer ? 'player' : 'ai'}`;
         
         div.innerHTML = `
-            <div class="message-sender">${msg.sender_name} (${msg.leader_name})</div>
-            <div class="message-text">${msg.message_text}</div>
+            <div class="message-sender">${this.escapeHtml(msg.sender_name || countryFlags.name(msg.sender_nation))}${msg.leader_name ? ` — ${this.escapeHtml(msg.leader_name)}` : ''}</div>
+            <div class="message-text">${this.escapeHtml(msg.message_text)}</div>
             <div class="message-date">${app.formatDate(msg.game_date)}</div>
         `;
         
+        div.querySelector('.message-sender').prepend(this.flag(msg.sender_nation));
         container.appendChild(div);
         container.scrollTop = container.scrollHeight;
+    },
+
+    escapeHtml(value) {
+        return (typeof countryFlags !== 'undefined' ? countryFlags.prose(value) : String(value ?? '')).replace(/[&<>'"]/g, character => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+        })[character]);
     }
 };
