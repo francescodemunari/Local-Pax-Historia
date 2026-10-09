@@ -78,9 +78,15 @@ async function discoverModels(settings) {
     }
     return [...new Map(models.map(model => [model.id, model])).values()].sort((a, b) => a.id.localeCompare(b.id));
 }
-function completionOptions(settings, messages, temperature, maxTokens) {
+function completionOptions(settings, messages, temperature, maxTokens, {json=false}={}) {
     const reasoning = settings.provider === 'openai' && /^(o[1-9](?:-|$)|gpt-[5-9](?:[.-]|$))/.test(settings.model);
-    return reasoning ? { model: settings.model, messages, max_completion_tokens: maxTokens }
+    const options = reasoning ? { model: settings.model, messages, max_completion_tokens: maxTokens }
         : { model: settings.model, messages, temperature, max_tokens: maxTokens };
+    // Gemini's compatibility endpoint supports JSON mode. Do not assume every
+    // local/custom backend supports this optional parameter; prose calls keep
+    // their usual format. Model names returned by discovery may include models/.
+    if(json && settings.provider==='google' && /^(?:models\/)?gemini-/.test(settings.model))
+        options.response_format={type:'json_object'};
+    return options;
 }
 module.exports = { providers, normalizeEndpoint, resolveSettings, discoverModels, completionOptions };

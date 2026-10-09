@@ -23,7 +23,7 @@
     "test:startup": "node ../scripts/test_server_startup.js",
     "test:providers": "node ../scripts/test_ai_providers.js",
     "test:cities": "node ../scripts/test_city_visibility.js",
-    "test:model-json": "node ../scripts/test_model_json.js",
+    "test:model-json": "node ../scripts/test_model_json.js && node ../scripts/test_json_turn_recovery.js",
     "test:disband": "node ../scripts/test_disband.js",
     "test:tiles": "node ../scripts/test_map_tiles.js && node ../scripts/test_tile_worker.js",
     "test:actions-flow": "node ../scripts/test_actions_flow.js",

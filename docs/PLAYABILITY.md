@@ -1,5 +1,7 @@
 # Playability scope
 
+9 October 2026: Turn generation now requests JSON output for Gemini models. A bounded decoder recovers closing-bracket mistakes without changing keys, values or reports; ambiguous and truncated replies still cannot commit partial state. The recorded malformed Italy/Ethiopia response now resolves both fronts and air support in one mocked request. See [AI reliability](AI_RELIABILITY.md#malformed-turn-json--9-october-2026).
+
 9 October 2026: Next important event no longer treats a missing milestone as permission to advance a full year. Sparse replies pause at an explicitly labelled progress checkpoint, keep unfinished fronts active and exclude later predictions. The recorded Italy/Ethiopia response now stops on 15 February instead of 31 December. See [AI reliability](AI_RELIABILITY.md#next-event-coverage-checkpoints--9-october-2026).
 
 Updated 4 October 2026. The game is a local AI-adjudicated sandbox. Automated checks establish executable behavior; they cannot certify every model-generated situation or historical judgment.

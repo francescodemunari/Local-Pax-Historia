@@ -1,6 +1,7 @@
 const assert = require('node:assert/strict');
 const http = require('node:http');
 const { once } = require('node:events');
+const fs=require('node:fs'),vm=require('node:vm');
 const { providers, normalizeEndpoint, resolveSettings, discoverModels, completionOptions } = require('../backend/services/ai-providers');
 
 async function run() {
@@ -17,6 +18,21 @@ async function run() {
     assert.throws(() => normalizeEndpoint('custom', 'https://secret@example.com/v1'));
     const options = completionOptions({provider:'openai', model:'gpt-5'},[],.7,100);
     assert.equal(options.max_completion_tokens,100); assert.equal(options.temperature,undefined);
+    for(const model of ['gemini-flash-lite-latest','models/gemini-2.5-flash']) {
+        assert.deepEqual(completionOptions({provider:'google',model},[],.7,8000,{json:true}).response_format,{type:'json_object'});
+        assert.equal(completionOptions({provider:'google',model},[],.7,8000).response_format,undefined,'Diplomacy remains prose');
+    }
+    assert.equal(completionOptions({provider:'custom',model:'local'},[],.7,8000,{json:true}).response_format,undefined);
+    assert.equal(completionOptions({provider:'google',model:'models/gemma-4-31b-it'},[],.7,8000,{json:true}).response_format,undefined,'Do not assume Gemma supports Gemini JSON mode');
+    const llmSource=fs.readFileSync(require.resolve('../backend/services/llm-service'),'utf8');
+    let outgoing;
+    const transport={currentSettings:{provider:'google',model:'gemini-flash-lite-latest'},providerCatalog:{completionOptions},
+        openai:{chat:{completions:{create:async options=>{outgoing=options;return {choices:[{message:{content:'{"events":[]}'},finish_reason:'length'}]};}}}}};
+    vm.createContext(transport);
+    vm.runInContext(llmSource.slice(llmSource.indexOf('async function executeChatCompletion('),llmSource.indexOf('async function testConnectionWithSettings('))+'\nthis.complete=executeChatCompletion;',transport);
+    const wire=await transport.complete([{role:'user',content:'Return JSON.'}],.7,8000,{json:true});
+    assert.equal(outgoing.response_format.type,'json_object');assert.equal(wire.finish_reason,'length');
+    await transport.complete([{role:'user',content:'Hello.'}]);assert.equal(outgoing.response_format,undefined);
 
     const requests = [];
     const server = http.createServer((req, res) => {

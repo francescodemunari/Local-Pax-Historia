@@ -143,14 +143,15 @@ async function callAnthropic(options) {
     if (res.content && res.content[0] && res.content[0].text) {
         return {
             content: res.content[0].text,
-            model: res.model
+            model: res.model,
+            finish_reason: res.stop_reason === 'max_tokens' ? 'length' : res.stop_reason
         };
     } else {
         throw new Error('Unexpected response format from Anthropic: ' + JSON.stringify(res));
     }
 }
 
-async function executeChatCompletion(messages, temperature = 0.7, max_tokens = 3000) {
+async function executeChatCompletion(messages, temperature = 0.7, max_tokens = 3000, outputOptions = {}) {
     if (!openai && currentSettings.provider !== 'anthropic') {
         updateClients();
     }
@@ -159,15 +160,17 @@ async function executeChatCompletion(messages, temperature = 0.7, max_tokens = 3
         const response = await callAnthropic({ messages, temperature, max_tokens });
         return {
             content: response.content,
-            model: response.model
+            model: response.model,
+            finish_reason: response.finish_reason
         };
     } else {
         const modelName = currentSettings.model || 'qwen3-vl-8b';
-        const response = await openai.chat.completions.create(providerCatalog.completionOptions(currentSettings, messages, temperature, max_tokens));
+        const response = await openai.chat.completions.create(providerCatalog.completionOptions(currentSettings, messages, temperature, max_tokens, outputOptions));
 
         return {
             content: response.choices[0].message.content,
-            model: response.model || modelName
+            model: response.model || modelName,
+            finish_reason: response.choices[0].finish_reason
         };
     }
 }
@@ -351,11 +354,11 @@ async function generateEvents(timeJump, gameContext) {
     const messages=require('./turn-prompt').buildTurnMessages(timeJump,gameContext,historicalContext);
     const started=Date.now();
     const diagnostics={requests:0,prompt_characters:messages.reduce((n,m)=>n+m.content.length,0),repair_prompt_characters:0,
-        initial_request_ms:0,repair_request_ms:0};
+        initial_request_ms:0,repair_request_ms:0,json_recoveries:0,truncated_replies:0};
     const complete = async (requestMessages, temperature, phase) => {
         const requestStarted = Date.now();
         diagnostics.requests++;
-        try { return await executeChatCompletion(requestMessages, temperature, 8000); }
+        try { return await executeChatCompletion(requestMessages, temperature, 8000, {json:true}); }
         finally { diagnostics[phase + '_request_ms'] = Date.now() - requestStarted; }
     };
     const recordDiagnostics = (deferredOrders, failed) => {
@@ -378,8 +381,19 @@ async function generateEvents(timeJump, gameContext) {
             try {
                 // Retain failed replies too; otherwise the diagnostic points at
                 // an unrelated older successful turn.
-                try {const dir=path.join(__dirname,'../../data/debug');if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'last_ai_response.txt'),response.content);}catch{}
+                try {
+                    const dir=path.join(__dirname,'../../data/debug');
+                    if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});
+                    fs.writeFileSync(path.join(dir,'last_ai_response.txt'),response.content);
+                    fs.writeFileSync(path.join(dir,attempt===0?'last_ai_initial_response.txt':'last_ai_repair_response.txt'),response.content);
+                    if(attempt===0)fs.writeFileSync(path.join(dir,'last_ai_repair_response.txt'),'');
+                }catch{}
+                if(response.finish_reason==='length') {
+                    diagnostics.truncated_replies++;
+                    throw new Error('The model response reached its output limit before completing the turn. Return a complete, concise JSON object with fewer grouped reports.');
+                }
                 parsed=require('./model-json').parseModelJSON(response.content,{requireEvents:!repairBase,allowMissingEvents:!repairBase});
+                if(require('./model-json').wasJSONRecovered(parsed))diagnostics.json_recoveries++;
                 if(repairBase)parsed=require('./turn-validation').mergeMilitaryRepair(repairBase,parsed);
                 const original=structuredClone(parsed);
                 try {require('./turn-validation').validateTurn(parsed,gameContext,{allowUnresolved:attempt===1,allowIncomplete:gameContext.nextImportantEvent || attempt===1});}

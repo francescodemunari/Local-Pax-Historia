@@ -1,5 +1,7 @@
 # Pax Historia — Local Grand Strategy
 
+9 October 2026: Turn generation now requests JSON output for Gemini models. A bounded decoder recovers closing-bracket mistakes without changing keys, values or reports; ambiguous and truncated replies still cannot commit partial state. The recorded malformed Italy/Ethiopia response now resolves both fronts and air support in one mocked request. See [AI reliability](docs/AI_RELIABILITY.md#malformed-turn-json--9-october-2026).
+
 9 October 2026: Next important event no longer treats a missing milestone as permission to advance a full year. Sparse replies pause at an explicitly labelled progress checkpoint, keep unfinished fronts active and exclude later predictions. The recorded Italy/Ethiopia response now stops on 15 February instead of 31 December. See [AI reliability](docs/AI_RELIABILITY.md#next-event-coverage-checkpoints--9-october-2026).
 
 A local historical strategy sandbox with AI-generated events, diplomacy and advice. Choose **Before the Great War — 1910**, **World War II — Geographic Map (1936)**, or **Multipolar World — 2010**. WWI now starts on **1 January 1910**, giving you several years to shape events before a possible war. WWII remains the default, starting on 1 January 1936.
