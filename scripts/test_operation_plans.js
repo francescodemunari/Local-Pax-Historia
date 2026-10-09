@@ -72,9 +72,9 @@ async function run() {
     assert.equal(state.units.find(u=>u.name==='Southern division').region_id,s.id);
     assert.equal(state.units.find(u=>u.name==='Air wing').mission.target_region_id,n.id);
     assert.equal(engine.getRegionController(state,n),'ITA');assert.equal(engine.getRegionController(state,s),'ITA');
-    assert.equal(state.currentDate,mode==='next_event'?'1936-12-31':'1936-02-01');
+    assert.equal(state.currentDate,mode==='next_event'?'1936-01-21':'1936-02-01');
     assert.equal(turn.events.find(e=>e.campaign_effect).severity,'moderate','Ordinary border gains are not major milestones');
-    if(mode==='next_event')assert(turn.next_event_horizon_reached,'No strategic milestone is invented from a border battle');
+    if(mode==='next_event')assert(turn.next_event_checkpoint && !turn.next_event_horizon_reached,'A border battle is a checkpoint, not an invented milestone or quiet year');
     assert(turn.events.some(e=>e.title==='French domestic reform'),'Unrelated news survives repair');
     const battle=turn.events.find(e=>e.campaign_effect);
     assert.equal(battle.applied_unit_changes.length,2);

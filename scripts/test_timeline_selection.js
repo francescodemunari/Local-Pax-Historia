@@ -68,7 +68,7 @@ async function run() {
      assert.equal(followupCount(),1);
      assert.equal(later.units.find(u=>u.id===south.id).region_id,'g5200_aETH-3134_f5');
      assert.equal(later.units.find(u=>u.unit_type==='air').mission.target_region_id,'g5200_aETH-3134_f5');
-     assert.equal(later.currentDate,'1937-01-30','An ordinary later battle progresses within the horizon without forcing a stop');
+     assert.equal(later.currentDate,'1936-02-18','An ordinary later battle produces a progress checkpoint without consuming the rest of the year');
     }
    }finally{await engine.deleteSave(game.save_id);}
   }

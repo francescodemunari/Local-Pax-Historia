@@ -18,7 +18,9 @@ const turnPlayback = {
   gameMap.applyNationColorsToAllSVG(this.finalState.regions.map(r=>({...r,nation_code:previous.get(r.id)||r.nation_code})));
   app.nationManager?.displayNationLabels();app.closeAllPanels();document.getElementById('region-popup')?.classList.add('hidden');
   const card=document.createElement('section');card.id='turn-playback';card.setAttribute('aria-label','Turn events');
-  card.innerHTML='<span class="playback-count"></span><h2></h2><p class="playback-location"></p><div class="playback-description" aria-live="polite"></div><div class="playback-controls"><button class="btn primary" data-action="next">Next event</button><button class="btn secondary" data-action="skip">Finish playback</button></div>';
+  card.innerHTML='<span class="playback-count"></span><p class="playback-stop" hidden></p><h2></h2><p class="playback-location"></p><div class="playback-description" aria-live="polite"></div><div class="playback-controls"><button class="btn primary" data-action="next">Next event</button><button class="btn secondary" data-action="skip">Finish playback</button></div>';
+  const stopNote=card.querySelector('.playback-stop');
+  if(stopNote && result.next_event_checkpoint){stopNote.hidden=false;stopNote.textContent=`Progress checkpoint · ${app.formatDate(result.new_date)}. No strategic milestone was resolved; standing orders remain active.`;}
   document.getElementById('game-container').append(card);
   card.querySelector('[data-action="next"]').onclick=()=>this.next();card.querySelector('[data-action="skip"]').onclick=()=>this.stop();
   const finished=new Promise(resolve=>{this.finish=resolve;});this.display();await finished;

@@ -23,6 +23,13 @@ vm.createContext(context);vm.runInContext(fs.readFileSync(require.resolve('../fr
  assert.equal(app.unitManager.units.length,0,'A destroyed formation disappears during its battle card');
  assert.equal(map.currentRegions[1].nation_code,'ETH','Enemy gains are revealed in the same event');
  context.playback.stop();await defeat;
+ app.formatDate=value=>value;
+ const checkpoint=context.playback.play([{title:'Front report',description:'Verified progress.'}],'test',
+  {next_event_checkpoint:true,new_date:'1936-02-15'});
+ assert.equal(fields.get('.playback-stop').hidden,false,'A checkpoint remains visible while reviewing its events');
+ assert.match(fields.get('.playback-stop').textContent,/1936-02-15/);
+ assert.equal(context.playback.queue.length,1,'Checkpoint status must not create an extra event card');
+ context.playback.stop();await checkpoint;
  console.log('✓ Manual playback, event-specific positions/control and finish restoration passed');
 })().catch(error=>{console.error(error);process.exitCode=1;});
 

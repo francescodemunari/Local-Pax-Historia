@@ -135,8 +135,9 @@ const timelinePanel = {
         await app.refreshAfterTurn(result);
         if (app.currentGame?.saveId !== saveId) return;
         eventsPanel.addEvents(result.events || []);
-        if(result.next_event_horizon_reached)app.showToast(`Advanced ${result.next_event_horizon_days || 365} days. No strategic milestone was found; standing operations continue.`, 'info');
-        if(result.resolution_notes?.length)app.showToast('Some orders are still awaiting an outcome. They remain available in Actions.', 'info');
+        if(result.next_event_checkpoint)app.showToast(`Paused after ${result.advanced_days} days at a progress checkpoint. No strategic milestone was resolved; standing orders continue.`, 'info');
+        if(result.resolution_notes?.some(n=>n.kind==='order'))app.showToast('Some orders are still awaiting an outcome. They remain available in Actions.', 'info');
+        else if(result.resolution_notes?.length)app.showToast('Some fronts or support requests still need an outcome. Their standing orders remain active.', 'info');
         document.getElementById('action-suggestions')?.replaceChildren();
         await turnPlayback.play(result.events, saveId, result);
     },

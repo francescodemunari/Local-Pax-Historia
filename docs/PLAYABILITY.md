@@ -1,11 +1,13 @@
 # Playability scope
 
+9 October 2026: Next important event no longer treats a missing milestone as permission to advance a full year. Sparse replies pause at an explicitly labelled progress checkpoint, keep unfinished fronts active and exclude later predictions. The recorded Italy/Ethiopia response now stops on 15 February instead of 31 December. See [AI reliability](AI_RELIABILITY.md#next-event-coverage-checkpoints--9-october-2026).
+
 Updated 4 October 2026. The game is a local AI-adjudicated sandbox. Automated checks establish executable behavior; they cannot certify every model-generated situation or historical judgment.
 
 ## Supported campaign flow
 
 - Start 1910, 1936 or 2010; select a nation; queue orders and edit suggested drafts.
-- Resolve fixed periods or search up to a year for a strategic milestone. Routine battles do not prematurely end the strategic skip. Later proposals are excluded from the selected interval and unfinished orders continue.
+- Resolve fixed periods or search up to a year for a strategic milestone. Routine battles remain moderate; when no milestone is supplied, the engine pauses at a bounded progress checkpoint. Later proposals are excluded from the selected interval and unfinished orders continue.
 - Mobilise formations from orders; use saved IDs on later turns; advance along connected land fronts with real travel time and attach air/naval support to real formations.
 - Apply AI-authored strength/organization losses and destruction, including during held battles. Apply enemy counterattacks to connected player-held provinces after stationed formations retreat or are explicitly destroyed. No automatic defenders or combat rolls are added.
 - Persist explicit surrender and territorial settlement without inventing a march to the capital. An annexation objective can remain unfinished.

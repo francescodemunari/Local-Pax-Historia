@@ -8,14 +8,14 @@ const overrun={...dated,events:[...dated.events,{game_date:'1936-01-20',severity
 validateNextEvent(overrun,context);assert.equal(overrun.events.length,1,'Later proposals are excluded without rejecting the valid earlier event');
 validateNextEvent({elapsed_days:90,events:[],campaign_orders:[]},context);
 const unverifiedStop={elapsed_days:5,events:[],campaign_orders:[{action:'battle',day_offset:5,unresolved:true}]};
-validateNextEvent(unverifiedStop,context);assert.equal(unverifiedStop.elapsed_days,90,'An unresolved notice cannot force an early stop');
+validateNextEvent(unverifiedStop,context);assert.equal(unverifiedStop.elapsed_days,30,'An unresolved notice cannot force an early stop');
 const battle={events:[],campaign_orders:[{action:'battle',day_offset:8}]};
-validateNextEvent(battle,context);assert.equal(battle.elapsed_days,90,'An ordinary battle does not stop a strategic skip');
-const invalidDuration={elapsed_days:91,events:[]};validateNextEvent(invalidDuration,context);assert.equal(invalidDuration.elapsed_days,90,'Invalid redundant duration uses the bounded horizon');
+validateNextEvent(battle,context);assert.equal(battle.elapsed_days,8,'Without a milestone, adjudicated progress is a checkpoint, not a year of silence');
+const invalidDuration={elapsed_days:91,events:[]};validateNextEvent(invalidDuration,context);assert.equal(invalidDuration.elapsed_days,30,'Invalid redundant duration uses a short checkpoint');
 console.log('Next-event dates, omitted duration, quiet horizon and unresolved reports passed');
 
 const quiet={events:[{severity:'minor',game_date:'1936-02-02'}],campaign_orders:[]};
-validateNextEvent(quiet,context);assert.equal(quiet.elapsed_days,90,'Ordinary-turn schema without elapsed_days uses a quiet horizon');
+validateNextEvent(quiet,context);assert.equal(quiet.elapsed_days,30,'Ordinary-turn schema without elapsed_days uses a short checkpoint');
 const numeric={elapsed_days:'8',events:[],campaign_orders:[{action:'battle',day_offset:'8',severity:'major',significance_reason:'The enemy main army is defeated, changing the course of the war.'}]};
 validateNextEvent(numeric,context);assert.equal(numeric.elapsed_days,8);assert.equal(numeric.campaign_orders[0].day_offset,8);
 
@@ -47,5 +47,5 @@ const turningPoint={events:[],campaign_orders:[{action:'battle',day_offset:8},
  {action:'battle',day_offset:60,severity:'major',significance_reason:'The siege breaks the enemy defence of its capital, transforming the campaign.'}]};
 validateNextEvent(turningPoint,context);assert.equal(turningPoint.elapsed_days,60,'An explained strategic turning point can stop the skip');
 const quietYear={events:[],campaign_orders:[{action:'battle',day_offset:8}]};
-validateNextEvent(quietYear,{...context,nextEventHorizonDays:undefined});assert.equal(quietYear.elapsed_days,365);
+validateNextEvent(quietYear,{...context,nextEventHorizonDays:undefined});assert.equal(quietYear.elapsed_days,8);
 console.log('Routine progress, explained turning points, surrender, earlier world milestones and a one-year horizon passed');

@@ -14,12 +14,12 @@ try {
  llm.generateEvents=async(_,ctx)=>{assert(ctx.nextImportantEvent);return {elapsed_days:12,events:[{title:'Major change',description:'An independent development.',severity:'major',affected_nations:['FRA']}],unit_changes:[],campaign_orders:[],action_resolutions:[]};};
  await engine.advanceTime(game.save_id,'next_event');assert.equal((await engine.loadGame(game.save_id)).currentDate,'1910-01-13');
  llm.generateEvents=async()=>({elapsed_days:91,events:[]});await engine.advanceTime(game.save_id,'next_event');
- assert.equal((await engine.loadGame(game.save_id)).currentDate,'1911-01-13','A quiet response uses the one-year search horizon regardless of redundant duration');
+ assert.equal((await engine.loadGame(game.save_id)).currentDate,'1910-02-12','A quiet response uses a short checkpoint rather than the search horizon');
  await engine.processPlayerAction(game.save_id,'Invade Ethiopia from Eritrea and Somalia');
  llm.generateEvents=async()=>({events:[],error:'Missing required campaign_orders array.'});
  await assert.rejects(()=>engine.advanceTime(game.save_id,'1_month'),/campaign_orders/);
  const preserved=await engine.loadGame(game.save_id);
- assert.equal(preserved.currentDate,'1911-01-13');assert.equal(preserved.actions.at(-1).status,'pending');
+ assert.equal(preserved.currentDate,'1910-02-12');assert.equal(preserved.actions.at(-1).status,'pending');
  console.log('Operation schema, missing fronts and bounded next-event advancement passed');
 }finally{llm.generateEvents=original;await engine.deleteSave(game.save_id);}})().catch(e=>{console.error(e);process.exitCode=1;});
 

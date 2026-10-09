@@ -1,5 +1,7 @@
 # Release readiness
 
+9 October 2026: Next important event no longer treats a missing milestone as permission to advance a full year. Sparse replies pause at an explicitly labelled progress checkpoint, keep unfinished fronts active and exclude later predictions. The recorded Italy/Ethiopia response now stops on 15 February instead of 31 December. See [AI reliability](AI_RELIABILITY.md#next-event-coverage-checkpoints--9-october-2026).
+
 ## 4 October 2026 playability pass
 
 Public/portable packaging: optional map-source caches and editable GeoJSON outputs are ignored (about 195 MiB removed from the checkout). Required JSON/SVG maps, hidden compatibility bundles, flags, portraits and attribution remain shipped. Node 20+ setup and runtime-only dependency installation are documented, and the Windows launcher explains missing Node/dependencies. Provider settings, environment files, saves, debug output and installed dependencies are excluded.

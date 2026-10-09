@@ -896,7 +896,10 @@ class GameEngine {
             generation_info: aiResult.generation_info,
             processed_actions: actionResolutions.filter(r=>!r.deferred).length,
             next_event_horizon_days: nextImportantEvent ? nextEventHorizonDays : undefined,
-            next_event_horizon_reached: nextImportantEvent && availableDays===nextEventHorizonDays && !turnEvents.some(e=>['major','critical'].includes(e.severity))
+            next_event_stop_reason: nextImportantEvent ? require('./next-event').getTimelineSelection(aiResult).stop_reason : undefined,
+            next_event_checkpoint: nextImportantEvent && require('./next-event').getTimelineSelection(aiResult).stop_reason !== 'milestone',
+            advanced_days: availableDays,
+            next_event_horizon_reached: nextImportantEvent && availableDays===nextEventHorizonDays && require('./next-event').getTimelineSelection(aiResult).stop_reason !== 'milestone'
         };
     }
 

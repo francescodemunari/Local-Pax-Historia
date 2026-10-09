@@ -14,7 +14,7 @@ async function run() {
   for(const {repairSucceeds,reply,expectedDate} of [
    {repairSucceeds:true,reply:fixture,expectedDate:'1936-01-14'},
    {repairSucceeds:false,reply:fixture,expectedDate:'1936-01-14'},
-   {repairSucceeds:false,reply:{...fixture,events:[],elapsed_days:90},expectedDate:'1936-12-31'}
+   {repairSucceeds:false,reply:{...fixture,events:[],elapsed_days:90},expectedDate:'1936-01-31'}
   ]) {
    const game=await engine.createGame('ITA',undefined,'ww2-geographic');
    try {
