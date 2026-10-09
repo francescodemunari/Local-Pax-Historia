@@ -17,3 +17,23 @@ Official references: [Gemini OpenAI compatibility](https://ai.google.dev/gemini-
 AI Settings persists the provider, endpoint, model and API key in `data/llm_settings.json`. This local file takes precedence over environment defaults and is ignored by Git. Normal clones do not receive it. Never force-add it or distribute a workspace archive containing local settings. `git ls-files data/llm_settings.json` should produce no output. Current settings responses expose only whether a key is present. The examined historical file contains a local-provider placeholder, not the current cloud key.
 
 Gemini model discovery now excludes obvious image/video/audio/live/research/robotics-only model IDs from game choices. This is a conservative name-based filter, not a compatibility guarantee; manual IDs remain available. Turn generation has an 8,000-token output allowance and a check for independent world events. No live/paid inference was used for implementation checks.
+
+
+## Turn output compatibility
+
+Updated 9 October 2026. Turn generation and its single corrective generation request structured output for every provider preset. Advisor, diplomacy and the connection test retain ordinary prose output. The backend negotiates format support with the selected endpoint/model rather than assuming every model on a provider has the same capabilities.
+
+| Provider family | Preferred turn format | On explicit format rejection |
+| --- | --- | --- |
+| OpenAI, Gemini/Gemma, OpenRouter, Groq, Together, Fireworks, DeepSeek, Mistral, xAI, Cerebras, Hugging Face | JSON object mode | Prompted JSON text |
+| Ollama, llama.cpp, vLLM, LocalAI, Jan, custom OpenAI-compatible endpoints | JSON object mode | Prompted JSON text |
+| LM Studio | JSON schema envelope | JSON object mode, then prompted JSON text |
+| Anthropic Claude | Named turn-submission tool | Automatic tool choice, then prompted JSON text |
+
+The Claude tool only carries the returned JSON; the application never executes model-supplied tool calls. Only one expected submission is accepted. The schema is deliberately an envelope rather than a second full game contract: the existing semantic validator checks dates, identities, movements and political effects. Server versions and individual models may reject or ignore optional format controls, so the provider-independent parser and integrity checks always remain active.
+
+Fallback requires an explicit unsupported-format error (or a routing error saying no endpoint supports the requested parameters). Authentication/access failures, unknown models, rate limits, connection failures, output refusals and server outages are not format fallbacks. A successful but malformed generation uses the existing single corrective-generation budget. Negotiation never switches models/providers or changes keys. At most two format rejections can precede a generation, and rejected modes are cached in memory for ten minutes per provider/endpoint/model. Saving settings clears the cache; no capability state is written to the private settings file.
+
+Local diagnostic counters now include provider_requests and format_fallbacks as well as generation requests. Tests use all catalogue entries with mocked completions plus a temporary local HTTP server for Claude request/error handling. No paid/live provider calls or browser checks were run.
+
+Protocol references: [OpenAI JSON mode](https://developers.openai.com/api/docs/guides/structured-outputs), [Claude tool choice and content blocks](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools), [LM Studio schema output](https://lmstudio.ai/docs/developer/openai-compat/structured-output), [Ollama compatibility](https://docs.ollama.com/api/openai-compatibility), [Groq structured output](https://console.groq.com/docs/structured-outputs), [OpenRouter parameter routing](https://openrouter.ai/docs/guides/routing/provider-selection), [Together structured output](https://docs.together.ai/docs/inference/chat/structured-outputs), [Fireworks structured output](https://docs.fireworks.ai/structured-responses/structured-response-formatting).

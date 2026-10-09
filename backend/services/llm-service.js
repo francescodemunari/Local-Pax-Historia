@@ -64,6 +64,7 @@ function saveSettings(settings) {
     fs.writeFileSync(SETTINGS_FILE + '.tmp', JSON.stringify(next, null, 2), 'utf8');
     fs.renameSync(SETTINGS_FILE + '.tmp', SETTINGS_FILE);
     currentSettings = next;
+    require('./model-output').clearCompatibilityCache();
     updateClients();
 }
 
@@ -93,7 +94,10 @@ function makeHttpRequest(url, options, postData) {
                             reject(new Error('Invalid JSON response: ' + data));
                         }
                     } else {
-                        reject(new Error(`HTTP ${res.statusCode}: ${data}`));
+                        const error=new Error(`HTTP ${res.statusCode}: ${data}`);
+                        error.status=res.statusCode;
+                        try {error.error=JSON.parse(data).error;} catch {}
+                        reject(error);
                     }
                 });
             });
@@ -110,7 +114,7 @@ function makeHttpRequest(url, options, postData) {
     });
 }
 
-async function callAnthropic(options) {
+async function callAnthropic(options, settings = currentSettings) {
     const systemMessage = options.messages.find(m => m.role === 'system');
     const systemPrompt = systemMessage ? systemMessage.content : undefined;
     const userMessages = options.messages.filter(m => m.role !== 'system');
@@ -120,18 +124,19 @@ async function callAnthropic(options) {
         content: m.content
     }));
 
-    const url = providerCatalog.normalizeEndpoint('anthropic', currentSettings.apiUrl) + '/messages';
+    const url = providerCatalog.normalizeEndpoint('anthropic', settings.apiUrl) + '/messages';
     const headers = {
-        'x-api-key': currentSettings.apiKey || '',
+        'x-api-key': settings.apiKey || '',
         'anthropic-version': '2023-06-01',
         'content-type': 'application/json'
     };
 
     const postData = {
-        model: currentSettings.model || 'claude-3-5-sonnet-20240620',
+        model: settings.model || 'claude-3-5-sonnet-20240620',
         messages: anthropicMessages,
         max_tokens: options.max_tokens || 3000,
-        temperature: options.temperature !== undefined ? options.temperature : 0.7
+        temperature: options.temperature !== undefined ? options.temperature : 0.7,
+        ...require('./model-output').formatFields(options.formatMode)
     };
 
     if (systemPrompt) {
@@ -140,15 +145,7 @@ async function callAnthropic(options) {
 
     const res = await makeHttpRequest(url, { method: 'POST', headers }, postData);
 
-    if (res.content && res.content[0] && res.content[0].text) {
-        return {
-            content: res.content[0].text,
-            model: res.model,
-            finish_reason: res.stop_reason === 'max_tokens' ? 'length' : res.stop_reason
-        };
-    } else {
-        throw new Error('Unexpected response format from Anthropic: ' + JSON.stringify(res));
-    }
+    return require('./model-output').decodeAnthropic(res,{json:options.json});
 }
 
 async function executeChatCompletion(messages, temperature = 0.7, max_tokens = 3000, outputOptions = {}) {
@@ -156,23 +153,13 @@ async function executeChatCompletion(messages, temperature = 0.7, max_tokens = 3
         updateClients();
     }
 
-    if (currentSettings.provider === 'anthropic') {
-        const response = await callAnthropic({ messages, temperature, max_tokens });
-        return {
-            content: response.content,
-            model: response.model,
-            finish_reason: response.finish_reason
-        };
-    } else {
-        const modelName = currentSettings.model || 'qwen3-vl-8b';
-        const response = await openai.chat.completions.create(providerCatalog.completionOptions(currentSettings, messages, temperature, max_tokens, outputOptions));
-
-        return {
-            content: response.choices[0].message.content,
-            model: response.model || modelName,
-            finish_reason: response.choices[0].finish_reason
-        };
-    }
+    const output=require('./model-output'),settings={...currentSettings},client=openai;
+    return output.withOutputMode(settings,outputOptions,async formatMode=>{
+        if(settings.provider==='anthropic')
+            return callAnthropic({messages,temperature,max_tokens,json:outputOptions.json,formatMode},settings);
+        const response=await client.chat.completions.create(providerCatalog.completionOptions(settings,messages,temperature,max_tokens,{...outputOptions,formatMode}));
+        return output.decodeOpenAI(response,settings.model);
+    });
 }
 
 async function testConnectionWithSettings(tempSettings) {
@@ -354,11 +341,12 @@ async function generateEvents(timeJump, gameContext) {
     const messages=require('./turn-prompt').buildTurnMessages(timeJump,gameContext,historicalContext);
     const started=Date.now();
     const diagnostics={requests:0,prompt_characters:messages.reduce((n,m)=>n+m.content.length,0),repair_prompt_characters:0,
-        initial_request_ms:0,repair_request_ms:0,json_recoveries:0,truncated_replies:0};
+        initial_request_ms:0,repair_request_ms:0,json_recoveries:0,truncated_replies:0,provider_requests:0,format_fallbacks:0};
     const complete = async (requestMessages, temperature, phase) => {
         const requestStarted = Date.now();
         diagnostics.requests++;
-        try { return await executeChatCompletion(requestMessages, temperature, 8000, {json:true}); }
+        try { return await executeChatCompletion(requestMessages, temperature, 8000, {json:true,
+            onRequest:({fallback})=>{diagnostics.provider_requests++;if(fallback)diagnostics.format_fallbacks++;}}); }
         finally { diagnostics[phase + '_request_ms'] = Date.now() - requestStarted; }
     };
     const recordDiagnostics = (deferredOrders, failed) => {

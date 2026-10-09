@@ -22,11 +22,11 @@ async function run() {
         assert.deepEqual(completionOptions({provider:'google',model},[],.7,8000,{json:true}).response_format,{type:'json_object'});
         assert.equal(completionOptions({provider:'google',model},[],.7,8000).response_format,undefined,'Diplomacy remains prose');
     }
-    assert.equal(completionOptions({provider:'custom',model:'local'},[],.7,8000,{json:true}).response_format,undefined);
-    assert.equal(completionOptions({provider:'google',model:'models/gemma-4-31b-it'},[],.7,8000,{json:true}).response_format,undefined,'Do not assume Gemma supports Gemini JSON mode');
+    assert.equal(completionOptions({provider:'custom',model:'local'},[],.7,8000,{json:true}).response_format.type,'json_object');
+    assert.equal(completionOptions({provider:'google',model:'models/gemma-4-31b-it'},[],.7,8000,{json:true}).response_format.type,'json_object','Unknown model capabilities are negotiated, not guessed from names');
     const llmSource=fs.readFileSync(require.resolve('../backend/services/llm-service'),'utf8');
     let outgoing;
-    const transport={currentSettings:{provider:'google',model:'gemini-flash-lite-latest'},providerCatalog:{completionOptions},
+    const transport={currentSettings:{provider:'google',model:'gemini-flash-lite-latest'},providerCatalog:{completionOptions},require:()=>require('../backend/services/model-output'),
         openai:{chat:{completions:{create:async options=>{outgoing=options;return {choices:[{message:{content:'{"events":[]}'},finish_reason:'length'}]};}}}}};
     vm.createContext(transport);
     vm.runInContext(llmSource.slice(llmSource.indexOf('async function executeChatCompletion('),llmSource.indexOf('async function testConnectionWithSettings('))+'\nthis.complete=executeChatCompletion;',transport);

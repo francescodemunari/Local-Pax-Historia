@@ -21,7 +21,7 @@
     "test:syntax": "node ../scripts/check_frontend_syntax.js",
     "test:scenario-selection": "node ../scripts/test_scenario_selection.js",
     "test:startup": "node ../scripts/test_server_startup.js",
-    "test:providers": "node ../scripts/test_ai_providers.js",
+    "test:providers": "node ../scripts/test_ai_providers.js && node ../scripts/test_output_protocols.js",
     "test:cities": "node ../scripts/test_city_visibility.js",
     "test:model-json": "node ../scripts/test_model_json.js && node ../scripts/test_json_turn_recovery.js",
     "test:disband": "node ../scripts/test_disband.js",
