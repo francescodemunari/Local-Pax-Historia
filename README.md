@@ -31,7 +31,15 @@ npm ci
 
 On Windows, launch `server.bat` from the project root. Alternatively run `node server.js` from `backend/`. Open [the game](http://localhost:3000).
 
-On another PC, clone this repository and run the install command once before starting the server. For gameplay alone, `npm ci --omit=dev` skips development tools. The playable maps, flags and portraits are included; Python and map downloads are unnecessary for playing. AI keys/settings, `.env`, saves and debug output stay local and are ignored by Git. Configure your own AI provider after starting. To transfer an existing campaign, copy its `data/saves` file privately; saves are not uploaded to this public repository.
+For a lightweight setup on another PC, use a shallow clone to skip older repository history and install only gameplay dependencies:
+
+```text
+git clone --depth 1 https://github.com/francescodemunari/Local-Pax-Historia.git
+cd Local-Pax-Historia/backend
+npm ci --omit=dev
+```
+
+Then launch `server.bat` from the project root. The playable maps, flags and portraits are included; Python and map downloads are unnecessary for playing. AI keys/settings, `.env`, saves and debug output stay local and are ignored by Git. Configure your own AI provider after starting. To transfer an existing campaign, copy its `data/saves` file privately; saves are not uploaded to this public repository.
 
 Only one backend can use port 3000. If it is occupied, use the already-running game or close its original server window before restarting. Startup reports conflicts without killing another application.
 

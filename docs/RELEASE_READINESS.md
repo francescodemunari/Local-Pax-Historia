@@ -4,6 +4,8 @@
 
 Public/portable packaging: optional map-source caches and editable GeoJSON outputs are ignored (about 195 MiB removed from the checkout). Required JSON/SVG maps, hidden compatibility bundles, flags, portraits and attribution remain shipped. Node 20+ setup and runtime-only dependency installation are documented, and the Windows launcher explains missing Node/dependencies. Provider settings, environment files, saves, debug output and installed dependencies are excluded.
 
+The README recommends `git clone --depth 1` for another PC, avoiding downloads of older repository history. This preserves the current playable snapshot; historical dependency files remain in older commits rather than being removed through a history rewrite.
+
 Verification used a fresh archive of tracked files in an isolated directory: `npm ci --omit=dev` installed 99 packages, and the full `npm test` suite passed with default AI settings and no optional source/GeoJSON caches. No browser or live-model calls were used. The resulting tracked checkout is about 225.5 MiB; map rebuilds need the separately fetched inputs.
 
 Target-identity follow-up: the latest model reply omitted its campaign target while supplying both fronts and reports. Canonical country references and grounded missing-target recovery now handle this metadata gap generically. Regression coverage includes the real response, earlier world-event stopping, standing continuation, settlement, aliases, ambiguity and identity conflicts. No live model or browser check was used.
