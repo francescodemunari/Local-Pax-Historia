@@ -81,8 +81,11 @@ async function run() {
  assert.deepEqual(omitted.deferred_action_ids,['civilian'],'Omitted non-military orders also remain pending');
  assert.throws(()=>prepareActionOutcomes({events:[{state_changes:{AAA:{leader_name:'Someone'}}}],action_resolutions:[]},context,{allowDeferred:true}),/Missing outcome/,'Do not defer and replay an order whose player-state effects may already be applied');
  const dated={...fixture,elapsed_days:91};validateNextEvent(dated,{nextImportantEvent:true,currentDate:'1936-01-01'});assert.equal(dated.elapsed_days,13);
- const later=structuredClone(fixture);later.events.push({severity:'minor',game_date:'1936-01-20'});
- validateNextEvent(later,{nextImportantEvent:true,currentDate:'1936-01-01'});assert.equal(later.events.length,1,'Select the dated prefix without applying later effects');
+ const later=structuredClone(fixture);later.events.push({severity:'minor',game_date:'1936-01-20'},{severity:'minor',game_date:'1936-03-20'});
+ validateNextEvent(later,{nextImportantEvent:true,currentDate:'1936-01-01'});
+ assert.equal(later.elapsed_days,19,'Condemnation does not stop the search before other ordinary news');
+ assert.equal(later.events.length,2,'Select a bounded ordinary-news checkpoint without applying distant effects');
+ assert.equal(later.events[0].severity,'moderate');
  console.log('Actual omitted-order reply, military-only JSON repair, authoritative dates, deferred orders and compact context passed');
 }
 run().catch(error=>{console.error(error);process.exitCode=1;});

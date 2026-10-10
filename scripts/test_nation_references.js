@@ -151,7 +151,7 @@ assert.throws(()=>normalizeNationReferences(result(operation({target_nation_code
     campaign_orders:[{action:'start',action_id:'order',target_nation_code:'FRA'}]}),context()),/conflicting targets/);
 
 const future = result(operation({target_nation_code:'UNSUPPORTED',day_offset:10}),{events:[
-    {title:'Strategic treaty',description:'An independent major treaty.',game_date:'1936-01-06',severity:'major',affected_nations:['FRA']}]});
+    {title:'Strategic treaty',description:'An independent major treaty.',game_date:'1936-01-06',severity:'major',significance_reason:'The signed treaty creates a lasting security settlement.',affected_nations:['FRA']}]});
 const futureContext = context({nextImportantEvent:true,nextEventHorizonDays:365});
 normalizeNationReferences(future,futureContext,{strict:false});
 validateNextEvent(future,futureContext);
@@ -162,7 +162,7 @@ assert.deepEqual(getTimelineSelection(future).deferredActionIds,['order']);
 
 const futureDeclaration = result(operation({formations:[],fronts:[],reports:[
     {action:'battle',outcome:'hold',day_offset:3,movements:[]}]}),{events:[
-    {title:'Strategic treaty',description:'An independent major treaty.',game_date:'1936-01-06',severity:'major',affected_nations:['FRA']}],
+    {title:'Strategic treaty',description:'An independent major treaty.',game_date:'1936-01-06',severity:'major',significance_reason:'The signed treaty creates a lasting security settlement.',affected_nations:['FRA']}],
     diplomatic_changes:[{action:'declare_war',action_id:'order',nation_code:'ITA',target_nation_code:'GBR',day_offset:20}]});
 normalizeNationReferences(futureDeclaration,futureContext,{strict:false});
 validateNextEvent(futureDeclaration,futureContext);

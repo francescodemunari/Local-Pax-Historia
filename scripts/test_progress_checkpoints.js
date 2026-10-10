@@ -7,6 +7,7 @@ const source=fs.readFileSync(require.resolve('../backend/services/llm-service'),
 
 // The policy must work independently of country IDs, dates and model arithmetic.
 for(const year of [1910,1936,2010]) {
+ const significance_reason='A binding settlement enters into force, changing the balance between the major powers.';
  const context={nextImportantEvent:true,currentDate:`${year}-01-01`,playerNation:{code:'PLAYER'},
   campaigns:[{id:'active',status:'active',target:'TARGET'}]};
  for(const supplied of [undefined,365,'365',-1]) {
@@ -20,29 +21,29 @@ for(const year of [1910,1936,2010]) {
  assert.equal(empty.elapsed_days,30,'A missing world simulation cannot consume a year');
  const late={events:[],campaign_orders:[{action:'battle',day_offset:300}]};validateNextEvent(late,context);
  assert.equal(late.elapsed_days,30);assert.equal(late.campaign_orders.length,0);
- const distantWorld={events:[{severity:'major',day_offset:250}],campaign_orders:[{action:'battle',day_offset:45}]};
+ const distantWorld={events:[{severity:'major',significance_reason,day_offset:250}],campaign_orders:[{action:'battle',day_offset:45}]};
  validateNextEvent(distantWorld,context);assert.equal(distantWorld.elapsed_days,45,'A distant world event cannot hide months of unreported campaign time');
  assert.equal(distantWorld.events.length,0);
- const futureBattle={events:[{severity:'major',day_offset:40}],campaign_orders:[{action:'battle',day_offset:60}]};
+ const futureBattle={events:[{severity:'major',significance_reason,day_offset:40}],campaign_orders:[{action:'battle',day_offset:60}]};
  validateNextEvent(futureBattle,context);assert.equal(futureBattle.elapsed_days,30,'A checkpoint cannot overrun an earlier world milestone');
- const earlierWorld={events:[{severity:'major',day_offset:20}],campaign_orders:[{action:'battle',day_offset:45}]};
+ const earlierWorld={events:[{severity:'major',significance_reason,day_offset:20}],campaign_orders:[{action:'battle',day_offset:45}]};
  validateNextEvent(earlierWorld,context);assert.equal(earlierWorld.elapsed_days,20);assert.equal(getTimelineSelection(earlierWorld).stop_reason,'milestone');
  const surrender={events:[],campaign_orders:[{action:'battle',day_offset:45},{action:'annex',day_offset:155,surrendered:true}]};
  validateNextEvent(surrender,context);assert.equal(surrender.elapsed_days,155,'Real long-campaign milestones remain supported');
  const ordinary={events:[{severity:'moderate',day_offset:12}]};validateNextEvent(ordinary,{...context,campaigns:[]});
  assert.equal(ordinary.elapsed_days,12,'Ordinary dated news does not imply simulation of the rest of the year');
- const twoWars={events:[{severity:'major',day_offset:250}],campaign_orders:[{action:'battle',campaign_id:'active',day_offset:45}]};
+ const twoWars={events:[{severity:'major',significance_reason,day_offset:250}],campaign_orders:[{action:'battle',campaign_id:'active',day_offset:45}]};
  validateNextEvent(twoWars,{...context,campaigns:[...context.campaigns,{id:'other',status:'active',target:'OTHER'}]});
  assert.equal(twoWars.elapsed_days,30,'Progress in one war cannot hide a completely unreported second war');
- const futureOrder={events:[{severity:'major',day_offset:40}],action_resolutions:[{action_id:'later',day_offset:50,
+ const futureOrder={events:[{severity:'major',significance_reason,day_offset:40}],action_resolutions:[{action_id:'later',day_offset:50,
   operation:{kind:'invasion',status:'proceed',target_nation_code:'TARGET',reports:[{action:'battle',day_offset:60}]}}]};
  validateNextEvent(futureOrder,{...context,campaigns:[],actions:[{id:'later'}]});
  assert.equal(futureOrder.elapsed_days,40,'A scheduled future offensive does not count as an active coverage gap');
- const undated={elapsed_days:250,events:[{severity:'major',state_changes:{PLAYER:{leader_name:'Future leader'}}}],
+ const undated={elapsed_days:250,events:[{severity:'major',significance_reason,state_changes:{PLAYER:{leader_name:'Future leader'}}}],
   campaign_orders:[{action:'battle',day_offset:45}]};
  validateNextEvent(undated,context);assert.equal(undated.elapsed_days,45);
  assert.equal(undated.events.length,0,'A legacy undated milestone and its state changes cannot be pulled forward into a checkpoint');
- const unanchored={events:[{severity:'major',state_changes:{PLAYER:{leader_name:'Undated leader'}}}],elapsed_days:999};
+ const unanchored={events:[{severity:'major',significance_reason,state_changes:{PLAYER:{leader_name:'Undated leader'}}}],elapsed_days:999};
  validateNextEvent(unanchored,context);assert.equal(unanchored.elapsed_days,30);assert.equal(unanchored.events.length,0,
   'A milestone without a defensible date cannot apply political changes or appear as a major checkpoint event');
  const offsets={events:[{severity:'moderate',day_offset:10},{severity:'moderate',day_offset:'20'}],

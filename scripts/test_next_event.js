@@ -1,7 +1,8 @@
 const assert=require('node:assert/strict');
 const {validateNextEvent}=require('../backend/services/next-event');
 const context={nextImportantEvent:true,nextEventHorizonDays:90,currentDate:'1936-01-01',playerNation:{code:'ITA'}};
-const dated={events:[{severity:'major',game_date:'1936-01-12',affected_nations:['FRA']}],campaign_orders:[]};
+const significance_reason='A binding peace settlement ends a major war and changes regional security.';
+const dated={events:[{severity:'major',significance_reason,game_date:'1936-01-12',affected_nations:['FRA']}],campaign_orders:[]};
 validateNextEvent(dated,context);assert.equal(dated.elapsed_days,11,'Recover omitted duration from an actual dated event');
 const inconsistent={...dated,elapsed_days:30};validateNextEvent(inconsistent,context);assert.equal(inconsistent.elapsed_days,11,'Dated outcomes override redundant model arithmetic');
 const overrun={...dated,events:[...dated.events,{game_date:'1936-01-20',severity:'minor'}]};
@@ -20,7 +21,7 @@ const numeric={elapsed_days:'8',events:[],campaign_orders:[{action:'battle',day_
 validateNextEvent(numeric,context);assert.equal(numeric.elapsed_days,8);assert.equal(numeric.campaign_orders[0].day_offset,8);
 
 const {validateTurn}=require('../backend/services/turn-validation');
-const unreported={events:[{severity:'major',game_date:'1936-01-14',affected_nations:['FRA']}],elapsed_days:14,campaign_orders:[]};
+const unreported={events:[{severity:'major',significance_reason,game_date:'1936-01-14',affected_nations:['FRA']}],elapsed_days:14,campaign_orders:[]};
 const standing={...context,actions:[],campaigns:[{id:'standing',source_action_id:'old_order',target:'ETH',status:'active'}],
  recruitment:{existingUnits:[],movement:{available_days:90}}};
 validateTurn(unreported,standing,{allowUnresolved:true,allowIncomplete:true});
@@ -38,7 +39,7 @@ for(const nested of [false,true]) {
  assert.equal(reply.elapsed_days,150,'Surrender beyond 90 days is a milestone; routine victories are not');
  assert.equal((nested?reply.action_resolutions[0].operation.reports:reply.campaign_orders).length,3,'Future effects are excluded');
 }
-const worldFirst={events:[{severity:'major',game_date:'1936-01-20',affected_nations:['ENG']}],
+const worldFirst={events:[{severity:'major',significance_reason,game_date:'1936-01-20',affected_nations:['ENG']}],
  campaign_orders:[{action:'battle',day_offset:8},{action:'annex',day_offset:150}]};
 validateNextEvent(worldFirst,{...context,nextEventHorizonDays:365});
 assert.equal(worldFirst.elapsed_days,19,'An earlier important world development stops before the surrender');

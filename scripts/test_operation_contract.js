@@ -11,7 +11,7 @@ assert.throws(()=>validateOperations({...result,unit_changes:[]},context),/groun
 const Engine=require('../backend/services/game-engine'),llm=require('../backend/services/llm-service');
 (async()=>{const engine=new Engine(),game=await engine.createGame('ITA',undefined,'ww1-1910'),original=llm.generateEvents;
 try {
- llm.generateEvents=async(_,ctx)=>{assert(ctx.nextImportantEvent);return {elapsed_days:12,events:[{title:'Major change',description:'An independent development.',severity:'major',affected_nations:['FRA']}],unit_changes:[],campaign_orders:[],action_resolutions:[]};};
+ llm.generateEvents=async(_,ctx)=>{assert(ctx.nextImportantEvent);return {elapsed_days:12,events:[{title:'Major change',description:'An independent development.',severity:'major',significance_reason:'A binding peace settlement ends a war between major powers.',affected_nations:['FRA']}],unit_changes:[],campaign_orders:[],action_resolutions:[]};};
  await engine.advanceTime(game.save_id,'next_event');assert.equal((await engine.loadGame(game.save_id)).currentDate,'1910-01-13');
  llm.generateEvents=async()=>({elapsed_days:91,events:[]});await engine.advanceTime(game.save_id,'next_event');
  assert.equal((await engine.loadGame(game.save_id)).currentDate,'1910-02-12','A quiet response uses a short checkpoint rather than the search horizon');

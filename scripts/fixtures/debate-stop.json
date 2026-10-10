@@ -1,0 +1,118 @@
+{
+  "action_resolutions": [
+    {
+      "action_id": "debate_stop_order",
+      "summary": "Initiated a two-pronged full-scale offensive against Ethiopia from Italian Eritrea in the north and Italian Somaliland in the south, supported by air wings and elite Blackshirt divisions.",
+      "operation": {
+        "kind": "annexation",
+        "status": "proceed",
+        "target_nation_code": "ETH",
+        "reason": "The Italian forces are advancing steadily from northern Eritrea and southern Somaliland, heavily engaging Ethiopian defensive lines while special forces operate in the interior.",
+        "fronts": [
+          {
+            "id": "front_north",
+            "name": "Northern Front (Eritrea)",
+            "region_id": "g531_aERI-1562_f0",
+            "status": "ready"
+          },
+          {
+            "id": "front_south",
+            "name": "Southern Front (Somaliland)",
+            "region_id": "g5200_aSOM-2413_f0",
+            "status": "ready"
+          }
+        ],
+        "formations": [
+          {
+            "formation_ref": "ita_inf_north_1",
+            "unit_type": "infantry",
+            "name": "1st Eritrean Corps",
+            "region_id": "g531_aERI-1562_f0"
+          },
+          {
+            "formation_ref": "ita_inf_south_1",
+            "unit_type": "infantry",
+            "name": "1st Somali Corps",
+            "region_id": "g5200_aSOM-2413_f0"
+          },
+          {
+            "formation_ref": "ita_air_1",
+            "unit_type": "air",
+            "name": "Regia Aeronautica East Africa",
+            "region_id": "g531_aERI-1562_f0"
+          }
+        ],
+        "reports": [
+          {
+            "action": "battle",
+            "title": "Battle of the Northern Border",
+            "report": "The 1st Eritrean Corps, backed by the Regia Aeronautica, launched an assault across the frontier into Tigray. Ethiopian defenders under local ras attempted to hold mountainous terrain but were overwhelmed by superior firepower, air reconnaissance, and coordinated infantry pressure.",
+            "outcome": "advance",
+            "day_offset": 15,
+            "front_ids": [
+              "front_north"
+            ],
+            "movements": [
+              {
+                "formation_ref": "ita_inf_north_1",
+                "region_id": "g531_aETH-3110_f0"
+              }
+            ],
+            "support": [
+              {
+                "formation_ref": "ita_air_1",
+                "region_id": "g531_aETH-3110_f0",
+                "mission": "Reconnaissance"
+              }
+            ]
+          },
+          {
+            "action": "battle",
+            "title": "Advance in the Ogaden",
+            "report": "The 1st Somali Corps pushed forward from southern bases into the Ogaden region against sporadic Ethiopian tribal resistance and harsh desert conditions. Italian columns secured key watering holes and advanced deeper toward regional administrative centers.",
+            "outcome": "advance",
+            "day_offset": 25,
+            "front_ids": [
+              "front_south"
+            ],
+            "movements": [
+              {
+                "formation_ref": "ita_inf_south_1",
+                "region_id": "g5200_aSOM-2412_f0"
+              }
+            ],
+            "support": []
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "title": "Accession of Edward VIII in the United Kingdom",
+      "description": "Following the death of King George V, Edward VIII ascends to the British throne, bringing a period of transition to the UK political establishment.",
+      "game_date": "1936-01-20",
+      "event_type": "political",
+      "severity": "moderate",
+      "affected_nations": [
+        "ENG"
+      ]
+    },
+    {
+      "title": "League of Nations Debates Sanctions on Italy",
+      "description": "In response to the outbreak of full-scale hostilities in East Africa, the League of Nations intensifies diplomatic pressure and debates economic sanctions against Italy.",
+      "game_date": "1936-02-10",
+      "event_type": "diplomatic",
+      "severity": "major",
+      "affected_nations": [
+        "ITA",
+        "ETH",
+        "ENG",
+        "FRA"
+      ]
+    }
+  ],
+  "unit_changes": [],
+  "campaign_orders": [],
+  "diplomatic_changes": []
+}

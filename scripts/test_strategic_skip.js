@@ -73,7 +73,7 @@ async function run() {
       outcome:'advance',day_offset:150,movements:[{formation_ref:'ita_north_army',region_id:capital.region_id},{formation_ref:'ita_south_army',region_id:'g5200_aETH-3134_f5'}],
       support:[{formation_ref:'ita_air_corps',region_id:capital.region_id,mission:'Reconnaissance'}]},
       {action:'annex',title:'Ethiopian surrender',report:'The government accepts surrender and annexation following the loss of its capital and field army.',surrendered:true,day_offset:151}];
-     reply.events=earlierWorld?[{title:'Major world treaty',description:'A binding settlement transforms relations between the great powers.',severity:'major',game_date:'1936-03-01',affected_nations:['FRA','GER']}]:[];
+     reply.events=earlierWorld?[{title:'Major world treaty',description:'A binding settlement transforms relations between the great powers.',severity:'major',significance_reason:'The signed settlement changes the security commitments of the great powers.',game_date:'1936-03-01',affected_nations:['FRA','GER']}]:[];
      return reply;
     });
     const turn=await engine.advanceTime(game.save_id,'next_event'),saved=await engine.loadGame(game.save_id);

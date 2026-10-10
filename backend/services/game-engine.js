@@ -751,7 +751,11 @@ class GameEngine {
                 game_date: require('./event-dates').withinTurn(event.game_date || event.date,currentDate,nextDate) || require('./event-dates').atDay(currentDate,(index+1)*availableDays/Math.max(1,narrativeEvents.length),availableDays),
                 title: event.title.trim().slice(0, 200), description: event.description.trim().slice(0, 12000),
                 event_type: ['political', 'military', 'economic', 'diplomatic', 'social'].includes(event.event_type) ? event.event_type : 'political',
-                severity: ['minor', 'moderate', 'major', 'critical'].includes(event.severity) ? event.severity : 'minor',
+                severity: require('./event-importance').worldSeverity(event),
+                ...(typeof event.significance_reason==='string' && event.significance_reason.trim()
+                    ? {significance_reason:event.significance_reason.trim().slice(0,2000)} : {}),
+                ...(['occurred','discussion','proposed','preparatory'].includes(event.development_status)
+                    ? {development_status:event.development_status} : {}),
                 affected_nations: [...new Set((Array.isArray(event.affected_nations) ? event.affected_nations : [])
                     .filter(code => typeof code === 'string' && Object.hasOwn(gameState.nations, code)))],
                 state_changes: isRecord(event.state_changes) ? event.state_changes : {},

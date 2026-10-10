@@ -1,5 +1,9 @@
 # Release readiness
 
+10 October 2026: World news now needs an explained actual consequence to qualify as Major/Critical; explicitly proposed or preparatory developments remain moderate. The exact sanctions-debate response pauses on 26 January at campaign progress rather than stopping on the debate. Both fronts and air support remain applied. Generic era tests preserve genuine world milestones and decisive battles. See [AI reliability](AI_RELIABILITY.md#consequential-world-milestones--10-october-2026).
+
+The complete `npm test --prefix backend` suite passed, including event metadata persistence and HTTP integration. Verification used mocked providers; no browser, screenshots or live-model requests were used. Semantic importance still depends on the model's explanation of actual consequences.
+
 9 October 2026: Turn generation now negotiates structured output across all 19 provider presets, including local/custom endpoints and Claude. Explicitly unsupported formats fall back automatically and are cached per endpoint/model; authentication failures and outages are not retried as format errors. A bounded decoder recovers closing-bracket mistakes without changing keys, values or reports; ambiguous and truncated replies still cannot commit partial state. The recorded malformed Italy/Ethiopia response now resolves both fronts and air support in one mocked request. See [AI reliability](AI_RELIABILITY.md#malformed-turn-json--9-october-2026).
 
 9 October 2026: Next important event no longer treats a missing milestone as permission to advance a full year. Sparse replies pause at an explicitly labelled progress checkpoint, keep unfinished fronts active and exclude later predictions. The recorded Italy/Ethiopia response now stops on 15 February instead of 31 December. See [AI reliability](AI_RELIABILITY.md#next-event-coverage-checkpoints--9-october-2026).

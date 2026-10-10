@@ -28,11 +28,12 @@ async function run() {
     await engine.processPlayerAction(game.save_id,'Start a full invasion of Ethiopia from north and south, Eritrea and Somalia, using land and air forces.');
     const count=mock(ctx=>{
      const reply=structuredClone(fixture);reply.action_resolutions[0].action_id=ctx.actions[0].id;
-     if(!worldFirst)reply.events=[{title:'Major treaty concluded',description:'A binding treaty changes the international balance.',severity:'major',game_date:'1936-01-31',affected_nations:['FRA','GER']}];
+     if(worldFirst)Object.assign(reply.events[0],{title:'Binding arms embargo enters into force',description:'An enforced embargo immediately interrupts major arms deliveries.',development_status:'occurred',significance_reason:'The embargo cuts off a strategically important supply route.'});
+     if(!worldFirst)reply.events=[{title:'Major treaty concluded',description:'A binding treaty changes the international balance.',severity:'major',significance_reason:'The binding treaty enters into force, changing the security balance.',game_date:'1936-01-31',affected_nations:['FRA','GER']}];
      return reply;
     });
     const turn=await engine.advanceTime(game.save_id,'next_event'),state=await engine.loadGame(game.save_id);
-    assert.equal(count(),1,'The real overlong timeline resolves with one generation');
+    assert.equal(count(),1,'The recorded operation and explained milestone resolve with one generation');
     assert.equal(state.currentDate,worldFirst?'1936-01-15':'1936-01-31');
     assert.equal(state.units.length,3,'Both fronts and their air formation mobilise');
     const north=state.units.find(u=>u.name==='1st Italian Northern Army'),south=state.units.find(u=>u.name==='1st Italian Southern Army');
@@ -79,7 +80,7 @@ async function run() {
     const before=await engine.loadGame(game.save_id);
     const count=mock(ctx=>{
      const id=ctx.actions[0].id;
-     return {events:[{title:'French political crisis',description:'An independent development.',severity:'major',game_date:'1936-01-15',affected_nations:['FRA']},
+     return {events:[{title:'French political crisis',description:'The government falls after losing a confidence vote.',severity:'major',significance_reason:'The loss of government creates a major constitutional crisis.',game_date:'1936-01-15',affected_nations:['FRA']},
        ...(!military?[{title:'Future government change',description:'A future appointment.',game_date:'1936-02-05',action_id:id,state_changes:{ITA:{ruling_party:'Future party'}}}]:[])],
       action_resolutions:[{action_id:id,summary:'The later order is carried out.',...(military?{operation:{kind:'invasion',status:'proceed',target_nation_code:'ETH',reason:'A future invasion.',fronts:[]}}:{day_offset:35})}],
       unit_changes:[{action:'recruit',action_id:id,day_offset:35,unit_type:'invalid_future_type',region_id:'unmapped_future_province'}],
@@ -110,6 +111,6 @@ async function run() {
    assert.equal(state.actions[0].status,'pending','A real unsafe effect still preserves the entire turn');
   }finally{await engine.deleteSave(game.save_id);}
  }finally{llm.generateEvents=original;}
- console.log('Actual overlong timeline, one-call selection, both fronts/air, later standing movement, scheduled civilian/military orders and unsafe-effect rejection passed');
+ console.log('Recorded overlong operation with explained milestones, one-call selection, both fronts/air, later standing movement, scheduled civilian/military orders and unsafe-effect rejection passed');
 }
 run().catch(error=>{console.error(error);process.exitCode=1;});

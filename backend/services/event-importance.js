@@ -11,4 +11,15 @@ function campaignSeverity(report) {
 const isImportantCampaignReport = report => ['battle','annex'].includes(report?.action) &&
     ['major','critical'].includes(campaignSeverity(report));
 
-module.exports = {campaignSeverity,isImportantCampaignReport};
+function worldSeverity(event) {
+    const severity=['minor','moderate','major','critical'].includes(event?.severity) ? event.severity : 'minor';
+    if(!['major','critical'].includes(severity))return severity;
+    // A proposed decision is not the decision taking effect. Keep it as news,
+    // without a repair request or a special case for any institution or country.
+    if(event.development_status!=null && event.development_status!=='occurred')return 'moderate';
+    return typeof event.significance_reason==='string' && event.significance_reason.trim() ? severity : 'moderate';
+}
+
+const isImportantWorldEvent = event => ['major','critical'].includes(worldSeverity(event));
+
+module.exports = {campaignSeverity,isImportantCampaignReport,worldSeverity,isImportantWorldEvent};

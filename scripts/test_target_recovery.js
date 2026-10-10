@@ -19,7 +19,10 @@ async function run() {
      require:name=>require(path.join(__dirname,'../backend/services',name)),
      executeChatCompletion:async()=>{
       assert.equal(++calls,1,'Missing identity metadata must not consume a corrective inference');
-      const reply=structuredClone(fixture);reply.action_resolutions[0].action_id=followup
+      const reply=structuredClone(fixture);
+      // Keep the original operation; explain its consequential world milestone.
+      reply.events.find(e=>e.title.includes('Rhineland')).significance_reason='The actual military deployment ends demilitarization and changes the European security balance.';
+      reply.action_resolutions[0].action_id=followup
        ? context.campaigns[0].source_action_id : context.actions[0].id;
       if(followup) {
        reply.events=[];
@@ -80,7 +83,9 @@ async function run() {
     __dirname:path.join(__dirname,'../backend/services'),fs:{existsSync:()=>true,writeFileSync(){}},
     require:name=>require(path.join(__dirname,'../backend/services',name)),
     executeChatCompletion:async messages=>{
-     const reply=structuredClone(fixture);reply.action_resolutions[0].action_id=context.actions[0].id;
+     const reply=structuredClone(fixture);
+     reply.events.find(e=>e.title.includes('Rhineland')).significance_reason='The actual military deployment ends demilitarization and changes the European security balance.';
+     reply.action_resolutions[0].action_id=context.actions[0].id;
      if(++calls===1)reply.diplomatic_changes=[{action:'declare_war',action_id:context.actions[0].id,nation_code:'ITA',target_nation_code:'ENG'}];
      else {
       assert.equal(calls,2);

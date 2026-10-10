@@ -2,7 +2,7 @@ const DAY = 86400000;
 const NEXT_EVENT_HORIZON = 365;
 const QUIET_CHECKPOINT_DAYS = 30;
 const PROGRESS_CHECKPOINT_LIMIT = 90;
-const {isImportantCampaignReport}=require('./event-importance');
+const {isImportantCampaignReport,worldSeverity,isImportantWorldEvent}=require('./event-importance');
 // Selection bookkeeping is engine-owned and cannot be supplied by the model.
 const selections = new WeakMap();
 const array = value => Array.isArray(value) ? value : [];
@@ -68,7 +68,9 @@ function validateNextEvent(result, context) {
         ...flat.map(o => o?.target_nation_code),
         ...resolutions.map(r => r?.operation?.target_nation_code)
     ].filter(Boolean));
-    const significant = array(result.events).filter(e => ['major','critical'].includes(e?.severity) &&
+    const proposedImportant=array(result.events).filter(e=>['major','critical'].includes(e?.severity));
+    for(const event of array(result.events))if(event && typeof event==='object')event.severity=worldSeverity(event);
+    const significant = array(result.events).filter(e => isImportantWorldEvent(e) &&
         !(e.event_type === 'military' && targets.size && array(e.affected_nations).some(c => c === context.playerNation?.code || targets.has(c))));
     const milestones = [...flat,...nested].filter(isImportantCampaignReport);
     const important = [...significant,...milestones];
@@ -76,9 +78,10 @@ function validateNextEvent(result, context) {
     // Legacy undated milestones use the model's explicit elapsed duration.
     // Anchor them before clipping, so a checkpoint cannot pull their effects
     // forward merely because their calendar date was omitted.
+    const dateAnchors=[...new Set([...important,...proposedImportant])];
     if(Number.isInteger(supplied) && supplied>=1 && supplied<=horizon)
-        for(const event of important)if(offset(event,start)===null)event.day_offset=supplied;
-    const unanchoredMilestones=new Set(important.filter(event=>offset(event,start)===null));
+        for(const event of dateAnchors)if(offset(event,start)===null)event.day_offset=supplied;
+    const unanchoredMilestones=new Set(dateAnchors.filter(event=>offset(event,start)===null));
     const days = important.map(e => offset(e, start)).filter(d => Number.isInteger(d) && d >= 1 && d <= horizon);
     const milestone = days.length ? Math.min(...days) : null;
     const reportDays = [...flat,...nested].filter(r => !r?.unresolved && ['battle','annex','hold','cancel'].includes(r?.action))
