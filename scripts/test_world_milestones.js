@@ -20,7 +20,7 @@ for(const year of [1910,1936,2010]) {
  const context={currentDate:`${year}-01-01`,nextImportantEvent:true,playerNation:{code:'PLAYER'}};
  for(const development_status of ['discussion','proposed','preparatory']) {
   const reply={events:[{...debate,game_date:undefined,day_offset:10,development_status,significance_reason:'A possible embargo is under consideration.'},
-   {...enacted,day_offset:20}]};
+   {...enacted,day_offset:20,affected_nations:['PLAYER']}]};
   validateNextEvent(reply,context);
   assert.equal(reply.elapsed_days,20);assert.equal(reply.events[0].severity,'moderate');
   assert.equal(getTimelineSelection(reply).stop_reason,'milestone');

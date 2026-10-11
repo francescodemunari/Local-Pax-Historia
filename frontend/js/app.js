@@ -531,6 +531,7 @@ const app = {
                 playerNation: game.player_nation,
                 currentDate: game.current_date,
                 turnNumber: game.turn_number,
+                revision: Number.isSafeInteger(game.revision) ? game.revision : 0,
                 scenario: game.scenario
             };
 
@@ -621,11 +622,12 @@ const app = {
                 playerNation: game.playerNation,
                 currentDate: game.currentDate,
                 turnNumber: game.turnNumber,
+                revision: Number.isSafeInteger(game.revision) ? game.revision : 0,
                 scenario: game.scenario
             };
 
             // Add existing events
-            eventsPanel.events = game.events || [];
+            eventsPanel.replaceEvents(game.events || []);
 
             this.closeAllModals();
             await this.startGame();
@@ -677,22 +679,29 @@ const app = {
      * Load cities and units on the map
      */
     async loadWorldObjects() {
+        const game=this.currentGame;
+        const saveId=game?.saveId;
+        if(!saveId)return;
+        const revision=game.revision;
+        const isCurrent=()=>this.currentGame===game && game.revision===revision;
         try {
             // Load and display nation labels
             if (this.nationManager) {
-                await this.nationManager.loadNationLabels(this.currentGame.saveId);
+                await this.nationManager.loadNationLabels(saveId);
+                if(!isCurrent())return;
                 console.log('Nation labels loaded and displayed');
             }
 
             // Load and display cities
             if (this.cityManager) {
-                await this.cityManager.loadCities(this.currentGame.saveId);
+                await this.cityManager.loadCities(saveId);
+                if(!isCurrent())return;
                 console.log('Cities loaded and displayed');
             }
 
             // Game state owns units. Restore formations recorded in this save.
             if (this.unitManager) {
-                await this.unitManager.loadUnits(this.currentGame.saveId);
+                await this.unitManager.loadUnits(saveId);
             }
         } catch (error) {
             console.error('Failed to load world objects:', error);
@@ -874,30 +883,39 @@ const app = {
      */
     async refreshAfterTurn(turnResult) {
         if (!this.currentGame || !turnResult?.turn_number) return;
-
-        const key = `${this.currentGame.saveId}:${turnResult.turn_number}`;
+        const game=this.currentGame;
+        const saveId=game.saveId;
+        const revision=Number.isSafeInteger(turnResult.revision) && turnResult.revision>=0 ? turnResult.revision : null;
+        const knownRevision=Number.isSafeInteger(game.revision) ? game.revision : 0;
+        if(revision===null ? knownRevision>0 : revision<knownRevision)return;
+        const key = `${saveId}:${turnResult.turn_number}:${turnResult.revision || ''}`;
         if (this.lastTurnRefreshKey === key && this.activeTurnRefresh) {
             return this.activeTurnRefresh;
         }
+        if(revision!==null)game.revision=revision;
         this.lastTurnRefreshKey = key;
+        const isCurrent=()=>this.currentGame===game && this.lastTurnRefreshKey===key &&
+            (revision===null || game.revision===revision);
         this.activeTurnRefresh = (async () => {
             try {
                 if(!turnResult.world_changed && Array.isArray(turnResult.territory_changes) && !turnResult.territory_changes.length) {
-                    await this.unitManager.loadUnits(this.currentGame.saveId);
+                    await this.unitManager.loadUnits(saveId);
                     return;
                 }
                 if(turnResult.world_changed) {
-                    await gameMap.loadNationColors(this.currentGame.saveId);
+                    await gameMap.loadNationColors(saveId);
+                    if(!isCurrent())return;
                     const player=gameMap.nationColors[this.currentGame.playerNation.code];
                     if(player){this.currentGame.playerNation.name=player.name;document.getElementById('player-nation-name').textContent=player.name;}
                 }
-                const refreshedRegions = await api.getRegions(this.currentGame.saveId);
+                const refreshedRegions = await api.getRegions(saveId);
+                if(!isCurrent())return;
                 gameMap.applyNationColorsToAllSVG(refreshedRegions);
                 await this.loadWorldObjects();
             } catch (error) {
                 console.error('Failed to refresh the world after a turn:', error);
             } finally {
-                actionsPanel.loadPendingActions();
+                if(isCurrent())actionsPanel.loadPendingActions();
             }
         })();
 

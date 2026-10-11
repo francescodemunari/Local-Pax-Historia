@@ -18,11 +18,16 @@ const turnPlayback = {
   gameMap.applyNationColorsToAllSVG(this.finalState.regions.map(r=>({...r,nation_code:previous.get(r.id)||r.nation_code})));
   app.nationManager?.displayNationLabels();app.closeAllPanels();document.getElementById('region-popup')?.classList.add('hidden');
   const card=document.createElement('section');card.id='turn-playback';card.setAttribute('aria-label','Turn events');
-  card.innerHTML='<span class="playback-count"></span><p class="playback-stop" hidden></p><h2></h2><p class="playback-location"></p><div class="playback-description" aria-live="polite"></div><div class="playback-controls"><button class="btn primary" data-action="next">Next event</button><button class="btn secondary" data-action="skip">Finish playback</button></div>';
+  card.innerHTML='<span class="playback-count"></span><p class="playback-stop" hidden></p><h2></h2><p class="playback-location"></p><div class="playback-description" aria-live="polite"></div><div class="playback-controls"><button class="btn primary" data-action="next">Next event</button><button class="btn secondary" data-action="skip">Finish playback</button><button class="btn secondary" data-action="resume" hidden>Play from this event</button></div><p class="playback-choice" hidden>Continues from this date and discards later simulated outcomes.</p>';
   const stopNote=card.querySelector('.playback-stop');
   if(stopNote && result.next_event_checkpoint){stopNote.hidden=false;stopNote.textContent=`Progress checkpoint · ${app.formatDate(result.new_date)}. No strategic milestone was resolved; standing orders remain active.`;}
+  else if(stopNote && result.next_event_reason){stopNote.hidden=false;stopNote.textContent=result.next_event_reason;}
   document.getElementById('game-container').append(card);
   card.querySelector('[data-action="next"]').onclick=()=>this.next();card.querySelector('[data-action="skip"]').onclick=()=>this.stop();
+  card.querySelector('[data-action="resume"]').onclick=async()=>{
+   const button=card.querySelector('[data-action="resume"]');button.disabled=true;button.textContent='Restoring…';
+   try{await timelinePanel.resumeFromEvent(this.queue[this.index]);}finally{button.disabled=false;button.textContent='Play from this event';}
+  };
   const finished=new Promise(resolve=>{this.finish=resolve;});this.display();await finished;
  },
  next(){this.index++;if(this.index>=this.queue.length)this.stop();else this.display();},
@@ -44,5 +49,7 @@ const turnPlayback = {
   card.querySelector('h2').textContent=typeof countryFlags!=='undefined'?countryFlags.prose(event.title):event.title;card.querySelector('.playback-description').textContent=typeof countryFlags!=='undefined'?countryFlags.prose(event.description):event.description;
   card.querySelector('.playback-location').textContent=gameMap.focusEvent(event)||'No specific location';if(gameMap.showEventRoutes)gameMap.showEventRoutes(event.applied_unit_changes?.length?event.applied_unit_changes:change?[change]:[],event.campaign_effect?.support||[]);else gameMap.showEventRoute?.(change);
   card.querySelector('[data-action="next"]').textContent=this.index===this.queue.length-1?'Done':'Next event';
+  const resume=card.querySelector('[data-action="resume"]');resume.hidden=!event.can_resume;
+  card.querySelector('.playback-choice').hidden=!event.can_resume;
  }
 };

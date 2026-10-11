@@ -5,6 +5,7 @@
 
 const timelinePanel = {
     isAdvancing: false,
+    isContinuing: false,
 
     init() {
         this.setupEventListeners();
@@ -45,6 +46,7 @@ const timelinePanel = {
 
     showTimeModal() {
         if (!app.currentGame) return;
+        if(this.isContinuing)return;
         if (turnPlayback.queue?.length) { app.showToast('Finish event playback before advancing again.', 'info'); return; }
 
         const currentDate = new Date(app.currentGame.currentDate);
@@ -93,7 +95,7 @@ const timelinePanel = {
     },
 
     async advanceTime(timeJump) {
-        if (!app.currentGame || this.isAdvancing) return;
+        if (!app.currentGame || this.isAdvancing || this.isContinuing) return;
 
         const saveId = app.currentGame.saveId;
         this.hideTimeModal();
@@ -126,20 +128,69 @@ const timelinePanel = {
 
     async receiveTurn(result, saveId) {
         if (app.currentGame?.saveId !== saveId) return;
-        const key = `${saveId}:${result.turn_number}`;
+        const game=app.currentGame;
+        const revision=Number.isSafeInteger(result.revision) && result.revision>=0 ? result.revision : null;
+        const knownRevision=Number.isSafeInteger(game.revision) ? game.revision : 0;
+        if(revision===null ? knownRevision>0 : revision<knownRevision)return;
+        const key = `${saveId}:${result.turn_number}:${result.revision || ''}`;
         if (this.lastPresentedTurn === key) return;
         this.lastPresentedTurn = key;
+        if(revision!==null)game.revision=revision;
+        const isCurrent=()=>app.currentGame===game && this.lastPresentedTurn===key &&
+            (revision===null || game.revision===revision);
+        if(result.resumed_from_event) {
+            turnPlayback.stop();
+            app.currentGame.currentDate=result.new_date;
+            app.currentGame.turnNumber=result.turn_number;
+            if(result.state?.playerNation)app.currentGame.playerNation=result.state.playerNation;
+            this.updateDateDisplay();
+            const draft=document.getElementById('action-input')?.value || '';
+            actionsPanel.reset();
+            if(document.getElementById('action-input'))document.getElementById('action-input').value=draft;
+            actionsPanel.updateComposer();
+            actionsPanel.updatePanelInfo();
+            if(typeof diplomacyPanel!=='undefined')diplomacyPanel.reset();
+            if(typeof advisorPanel!=='undefined')advisorPanel.reset();
+            await app.refreshAfterTurn({...result,world_changed:true});
+            if(!isCurrent())return;
+            const history=result.state?.events || await api.getEvents(saveId);
+            if(!isCurrent())return;
+            eventsPanel.replaceEvents(history);
+            app.closeAllPanels();
+            document.getElementById('region-popup')?.classList.add('hidden');
+            document.getElementById('nation-popup')?.classList.add('hidden');
+            app.showToast(`Playing from ${app.formatDate(result.new_date)}. Later simulated outcomes were discarded.`, 'success');
+            return;
+        }
         app.currentGame.currentDate = result.new_date;
         app.currentGame.turnNumber = result.turn_number;
         this.updateDateDisplay();
         await app.refreshAfterTurn(result);
-        if (app.currentGame?.saveId !== saveId) return;
+        if (!isCurrent()) return;
         eventsPanel.addEvents(result.events || []);
         if(result.next_event_checkpoint)app.showToast(`Paused after ${result.advanced_days} days at a progress checkpoint. No strategic milestone was resolved; standing orders continue.`, 'info');
         if(result.resolution_notes?.some(n=>n.kind==='order'))app.showToast('Some orders are still awaiting an outcome. They remain available in Actions.', 'info');
         else if(result.resolution_notes?.length)app.showToast('Some fronts or support requests still need an outcome. Their standing orders remain active.', 'info');
         document.getElementById('action-suggestions')?.replaceChildren();
         await turnPlayback.play(result.events, saveId, result);
+    },
+
+    async resumeFromEvent(event) {
+        if(!app.currentGame || this.isContinuing || !event?.can_resume)return;
+        if(this.isAdvancing && !turnPlayback.queue?.length)return;
+        const saveId=app.currentGame.saveId;
+        this.isContinuing=true;
+        try {
+            const result=await api.request('/game/resume-event',{method:'POST',body:{saveId,eventId:event.id,revision:event.resume_revision}});
+            await this.receiveTurn(result,saveId);
+        } catch(error) {
+            if(app.currentGame?.saveId===saveId) {
+                app.showToast(error.message || 'Unable to continue from this event. Your save is unchanged.','error');
+                await eventsPanel.loadEvents();
+            }
+        } finally {
+            this.isContinuing=false;
+        }
     },
 
     updateDateDisplay() {

@@ -147,6 +147,13 @@ class ApiClient {
         });
     }
 
+    async improveAction(saveId, actionText) {
+        return this.request('/actions/improve', {
+            method: 'POST',
+            body: { saveId, actionText }
+        });
+    }
+
     // ==================== Events ====================
 
     async getEvents(saveId, limit = 50) {

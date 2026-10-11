@@ -29,8 +29,13 @@ class UnitManager {
      * Load units from API
      */
     async loadUnits(saveId) {
+        const request = this.unitsLoadRequest = (this.unitsLoadRequest || 0) + 1;
+        const trackGame = typeof app !== 'undefined' && Object.hasOwn(app, 'currentGame');
+        const game = trackGame ? app.currentGame : null;
+        const revision = game?.revision;
+        const isCurrent = () => request === this.unitsLoadRequest &&
+            (!trackGame || (app.currentGame === game && app.currentGame?.revision === revision && (game?.saveId || null) === (saveId || null)));
         try {
-            this.saveId = saveId;
             const url = `/api/units?saveId=${saveId}`;
             console.log(`Fetching units from: ${url}`);
 
@@ -41,7 +46,10 @@ class UnitManager {
                 throw new Error('Failed to load units');
             }
 
-            this.units = await response.json();
+            const units = await response.json();
+            if (!isCurrent()) return [];
+            this.saveId = saveId;
+            this.units = units;
             console.log(`[UnitManager] Loaded ${this.units.length} units for saveId ${saveId}`);
             console.log('[UnitManager] First unit sample:', this.units[0]);
 
@@ -49,7 +57,7 @@ class UnitManager {
 
             return this.units;
         } catch (error) {
-            console.error('Error loading units:', error);
+            if (isCurrent()) console.error('Error loading units:', error);
             return [];
         }
     }

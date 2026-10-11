@@ -28,8 +28,8 @@ async function run() {
     await engine.processPlayerAction(game.save_id,'Start a full invasion of Ethiopia from north and south, Eritrea and Somalia, using land and air forces.');
     const count=mock(ctx=>{
      const reply=structuredClone(fixture);reply.action_resolutions[0].action_id=ctx.actions[0].id;
-     if(worldFirst)Object.assign(reply.events[0],{title:'Binding arms embargo enters into force',description:'An enforced embargo immediately interrupts major arms deliveries.',development_status:'occurred',significance_reason:'The embargo cuts off a strategically important supply route.'});
-     if(!worldFirst)reply.events=[{title:'Major treaty concluded',description:'A binding treaty changes the international balance.',severity:'major',significance_reason:'The binding treaty enters into force, changing the security balance.',game_date:'1936-01-31',affected_nations:['FRA','GER']}];
+     if(worldFirst)Object.assign(reply.events[0],{title:'Binding arms embargo enters into force',description:'An enforced embargo immediately interrupts major Italian arms deliveries.',development_status:'occurred',significance_reason:'The embargo cuts off a strategically important Italian supply route.',affected_nations:['ITA','FRA','ENG']});
+     if(!worldFirst)reply.events=[{title:'Major treaty concluded',description:'Italy signs a binding treaty that changes its security commitments.',severity:'major',significance_reason:'The binding treaty enters into force, changing Italy’s security commitments.',game_date:'1936-01-31',affected_nations:['ITA','FRA','GER']}];
      return reply;
     });
     const turn=await engine.advanceTime(game.save_id,'next_event'),state=await engine.loadGame(game.save_id);
@@ -80,7 +80,7 @@ async function run() {
     const before=await engine.loadGame(game.save_id);
     const count=mock(ctx=>{
      const id=ctx.actions[0].id;
-     return {events:[{title:'French political crisis',description:'The government falls after losing a confidence vote.',severity:'major',significance_reason:'The loss of government creates a major constitutional crisis.',game_date:'1936-01-15',affected_nations:['FRA']},
+     return {events:[{title:'Italian political crisis',description:'The Italian government falls after losing a confidence vote.',severity:'major',significance_reason:'The loss of Italy’s government creates a major constitutional crisis.',game_date:'1936-01-15',affected_nations:['ITA']},
        ...(!military?[{title:'Future government change',description:'A future appointment.',game_date:'1936-02-05',action_id:id,state_changes:{ITA:{ruling_party:'Future party'}}}]:[])],
       action_resolutions:[{action_id:id,summary:'The later order is carried out.',...(military?{operation:{kind:'invasion',status:'proceed',target_nation_code:'ETH',reason:'A future invasion.',fronts:[]}}:{day_offset:35})}],
       unit_changes:[{action:'recruit',action_id:id,day_offset:35,unit_type:'invalid_future_type',region_id:'unmapped_future_province'}],

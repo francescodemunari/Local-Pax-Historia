@@ -22,7 +22,9 @@ function resolveCampaigns(engine,state,orders,pendingIds,availableDays,alreadyMo
  state.units=state.units.filter(u=>u.source!=='campaign-defence');
  const diplomaticActions=new Set(['declare_war','make_peace','form_alliance','end_alliance']);
  const ordered=[...(Array.isArray(orders)?orders:[]).slice(0,24),...(Array.isArray(diplomacy)?diplomacy:[]).slice(0,20)].filter(o=>o && typeof o==='object');
- const orderDay=o=>o.action==='start'?0:Number(o.day_offset ?? (diplomaticActions.has(o.action)?0:availableDays));
+ const orderDay=o=>o.action==='start'?0:Number(
+  (diplomaticActions.has(o.action)?require('./event-continuation').dateOffset(o.game_date || o.date,state.currentDate):null)
+  ?? o.day_offset ?? (diplomaticActions.has(o.action)?0:availableDays));
  ordered.sort((a,b)=>(a.action==='start'?0:1)-(b.action==='start'?0:1) ||
   orderDay(a)-orderDay(b) || (diplomaticActions.has(a.action)?0:1)-(diplomaticActions.has(b.action)?0:1) || (a.action==='annex'?1:0)-(b.action==='annex'?1:0));
  for(const order of ordered) {

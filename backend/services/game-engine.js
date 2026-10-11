@@ -6,6 +6,7 @@ const ScenarioService = require('./scenario-service');
 const { contains, interiorPoint } = require('./map-geometry');
 const { findLandRoute, SPEED } = require('./movement');
 const { resolveCampaigns } = require('./campaigns');
+const eventContinuation = require('./event-continuation');
 
 function getRegionAnchor(region) {
     if (region.geographic_anchor && region.marker_anchor) return [...region.marker_anchor];
@@ -332,6 +333,10 @@ class GameEngine {
         // loadGame enriches a state for UI use. Derived response data belongs
         // in memory, not in a durable save where it can leak local metadata.
         const { playerNation, scenario, ...persistentState } = gameState;
+        persistentState.events = (persistentState.events || []).map(eventContinuation.cleanEvent);
+        if (turnCommit && gameState._eventReplay?.revision === storedRevision + 1) {
+            persistentState._eventReplay = gameState._eventReplay;
+        }
         persistentState.revision = storedRevision + 1;
         persistentState.updated_at = new Date().toISOString();
         const temporaryPath = `${filePath}.${crypto.randomUUID()}.tmp`;
@@ -354,7 +359,7 @@ class GameEngine {
             throw inputError('Save not found', 'SAVE_NOT_FOUND');
         }
 
-        const storedState = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        const { _eventReplay, ...storedState } = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
         const scenario = this.scenarios.getSaveScenario(storedState);
         const gameState = {
             ...storedState,
@@ -377,13 +382,13 @@ class GameEngine {
         for(const [code,n] of Object.entries(nations))if(!gameState.nations[code] && (n.is_territory_group||n.map_supplement))gameState.nations[code]={code,warWith:[],allies:[],occupied_regions:[],atWar:false};
         const effective=this.getEffectiveNations(gameState);
 
-        return {
+        return eventContinuation.decorate(eventContinuation.attach({
             ...gameState,
             playerNation: effective[gameState.playerNationCode],
             scenario: this.getScenarioSummary(scenario),
             events: gameState.events || [],
             actions: gameState.actions || []
-        };
+        }, _eventReplay));
     }
 
     async getSaves() {
@@ -514,6 +519,11 @@ class GameEngine {
             if (typeof change.action_id !== 'string' || (!approvedActionIds.has(change.action_id) && !standingRecruit)) return;
 
             const reject = reason => rejectedChanges.push({ action: operation, action_id: change.action_id, unit_id: change.unit_id, reason });
+            const executionDay = minimum => {
+                const dated = eventContinuation.dateOffset(change.game_date || change.date, gameState.currentDate);
+                const supplied = dated ?? Number(change.day_offset);
+                return Math.min(availableDays, Math.max(minimum, Number.isInteger(supplied) ? supplied : minimum));
+            };
             const nationCode = String(change.nation_code || '').toUpperCase();
             const unitType = String(change.unit_type || '').toLowerCase();
             const unitSpec = catalog[unitType];
@@ -528,7 +538,7 @@ class GameEngine {
                 }
                 gameState.units = gameState.units.filter(candidate => candidate.id !== unit.id);
                 movedUnits.add(unit.id);
-                applied.push({ action: 'disband', action_id: change.action_id, unit: { ...unit } });
+                applied.push({ action: 'disband', action_id: change.action_id, day_offset: executionDay(1), unit: { ...unit } });
                 return;
             }
 
@@ -556,7 +566,7 @@ class GameEngine {
                 unit.centroid = centroid;
                 unit.last_order_id = change.action_id;
                 movedUnits.add(unit.id);
-                applied.push({ action: 'move', action_id: change.action_id,
+                applied.push({ action: 'move', action_id: change.action_id, day_offset: executionDay(Math.max(1, route.required_days)),
                     previous_region_id: previousRegionId, route, unit: { ...unit } });
                 return;
             }
@@ -652,16 +662,19 @@ class GameEngine {
         }
     }
 
-    async advanceTimeUnlocked(saveId, timeJump) {
-        const gameState = await this.loadGame(saveId);
+    async advanceTimeUnlocked(saveId, timeJump, replay = null) {
+        const gameState = replay ? replay.state : await this.loadGame(saveId);
+        const beforeTurn = eventContinuation.snapshot(gameState);
         const initialUnits = structuredClone(gameState.units || []);
         const turnEventStart = gameState.events.length;
         const initialControl = this.getRegionControllers(gameState);
         const nextImportantEvent = timeJump === 'next_event';
         const nextEventHorizonDays = require('./next-event').NEXT_EVENT_HORIZON;
-        let normalizedTimeJump = this.normalizeTimeJump(nextImportantEvent ? `${nextEventHorizonDays}_days` : timeJump);
+        let normalizedTimeJump = replay ? `${replay.days}_days`
+            : this.normalizeTimeJump(nextImportantEvent ? `${nextEventHorizonDays}_days` : timeJump);
         const currentDate = new Date(gameState.currentDate);
-        let nextDate = this.calculateNewDate(currentDate, normalizedTimeJump);
+        let nextDate = replay ? new Date(+currentDate + replay.days * 86400000)
+            : this.calculateNewDate(currentDate, normalizedTimeJump);
         let availableDays = Math.round((nextDate - currentDate) / 86400000);
 
         // 1. Prepare AI Context
@@ -710,8 +723,9 @@ class GameEngine {
         };
 
         // 2. Call AI to generate consequences and events
-        console.log(`[Engine] Generating turn events for ${saveId} (${normalizedTimeJump})...`);
-        const aiResult = await llmService.generateEvents(normalizedTimeJump, gameContext);
+        console.log(`[Engine] ${replay ? 'Replaying recorded' : 'Generating'} turn events for ${saveId} (${normalizedTimeJump})...`);
+        const aiResult = replay ? structuredClone(replay.result)
+            : await llmService.generateEvents(normalizedTimeJump, gameContext);
 
         if (aiResult?.error) {
             console.error(`[Engine] AI Generation Error: ${aiResult.error}`);
@@ -730,7 +744,24 @@ class GameEngine {
             availableDays=aiResult.elapsed_days;normalizedTimeJump=`${availableDays}_days`;
             nextDate=this.calculateNewDate(currentDate,normalizedTimeJump);
         }
-        require('./operation-plan').compileOperationPlans(aiResult,gameContext);
+        if (replay) {
+            require('./next-event').clipTimelineAtDay(aiResult, gameContext, replay.days);
+            const selection = require('./next-event').getTimelineSelection(aiResult);
+            const deferred = new Set([...selection.deferredActionIds, ...(replay.result.deferred_action_ids || [])]);
+            require('./action-outcomes').prepareActionOutcomes(aiResult, {
+                ...gameContext, actions: pendingActions.filter(action => !deferred.has(action.id))
+            }, { allowDeferred: true });
+            aiResult.deferred_action_ids = [...new Set([...aiResult.deferred_action_ids, ...deferred])];
+            for (const id of deferred) if (!aiResult.action_resolutions.some(resolution => resolution.action_id === id)) {
+                aiResult.action_resolutions.push({ action_id: id, summary: 'This order falls after the chosen event and remains pending.' });
+            }
+            const replayContext = { ...gameContext, actions: pendingActions.filter(a => !aiResult.deferred_action_ids.includes(a.id)) };
+            require('./operation-plan').compileOperationPlans(aiResult, replayContext);
+            require('./operation-contract').validateOperations(aiResult, replayContext, {
+                allowIncomplete: true, allowUnresolved: false, futureCampaignIds: selection.futureCampaignIds
+            });
+            gameContext.previewMilitaryResult(aiResult);
+        } else require('./operation-plan').compileOperationPlans(aiResult,gameContext);
 
         console.log(`[Engine] Received ${aiResult.events?.length || 0} events from AI.`);
 
@@ -740,7 +771,7 @@ class GameEngine {
             const hasProposal = [...(Array.isArray(aiResult.unit_changes) ? aiResult.unit_changes : []), ...(Array.isArray(aiResult.diplomatic_changes) ? aiResult.diplomatic_changes : [])]
                 .some(proposal => proposal?.action_id === action.id);
             return !hasProposal && typeof outcome?.summary === 'string' && outcome.summary.trim()
-                ? [{title:'Order outcome',description:outcome.summary,game_date:outcome.game_date || outcome.date ||
+                ? [{title:'Order outcome',description:outcome.summary,action_id:action.id,game_date:outcome.game_date || outcome.date ||
                     (Number.isInteger(Number(outcome.day_offset)) ? require('./event-dates').atDay(currentDate,Number(outcome.day_offset),availableDays) : undefined),
                     affected_nations:[gameState.playerNationCode],event_type:'political'}] : [];
         });
@@ -750,12 +781,19 @@ class GameEngine {
             .map((event,index) => ({
                 game_date: require('./event-dates').withinTurn(event.game_date || event.date,currentDate,nextDate) || require('./event-dates').atDay(currentDate,(index+1)*availableDays/Math.max(1,narrativeEvents.length),availableDays),
                 title: event.title.trim().slice(0, 200), description: event.description.trim().slice(0, 12000),
+                ...(typeof event.action_id==='string' ? {action_id:event.action_id} : {}),
                 event_type: ['political', 'military', 'economic', 'diplomatic', 'social'].includes(event.event_type) ? event.event_type : 'political',
                 severity: require('./event-importance').worldSeverity(event),
+                important_for_player: require('./event-importance').isImportantForPlayer(event,gameState.playerNationCode),
                 ...(typeof event.significance_reason==='string' && event.significance_reason.trim()
                     ? {significance_reason:event.significance_reason.trim().slice(0,2000)} : {}),
                 ...(['occurred','discussion','proposed','preparatory'].includes(event.development_status)
                     ? {development_status:event.development_status} : {}),
+                ...(event.player_impact?.nation_code === gameState.playerNationCode &&
+                    ['minor','moderate','major','critical'].includes(event.player_impact.importance) &&
+                    typeof event.player_impact.reason === 'string' && event.player_impact.reason.trim()
+                    ? {player_impact:{nation_code:gameState.playerNationCode,importance:event.player_impact.importance,
+                        reason:event.player_impact.reason.trim().slice(0,2000)}} : {}),
                 affected_nations: [...new Set((Array.isArray(event.affected_nations) ? event.affected_nations : [])
                     .filter(code => typeof code === 'string' && Object.hasOwn(gameState.nations, code)))],
                 state_changes: isRecord(event.state_changes) ? event.state_changes : {},
@@ -765,6 +803,10 @@ class GameEngine {
         if (aiResult.events.length && !modelEvents.length) {
             throw inputError('Game Master returned no usable events. The turn was not saved.', 'GAME_MASTER_INVALID_RESPONSE');
         }
+        // Persist the exact calendar dates used by normal execution, including
+        // legacy events whose omitted dates were assigned by the engine.
+        aiResult.events = modelEvents.map(event => ({ ...event }));
+        const replayProposal = structuredClone(aiResult);
         if (modelEvents.length > 0) {
             modelEvents.forEach(event => {
                 const newEvent = {
@@ -831,7 +873,7 @@ class GameEngine {
                     ? `${change.unit.name} moved from ${change.previous_region_id} to ${change.unit.region_id}.`
                     : `${change.unit.name} formed in ${change.unit.region_id}.`,
                 affected_nations: [change.unit.nation_code], applied_unit_change: change,
-                game_date: gameState.currentDate, turn_number: gameState.turnNumber,
+                game_date: require('./event-dates').atDay(currentDate, change.day_offset, availableDays), turn_number: gameState.turnNumber,
                 created_at: new Date().toISOString(), source: 'engine'
             });
         }
@@ -870,6 +912,11 @@ class GameEngine {
             if(!require('./event-dates').withinTurn(event.game_date,currentDate,nextDate))event.game_date=require('./event-dates').atDay(currentDate,event.applied_unit_change?.route?.required_days || 1,availableDays);
         }
         const turnEvents=[...engineEvents,...narrative].sort((a,b)=>a.game_date.localeCompare(b.game_date));
+        for(const event of turnEvents)if(typeof event.important_for_player!=='boolean') {
+            event.important_for_player=event.campaign_effect || event.applied_diplomatic_change
+                ? ['major','critical'].includes(event.severity) && event.affected_nations.includes(gameState.playerNationCode)
+                : require('./event-importance').isImportantForPlayer(event,gameState.playerNationCode);
+        }
         gameState.events.splice(turnEventStart,gameState.events.length-turnEventStart,...turnEvents);
         const territoryChanges=this.scenarios.getMap(gameState.scenarioId).regions.flatMap(r=>{
             const controller=this.getRegionController(gameState,r);
@@ -880,8 +927,19 @@ class GameEngine {
         gameState.currentDate = nextDate.toISOString().split('T')[0];
         gameState.turnNumber += 1;
 
+        if (replay) {
+            const remaining = [...replay.events];
+            for (const event of turnEvents) {
+                const match = remaining.findIndex(candidate => candidate.date === event.game_date && candidate.title === event.title && candidate.event_type === event.event_type);
+                if (match >= 0) event.id = remaining.splice(match, 1)[0].id;
+            }
+        }
+        eventContinuation.recordExecutionDates(replayProposal, unitChanges, availableDays);
+        eventContinuation.attach(gameState, eventContinuation.checkpoint(beforeTurn, replayProposal, turnEvents, gameState.revision + 1));
+
         // 5. Save and Return
         this.saveGame(saveId, gameState, { turnCommit: true });
+        eventContinuation.decorate(gameState);
 
         return {
             previous_date: currentDate.toISOString().split('T')[0],
@@ -901,10 +959,49 @@ class GameEngine {
             processed_actions: actionResolutions.filter(r=>!r.deferred).length,
             next_event_horizon_days: nextImportantEvent ? nextEventHorizonDays : undefined,
             next_event_stop_reason: nextImportantEvent ? require('./next-event').getTimelineSelection(aiResult).stop_reason : undefined,
+            next_event_reason: nextImportantEvent ? require('./next-event').getTimelineSelection(aiResult).stop_explanation : undefined,
             next_event_checkpoint: nextImportantEvent && require('./next-event').getTimelineSelection(aiResult).stop_reason !== 'milestone',
             advanced_days: availableDays,
+            revision: gameState.revision,
+            ...(replay ? { resumed_from_event: replay.eventId, state: gameState } : {}),
             next_event_horizon_reached: nextImportantEvent && availableDays===nextEventHorizonDays && require('./next-event').getTimelineSelection(aiResult).stop_reason !== 'milestone'
         };
+    }
+
+    async resumeFromEvent(saveId, eventId, revision) {
+        this.validateSaveId(saveId);
+        if (typeof eventId !== 'string' || !eventId || !Number.isSafeInteger(revision) || revision < 1) {
+            throw inputError('A valid eventId and revision are required.', 'INVALID_EVENT_CONTINUATION');
+        }
+        if (activeTurnSaves.has(saveId)) throw inputError('Wait for the current turn to finish before continuing from an event.', 'TURN_IN_PROGRESS');
+        activeTurnSaves.add(saveId);
+        try {
+            const current = await this.loadGame(saveId);
+            if (current.revision !== revision) throw inputError('This save changed after the event was displayed. Refresh before continuing.', 'SAVE_CONFLICT');
+            const event = current.events.find(candidate => candidate.id === eventId);
+            if (!event || !eventContinuation.eligible(current, event)) {
+                throw inputError('This event no longer has an available continuation point. Only earlier events from the latest unchanged turn can be used.', 'EVENT_CONTINUATION_UNAVAILABLE');
+            }
+            const replay = current._eventReplay;
+            const state = structuredClone(replay.before);
+            // The historical world is replayed against the current disk
+            // revision; saveGame retains its normal atomic conflict check.
+            state.revision = current.revision;
+            state.name = current.name;
+            state.playerNation = this.getEffectiveNations(state)[state.playerNationCode];
+            state.scenario = this.getScenarioSummary(this.scenarios.getScenario(state.scenarioId));
+            try {
+                return await this.advanceTimeUnlocked(saveId, `${eventContinuation.dateOffset(event.game_date, state.currentDate)}_days`, {
+                    state, result: replay.result, events: replay.events, eventId,
+                    days: eventContinuation.dateOffset(event.game_date, state.currentDate)
+                });
+            } catch (error) {
+                if (!error.code) error.code = 'EVENT_CONTINUATION_UNAVAILABLE';
+                throw error;
+            }
+        } finally {
+            activeTurnSaves.delete(saveId);
+        }
     }
 
     applyModelDiplomaticChanges(gameState, proposals, approvedActionIds, {gameDate = gameState.currentDate} = {}) {

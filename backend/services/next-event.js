@@ -2,7 +2,7 @@ const DAY = 86400000;
 const NEXT_EVENT_HORIZON = 365;
 const QUIET_CHECKPOINT_DAYS = 30;
 const PROGRESS_CHECKPOINT_LIMIT = 90;
-const {isImportantCampaignReport,worldSeverity,isImportantWorldEvent}=require('./event-importance');
+const {isImportantCampaignReport,worldSeverity,isImportantForPlayer}=require('./event-importance');
 // Selection bookkeeping is engine-owned and cannot be supplied by the model.
 const selections = new WeakMap();
 const array = value => Array.isArray(value) ? value : [];
@@ -70,7 +70,7 @@ function validateNextEvent(result, context) {
     ].filter(Boolean));
     const proposedImportant=array(result.events).filter(e=>['major','critical'].includes(e?.severity));
     for(const event of array(result.events))if(event && typeof event==='object')event.severity=worldSeverity(event);
-    const significant = array(result.events).filter(e => isImportantWorldEvent(e) &&
+    const significant = array(result.events).filter(e => isImportantForPlayer(e,context.playerNation?.code) &&
         !(e.event_type === 'military' && targets.size && array(e.affected_nations).some(c => c === context.playerNation?.code || targets.has(c))));
     const milestones = [...flat,...nested].filter(isImportantCampaignReport);
     const important = [...significant,...milestones];
@@ -84,6 +84,13 @@ function validateNextEvent(result, context) {
     const unanchoredMilestones=new Set(dateAnchors.filter(event=>offset(event,start)===null));
     const days = important.map(e => offset(e, start)).filter(d => Number.isInteger(d) && d >= 1 && d <= horizon);
     const milestone = days.length ? Math.min(...days) : null;
+    const chosen=result.next_event_stop;
+    const chosenDay=offset(chosen,start);
+    const chosenEvent=chosen && typeof chosen.event_ref==='string' && typeof chosen.reason==='string' && chosen.reason.trim()
+        ? important.find(e=>e.event_ref===chosen.event_ref && offset(e,start)===chosenDay) : null;
+    // The model selects a real dated development. Redundant or inconsistent
+    // stop metadata cannot bypass an earlier consequential player event.
+    const stopEvent=chosenEvent && chosenDay===milestone ? chosenEvent : important.find(e=>offset(e,start)===milestone);
     const reportDays = [...flat,...nested].filter(r => !r?.unresolved && ['battle','annex','hold','cancel'].includes(r?.action))
         .map(r => offset(r,start)).filter(d => Number.isInteger(d) && d >= 1 && d <= horizon);
     const coverageLimit=campaignCoverageLimit(context,resolutions,flat,start,milestone??horizon,horizon);
@@ -98,11 +105,24 @@ function validateNextEvent(result, context) {
     if (coveredMilestone) {result.elapsed_days=milestone;stopReason='milestone';}
     else if (progressDays.length) {result.elapsed_days=Math.max(...progressDays);stopReason='campaign_checkpoint';}
     else {result.elapsed_days=ordinaryDays.length ? Math.max(...ordinaryDays) : Math.min(horizon,QUIET_CHECKPOINT_DAYS);stopReason='simulation_checkpoint';}
-    const stop = result.elapsed_days;
+    return clipTimelineAtDay(result,context,result.elapsed_days,{stopReason,unanchoredMilestones,
+        explanation:coveredMilestone ? (stopEvent===chosenEvent ? chosen.reason : stopEvent?.player_impact?.reason || stopEvent?.significance_reason || stopEvent?.report) : undefined,
+        title:coveredMilestone ? stopEvent?.title : undefined,eventRef:coveredMilestone ? stopEvent?.event_ref : undefined});
+}
+
+function clipTimelineAtDay(result,context,day,options={}) {
+    if(!Number.isInteger(day) || day<1)throw new Error('A timeline cutoff needs a positive whole day.');
+    const start=new Date(context.currentDate),resolutions=array(result.action_resolutions);
+    const unanchoredMilestones=options.unanchoredMilestones || new Set();
+    result.elapsed_days=day;
+    const stop=day;
     const previous = selections.get(result);
     const selection = previous?.start_date === context.currentDate ? previous
         : {start_date:context.currentDate,futureCampaignIds:[], deferredActionIds:[], future_events:0, future_effects:0};
-    selection.stop_reason=stopReason;
+    selection.stop_reason=options.stopReason || 'event_choice';
+    selection.stop_explanation=typeof options.explanation==='string' ? options.explanation.trim().slice(0,2000) : undefined;
+    selection.stop_title=options.title;
+    selection.stop_event_ref=options.eventRef;
     selection.stop_day=stop;
     const futureCampaigns = new Set(selection.futureCampaignIds);
     const futureActions = new Set(selection.deferredActionIds);
@@ -206,4 +226,4 @@ function validateNextEvent(result, context) {
     return result;
 }
 
-module.exports = {validateNextEvent,getTimelineSelection,NEXT_EVENT_HORIZON};
+module.exports = {validateNextEvent,clipTimelineAtDay,getTimelineSelection,NEXT_EVENT_HORIZON};

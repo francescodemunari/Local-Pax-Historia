@@ -22,4 +22,19 @@ function worldSeverity(event) {
 
 const isImportantWorldEvent = event => ['major','critical'].includes(worldSeverity(event));
 
-module.exports = {campaignSeverity,isImportantCampaignReport,worldSeverity,isImportantWorldEvent};
+function playerImportance(event, playerCode) {
+    if(!playerCode)return isImportantWorldEvent(event) ? worldSeverity(event) : 'minor';
+    const impact=event?.player_impact;
+    if(impact!==undefined) {
+        const occurred=event.development_status==null || event.development_status==='occurred';
+        return occurred && impact?.nation_code===playerCode && ['major','critical'].includes(impact.importance) &&
+            typeof impact.reason==='string' && impact.reason.trim() ? impact.importance : 'minor';
+    }
+    const directlyAffected=Array.isArray(event?.affected_nations) && event.affected_nations.includes(playerCode) ||
+        event?.state_changes && Object.hasOwn(event.state_changes,playerCode);
+    return directlyAffected && isImportantWorldEvent(event) ? worldSeverity(event) : 'minor';
+}
+
+const isImportantForPlayer = (event,playerCode) => ['major','critical'].includes(playerImportance(event,playerCode));
+
+module.exports = {campaignSeverity,isImportantCampaignReport,worldSeverity,isImportantWorldEvent,playerImportance,isImportantForPlayer};

@@ -111,6 +111,21 @@ router.post('/advance', async (req, res) => {
     }
 });
 
+// Continue the latest recorded turn through an earlier event date.
+router.post('/resume-event', async (req, res) => {
+    try {
+        const { saveId, eventId, revision } = req.body;
+        const result = await engine.resumeFromEvent(saveId, eventId, revision);
+        if (req.app.locals.broadcast) req.app.locals.broadcast({ type: 'time_advance_complete', saveId, data: result });
+        res.json(result);
+    } catch (error) {
+        console.error('Error continuing from event:', error);
+        if (error.code === 'INVALID_EVENT_CONTINUATION') return res.status(400).json({ error: error.message, code: error.code });
+        if (error.code === 'EVENT_CONTINUATION_UNAVAILABLE') return res.status(409).json({ error: error.message, code: error.code });
+        respondWithGameError(res, error);
+    }
+});
+
 // Get current game state
 router.get('/state/:saveId', async (req, res) => {
     try {

@@ -240,24 +240,35 @@
                             id="actions-date">—</span>.</p>
                     <p class="panel-hint">Describe orders for the Game Master to resolve; it decides their outcome.</p>
 
-                    <button id="btn-brainstorm" class="btn secondary full-width">
-                        ✨ Help me plan actions
-                    </button>
-
-                    <div id="action-suggestions" aria-live="polite"></div>
-                    <div id="active-campaigns"></div>
-                    <div id="pending-actions" class="pending-actions">
-                        <!-- Pending actions will appear here -->
-                    </div>
-
                     <div class="action-input-container">
-                        <textarea id="action-input" placeholder="Describe an order for the Game Master (e.g. Raise an infantry division in Hinterpommern)..." rows="3"></textarea>
+                        <label for="action-input" class="action-section-title">Your next order</label>
+                        <textarea id="action-input" placeholder="State your objective, where to act, and the forces or conditions to use…" rows="5" maxlength="2000" aria-describedby="action-composer-hint action-character-count"></textarea>
+                        <div class="action-composer-meta">
+                            <span id="action-composer-hint">Ctrl + Enter to queue</span>
+                            <span id="action-character-count">0 / 2000</span>
+                        </div>
                         <div class="action-buttons">
+                            <button id="btn-improve-action" class="btn secondary" type="button" disabled>✨ Improve wording</button>
                             <button id="btn-send-action" class="btn primary">
-                                <span class="icon">➤</span> Send Action
+                                <span class="icon">➤</span> Queue order
                             </button>
                         </div>
+                        <div id="action-improvement" class="action-improvement hidden" role="region" aria-labelledby="action-improvement-title" aria-live="polite">
+                            <h3 id="action-improvement-title" class="action-section-title">Review the rewrite</h3>
+                            <p class="panel-hint">Edit the suggestion, then apply it to your draft. Nothing has been queued.</p>
+                            <label for="action-improvement-input" class="panel-hint">Suggested rewrite</label>
+                            <textarea id="action-improvement-input" rows="6" maxlength="2000"></textarea>
+                            <div class="action-buttons">
+                                <button id="btn-apply-improvement" class="btn primary" type="button">Apply to draft</button>
+                                <button id="btn-discard-improvement" class="btn secondary" type="button">Keep original</button>
+                            </div>
+                        </div>
                     </div>
+                    <h3 class="action-section-title">Queued orders</h3>
+                    <div id="pending-actions" class="pending-actions"></div>
+                    <div id="active-campaigns"></div>
+                    <button id="btn-brainstorm" class="btn secondary full-width" type="button">✨ Help me plan actions</button>
+                    <div id="action-suggestions" aria-live="polite"></div>
                 </div>
             </div>
 
@@ -361,6 +372,7 @@
                 <div class="panel-body">
                     <div class="events-filters">
                         <button class="filter-btn active" data-type="all">All</button>
+                        <button class="filter-btn" data-type="player">Important for you</button>
                         <button class="filter-btn" data-type="military">Military</button>
                         <button class="filter-btn" data-type="political">Political</button>
                         <button class="filter-btn" data-type="economic">Economic</button>
@@ -405,7 +417,7 @@
                             <span class="time-label">Custom</span>
                         </button>
                         <button class="time-btn" data-jump="next_event">
-                            <span class="time-label">Next important event</span>
+                            <span class="time-label">Next important event for your nation</span>
                             <span>Stops at a milestone or a progress checkpoint</span>
                         </button>
                     </div>

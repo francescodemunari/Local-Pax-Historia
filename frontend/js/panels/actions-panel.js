@@ -8,6 +8,7 @@ const actionsPanel = {
 
     init() {
         this.setupEventListeners();
+        this.updateComposer();
     },
 
     setupEventListeners() {
@@ -19,8 +20,17 @@ const actionsPanel = {
         // Enter key in action input
         document.getElementById('action-input').addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && e.ctrlKey) {
+                e.preventDefault();
                 this.submitAction();
             }
+        });
+        document.getElementById('action-input').addEventListener('input', () => this.onDraftChanged());
+        document.getElementById('btn-improve-action').addEventListener('click', () => this.improveAction());
+        document.getElementById('btn-apply-improvement').addEventListener('click', () => this.applyImprovement());
+        document.getElementById('btn-discard-improvement').addEventListener('click', () => this.discardImprovement());
+        document.getElementById('action-improvement-input').addEventListener('input', () => {
+            const text = document.getElementById('action-improvement-input').value.trim();
+            document.getElementById('btn-apply-improvement').disabled = !text || text.length > 2000;
         });
 
         // Brainstorm button
@@ -37,6 +47,93 @@ const actionsPanel = {
         document.getElementById('action-suggestions').replaceChildren();
         document.getElementById('action-input').value = '';
         document.getElementById('active-campaigns').replaceChildren();
+        this.submitGeneration = (this.submitGeneration || 0) + 1;
+        this.pendingGeneration = (this.pendingGeneration || 0) + 1;
+        this.isSubmitting = false;
+        this.onDraftChanged();
+        const brainstorm = document.getElementById('btn-brainstorm');
+        brainstorm.disabled = false;
+        brainstorm.textContent = '✨ Help me plan actions';
+        document.getElementById('pending-actions').replaceChildren();
+    },
+
+    updateComposer() {
+        const value = document.getElementById('action-input').value;
+        const valid = Boolean(value.trim()) && value.trim().length <= 2000;
+        const improve = document.getElementById('btn-improve-action');
+        improve.disabled = !valid || Boolean(this.improving || this.isSubmitting);
+        improve.textContent = this.improving ? '⏳ Rewriting…' : '✨ Improve wording';
+        const send = document.getElementById('btn-send-action');
+        send.disabled = !valid || Boolean(this.isSubmitting);
+        send.textContent = this.isSubmitting ? '⏳ Queuing…' : '➤ Queue order';
+        document.getElementById('action-character-count').textContent = `${value.length} / 2000`;
+    },
+
+    onDraftChanged() {
+        this.draftVersion = (this.draftVersion || 0) + 1;
+        this.discardImprovement();
+    },
+
+    discardImprovement() {
+        this.improvementGeneration = (this.improvementGeneration || 0) + 1;
+        this.improving = false;
+        this.improvement = null;
+        document.getElementById('action-improvement').classList.add('hidden');
+        document.getElementById('action-improvement-input').value = '';
+        document.getElementById('btn-apply-improvement').disabled = true;
+        this.updateComposer();
+    },
+
+    async improveAction() {
+        const input = document.getElementById('action-input');
+        const original = input.value;
+        if (!app.currentGame || !original.trim() || original.trim().length > 2000 || this.improving || this.isSubmitting) return;
+        this.discardImprovement();
+        const generation = this.improvementGeneration;
+        const version = this.draftVersion;
+        const saveId = app.currentGame.saveId;
+        const date = app.currentGame.currentDate;
+        const isCurrent = () => generation === this.improvementGeneration && version === this.draftVersion &&
+            app.currentGame?.saveId === saveId && app.currentGame?.currentDate === date && input.value === original;
+        this.improving = true;
+        this.updateComposer();
+        try {
+            const result = await api.improveAction(saveId, original.trim());
+            if (!isCurrent()) return;
+            if (typeof result.action !== 'string' || !result.action.trim() || result.action.trim().length > 2000) {
+                throw new Error('No complete rewrite was returned. Your draft is unchanged.');
+            }
+            this.improvement = { saveId, date, original, version };
+            const preview = document.getElementById('action-improvement-input');
+            preview.value = result.action.trim();
+            document.getElementById('btn-apply-improvement').disabled = false;
+            document.getElementById('action-improvement').classList.remove('hidden');
+            preview.focus();
+        } catch (error) {
+            if (isCurrent()) app.showToast(error.message || 'Unable to improve this draft.', 'error');
+        } finally {
+            if (generation === this.improvementGeneration) {
+                this.improving = false;
+                this.updateComposer();
+            }
+        }
+    },
+
+    applyImprovement() {
+        const draft = this.improvement;
+        const input = document.getElementById('action-input');
+        if (!draft) return;
+        if (app.currentGame?.saveId !== draft.saveId || app.currentGame?.currentDate !== draft.date ||
+            this.draftVersion !== draft.version || input.value !== draft.original) {
+            this.discardImprovement();
+            app.showToast('The draft or campaign changed. Improve the current draft again.', 'info');
+            return;
+        }
+        const text = document.getElementById('action-improvement-input').value.trim();
+        if (!text || text.length > 2000) return;
+        input.value = text;
+        this.onDraftChanged();
+        input.focus();
     },
 
     show() {
@@ -101,11 +198,12 @@ const actionsPanel = {
 
     async loadPendingActions() {
         if (!app.currentGame) return;
+        const generation = this.pendingGeneration = (this.pendingGeneration || 0) + 1;
 
         try {
             const saveId = app.currentGame.saveId;
             const actions = await api.getActions(saveId);
-            if (app.currentGame?.saveId !== saveId) return;
+            if (app.currentGame?.saveId !== saveId || generation !== this.pendingGeneration) return;
             this.pendingActions = actions.filter(action => action.status === 'pending');
             this.renderPendingActions();
         } catch (error) {
@@ -135,6 +233,8 @@ const actionsPanel = {
                 const deleteBtn = document.createElement('button');
                 deleteBtn.className = 'btn-icon-only';
                 deleteBtn.innerHTML = '🗑️';
+                deleteBtn.title = 'Delete queued order';
+                deleteBtn.setAttribute('aria-label', 'Delete queued order');
                 deleteBtn.onclick = () => this.deleteAction(action.id);
                 div.appendChild(deleteBtn);
             }
@@ -147,11 +247,13 @@ const actionsPanel = {
         this.show();
         const input = document.getElementById('action-input');
         input.value = actionText;
+        this.onDraftChanged();
         input.focus();
         input.setSelectionRange(actionText.length, actionText.length);
     },
 
     async submitAction() {
+        if (this.isSubmitting) return;
         const input = document.getElementById('action-input');
         const actionText = input.value.trim();
 
@@ -165,19 +267,31 @@ const actionsPanel = {
             return;
         }
 
-        const btn = document.getElementById('btn-send-action');
-        btn.disabled = true;
-        btn.innerHTML = '<span class="icon">⏳</span> Queuing...';
+        if (actionText.length > 2000) {
+            app.showToast('Keep the order within 2000 characters.', 'error');
+            return;
+        }
+        const saveId = app.currentGame.saveId;
+        const original = input.value;
+        const version = this.draftVersion;
+        const generation = this.submitGeneration = (this.submitGeneration || 0) + 1;
+        this.discardImprovement();
+        this.isSubmitting = true;
+        this.updateComposer();
 
         try {
             const result = await api.submitAction(
-                app.currentGame.saveId,
+                saveId,
                 actionText
             );
 
+            if (app.currentGame?.saveId !== saveId || generation !== this.submitGeneration) return;
             if (result.success) {
                 app.showToast('Action sent!', 'success');
-                input.value = '';
+                if (version === this.draftVersion && input.value === original) {
+                    input.value = '';
+                    this.onDraftChanged();
+                }
                 this.loadPendingActions();
             } else {
                 app.showToast('The order could not be queued.', 'error');
@@ -185,21 +299,26 @@ const actionsPanel = {
             }
         } catch (error) {
             console.error('Failed to submit action:', error);
-            app.showToast('Error sending action', 'error');
+            if (app.currentGame?.saveId === saveId && generation === this.submitGeneration) app.showToast(error.message || 'Error sending action', 'error');
         } finally {
-            btn.disabled = false;
-            btn.innerHTML = '<span class="icon">➤</span> Send Action';
+            if (generation === this.submitGeneration) {
+                this.isSubmitting = false;
+                this.updateComposer();
+            }
         }
     },
 
     async deleteAction(actionId) {
+        const saveId = app.currentGame?.saveId;
+        if (!saveId) return;
         try {
-            await api.deleteAction(actionId, app.currentGame.saveId);
+            await api.deleteAction(actionId, saveId);
+            if (app.currentGame?.saveId !== saveId) return;
             app.showToast('Action deleted', 'info');
             this.loadPendingActions();
         } catch (error) {
             console.error('Failed to delete action:', error);
-            app.showToast('Error deleting action', 'error');
+            if (app.currentGame?.saveId === saveId) app.showToast('Error deleting action', 'error');
         }
     },
 
@@ -243,8 +362,10 @@ const actionsPanel = {
             console.error('Failed to brainstorm:', error);
             app.showToast(error.message || 'Unable to generate action drafts.', 'error');
         } finally {
-            btn.disabled = false;
-            btn.textContent = '✨ Help me plan actions';
+            if (generation === this.draftGeneration) {
+                btn.disabled = false;
+                btn.textContent = '✨ Help me plan actions';
+            }
         }
     },
 

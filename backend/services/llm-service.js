@@ -534,6 +534,7 @@ async function testConnection() {
 }
 
 module.exports = {
+    executeChatCompletion,
     generateEvents,
     planActions,
     diplomaticChat,

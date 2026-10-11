@@ -1,5 +1,13 @@
 # Release readiness
 
+## National decisions and event continuation — 11 October 2026
+
+Next-important-event selection now distinguishes a significant decision for the player from global Major news. The model proposes a coherent chronology and a referenced stopping point; explicit `player_impact` governs national relevance, with a directly affected legacy fallback. The engine keeps only the earliest supported player milestone or bounded campaign/quiet progress. The same Rhineland development can be news for one player and consequential for another when the saved situation supports that distinction.
+
+**Play from this event** restores the authoritative world through an earlier date in the latest unchanged turn, applying all simultaneous effects and preserving future-only orders without another inference. Subsequent save mutations invalidate eligibility; replay and persistence retain revision/turn conflict protection. **Improve wording** offers an editable preview, keeps the original draft until review and never submits automatically. See [event continuation](EVENT_CONTINUATION.md), [writing orders](ACTION_WRITING.md) and [AI reliability](AI_RELIABILITY.md#player-specific-milestones--11-october-2026).
+
+The complete `npm test --prefix backend` suite passed. CLI mocked regressions cover player-specific stops in all three eras, explicit model stop references, both fronts/air during replay, future civilian orders, valid 24-month turns with a selected event after 365 days, save/reload, concurrent/stale/corrupt choices, private checkpoint storage and delayed rewrite requests. Focused checks are `scripts/test_player_milestones.js`, `scripts/test_event_continuation.js`, `scripts/test_event_continuation_ui.js`, `scripts/test_event_continuation_api.js` and `scripts/test_action_improvement.js`. No browser, screenshot or live-provider checks were performed for this work. Model pacing, historical judgment, visual appearance and final gameplay remain user verification; these changes do not establish a finished game in every situation.
+
 10 October 2026: World news now needs an explained actual consequence to qualify as Major/Critical; explicitly proposed or preparatory developments remain moderate. The exact sanctions-debate response pauses on 26 January at campaign progress rather than stopping on the debate. Both fronts and air support remain applied. Generic era tests preserve genuine world milestones and decisive battles. See [AI reliability](AI_RELIABILITY.md#consequential-world-milestones--10-october-2026).
 
 The complete `npm test --prefix backend` suite passed, including event metadata persistence and HTTP integration. Verification used mocked providers; no browser, screenshots or live-model requests were used. Semantic importance still depends on the model's explanation of actual consequences.
@@ -22,7 +30,7 @@ The complete mocked backend suite passed. New real-map regressions cover neutral
 
 This closes additional campaign lifecycle and map-effect gaps. It does not establish universal correctness for every AI response or implement naval transport, aircraft rebasing, arbitrary new states or character custody. [Playability scope](PLAYABILITY.md) records the supported flow and remaining limits. Final live gameplay remains with the player.
 
-Assessment updated 3 October 2026. Target: a reliable local, single-player historical strategy game with AI-adjudicated orders. This is a working prototype with a scenario framework, not yet a finished campaign experience. Existing uncommitted changes were retained.
+Assessment updated 11 October 2026. Target: a reliable local, single-player historical strategy game with AI-adjudicated orders. This is a working prototype with a scenario framework, not yet a finished campaign experience.
 
 ## Completed in this pass
 
@@ -180,11 +188,11 @@ The state-path review also fixed an undefined profile variable in `GET /api/game
 
 ## Strategic milestones and formation continuity — 3 October 2026
 
-Next-event skips now search up to 365 days for a real strategic milestone, keeping routine battles and province captures inside the interval. Battle severity defaults to moderate; major/critical turning points need an explicit significance explanation. Verified surrender is critical, and an earlier important world development takes precedence. The UI displays the longer limit and reports quiet-horizon completion. The model remains responsible for historical plausibility and strategic judgment.
+Next-event skips now search up to 365 days for a real strategic milestone for the player nation, keeping routine battles and province captures inside the interval. Battle severity defaults to moderate; major/critical turning points need an explicit significance explanation. Verified surrender is critical, and an earlier explained consequential national development takes precedence. Global Major news alone cannot interrupt. The UI displays the search limit and labels incomplete coverage as a bounded progress checkpoint. The model remains responsible for historical plausibility and strategic judgment.
 
 Exact saved unit IDs repeated as new formation declarations are normalized to existing forces without duplicate recruitment or attribute changes. Successive campaign movements use increasing report dates, previous destinations and the actual time between stages. Unknown/ambiguous identities, impossible routes, same-date duplicate moves and unverified surrender remain blocked before a save is committed.
 
-`scripts/test_strategic_skip.js` replays the actual three-month roster-repetition reply with one mocked completion and tests a long campaign ending in surrender, an earlier world milestone, and temporal feasibility on generic era maps. Updated next-event and timeline-selection regressions distinguish routine progress from important events. Browser, screenshots, live-model pacing and final gameplay checks remain with the player.
+`scripts/test_strategic_skip.js` replays the actual three-month roster-repetition reply with one mocked completion and tests a long campaign ending in surrender, an earlier consequential Italian treaty, and temporal feasibility on generic era maps. Updated next-event and timeline-selection regressions distinguish routine progress from important events. Browser, screenshots, live-model pacing and final gameplay checks remain with the player.
 
 The complete `npm test --prefix backend` suite passed, including campaign, map, provider, persistence and HTTP integration coverage, with mocked model responses.
 

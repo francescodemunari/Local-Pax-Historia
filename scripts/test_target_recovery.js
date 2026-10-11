@@ -20,8 +20,10 @@ async function run() {
      executeChatCompletion:async()=>{
       assert.equal(++calls,1,'Missing identity metadata must not consume a corrective inference');
       const reply=structuredClone(fixture);
-      // Keep the original operation; explain its consequential world milestone.
+      // Keep the original operation; this positive compatibility replay gives
+      // Italy an explicit consequential interest as a Locarno guarantor.
       reply.events.find(e=>e.title.includes('Rhineland')).significance_reason='The actual military deployment ends demilitarization and changes the European security balance.';
+      reply.events.find(e=>e.title.includes('Rhineland')).player_impact={nation_code:'ITA',importance:'major',reason:'As a Locarno guarantor, Italy must decide whether to enforce its security commitments after the military breach.'};
       reply.action_resolutions[0].action_id=followup
        ? context.campaigns[0].source_action_id : context.actions[0].id;
       if(followup) {
@@ -85,6 +87,7 @@ async function run() {
     executeChatCompletion:async messages=>{
      const reply=structuredClone(fixture);
      reply.events.find(e=>e.title.includes('Rhineland')).significance_reason='The actual military deployment ends demilitarization and changes the European security balance.';
+     reply.events.find(e=>e.title.includes('Rhineland')).player_impact={nation_code:'ITA',importance:'major',reason:'As a Locarno guarantor, Italy must decide whether to enforce its security commitments after the military breach.'};
      reply.action_resolutions[0].action_id=context.actions[0].id;
      if(++calls===1)reply.diplomatic_changes=[{action:'declare_war',action_id:context.actions[0].id,nation_code:'ITA',target_nation_code:'ENG'}];
      else {

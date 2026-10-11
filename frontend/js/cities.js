@@ -26,14 +26,22 @@ class CityManager {
      * Load cities from API
      */
     async loadCities(saveId = null) {
+        const request = this.citiesLoadRequest = (this.citiesLoadRequest || 0) + 1;
+        const trackGame = typeof app !== 'undefined' && Object.hasOwn(app, 'currentGame');
+        const game = trackGame ? app.currentGame : null;
+        const revision = game?.revision;
+        const isCurrent = () => request === this.citiesLoadRequest &&
+            (!trackGame || (app.currentGame === game && app.currentGame?.revision === revision && (game?.saveId || null) === (saveId || null)));
         try {
             const response = await fetch(`/api/map/cities${saveId ? `?saveId=${encodeURIComponent(saveId)}` : ''}`);
             if (!response.ok) throw new Error('Failed to fetch cities');
-            this.cities = await response.json();
+            const cities = await response.json();
+            if (!isCurrent()) return;
+            this.cities = cities;
             console.log(`Loaded ${this.cities.length} cities`);
             this.displayCities();
         } catch (error) {
-            console.error('Error loading cities:', error);
+            if (isCurrent()) console.error('Error loading cities:', error);
         }
     }
 

@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const GameEngine = require('../services/game-engine');
 const llmService = require('../services/llm-service');
+const actionImprovement = require('../services/action-improvement');
 
 const engine = new GameEngine();
 
@@ -57,6 +58,24 @@ router.post('/', async (req, res) => {
         });
     } catch (error) {
         console.error('Error processing action:', error);
+        respondWithError(res, error);
+    }
+});
+
+// Improve a draft without queuing it or writing to the campaign.
+router.post('/improve', async (req, res) => {
+    try {
+        const { saveId, actionText } = req.body;
+        if (typeof saveId !== 'string' || !saveId.trim() || typeof actionText !== 'string' || !actionText.trim()) {
+            return res.status(400).json({ error: 'saveId and a non-empty actionText are required' });
+        }
+        if (actionText.trim().length > actionImprovement.MAX_ACTION_LENGTH) {
+            return res.status(400).json({ error: 'actionText must not exceed 2000 characters' });
+        }
+        const context = await engine.getAdvisorContext(saveId);
+        const action = await actionImprovement.improveAction(actionText, context);
+        res.json({ action });
+    } catch (error) {
         respondWithError(res, error);
     }
 });

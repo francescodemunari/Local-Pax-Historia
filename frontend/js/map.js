@@ -64,13 +64,21 @@ class GameMap {
      * Load nation colors from backend (JSON-based)
      */
     async loadNationColors(saveId = null) {
+        const request = this.colorsLoadRequest = (this.colorsLoadRequest || 0) + 1;
+        const trackGame = typeof app !== 'undefined' && Object.hasOwn(app, 'currentGame');
+        const game = trackGame ? app.currentGame : null;
+        const revision = game?.revision;
+        const isCurrent = () => request === this.colorsLoadRequest &&
+            (!trackGame || (app.currentGame === game && app.currentGame?.revision === revision && (game?.saveId || null) === (saveId || null)));
         try {
             const response = await fetch(`/api/map/colors${saveId ? `?saveId=${encodeURIComponent(saveId)}` : ''}`);
+            if (!response.ok) throw new Error('Failed to fetch nation colors');
             const colors = await response.json();
+            if (!isCurrent()) return {};
             this.nationColors = colors;
             return colors;
         } catch (error) {
-            console.error('Failed to load nation colors:', error);
+            if (isCurrent()) console.error('Failed to load nation colors:', error);
             return {};
         }
     }
@@ -79,26 +87,38 @@ class GameMap {
      * Load and display HOI4 map data from SVG-derived JSON
      */
     async asyncLoadMapData(saveId = null) {
+        const request = this.mapLoadRequest = (this.mapLoadRequest || 0) + 1;
+        const trackGame = typeof app !== 'undefined' && Object.hasOwn(app, 'currentGame');
+        const game = trackGame ? app.currentGame : null;
+        const revision = game?.revision;
+        const isCurrent = () => request === this.mapLoadRequest &&
+            (!trackGame || (app.currentGame === game && app.currentGame?.revision === revision && (game?.saveId || null) === (saveId || null)));
         try {
             console.log('Loading HOI4 colors and map data...');
 
             // Load colors first
             await this.loadNationColors(saveId);
+            if (!isCurrent()) return;
 
             const mapRes = await fetch(`/api/map/geojson?compact=1${saveId ? `&saveId=${encodeURIComponent(saveId)}` : ''}`);
+            if (!mapRes.ok) throw new Error('Failed to fetch map data');
             const mapData = await mapRes.json();
+            if (!isCurrent()) return;
 
-            return this.renderSVGMap(mapData);
+            return this.renderSVGMap(mapData, isCurrent);
         } catch (error) {
-            console.error('Failed to load map data:', error);
-            app.showToast('Error loading map', 'error');
+            if (isCurrent()) {
+                console.error('Failed to load map data:', error);
+                if (typeof app !== 'undefined') app.showToast('Error loading map', 'error');
+            }
         }
     }
 
     /**
      * Render SVG-derived regions on the map
      */
-    renderSVGMap(mapData) {
+    renderSVGMap(mapData, isCurrent = () => true) {
+        if (!isCurrent()) return;
         this.currentScenarioId = mapData.scenarioId || null;
         document.getElementById('map-source-credit')?.classList.toggle('hidden', mapData.coordinateSystem !== 'WGS84');
         console.log('Using Native SVG Overlay approach...');
@@ -127,6 +147,7 @@ class GameMap {
         return fetch(svgUrl)
             .then(response => response.text())
             .then(svgText => {
+                if (!isCurrent()) return;
                 const parser = new DOMParser();
                 const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
                 const svgElement = svgDoc.querySelector('svg');
@@ -247,11 +268,11 @@ class GameMap {
                 // after this promise resolves, so labels and markers are always
                 // positioned against a fully rendered map.
                 setTimeout(() => {
-                    this.map.invalidateSize();
+                    if (isCurrent()) this.map.invalidateSize();
                 }, 100);
             })
             .catch(err => {
-                console.error('Error loading SVG for overlay:', err);
+                if (isCurrent()) console.error('Error loading SVG for overlay:', err);
             });
     }
 

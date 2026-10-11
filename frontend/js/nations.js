@@ -26,14 +26,22 @@ class NationLabelManager {
      * Load nation data and render labels on map
      */
     async loadNationLabels(saveId = null) {
+        const request = this.labelsLoadRequest = (this.labelsLoadRequest || 0) + 1;
+        const trackGame = typeof app !== 'undefined' && Object.hasOwn(app, 'currentGame');
+        const game = trackGame ? app.currentGame : null;
+        const revision = game?.revision;
+        const isCurrent = () => request === this.labelsLoadRequest &&
+            (!trackGame || (app.currentGame === game && app.currentGame?.revision === revision && (game?.saveId || null) === (saveId || null)));
         try {
             const response = await fetch(`/api/map/colors${saveId ? `?saveId=${encodeURIComponent(saveId)}` : ''}`);
             if (!response.ok) throw new Error('Failed to fetch nation colors');
-            this.nationsData = await response.json();
+            const nations = await response.json();
+            if (!isCurrent()) return;
+            this.nationsData = nations;
             console.log('Loaded nation data for labels:', Object.keys(this.nationsData).length);
             this.displayNationLabels();
         } catch (error) {
-            console.error('Error loading nation labels:', error);
+            if (isCurrent()) console.error('Error loading nation labels:', error);
         }
     }
 
