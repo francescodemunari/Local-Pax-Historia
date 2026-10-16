@@ -6,7 +6,7 @@
   <img src="frontend/assets/pax-historia-mark.png" alt="" width="64" height="64">
 </p>
 
-<h1 align="center">Pax Historia</h1>
+<h1 align="center">Local Pax Historia</h1>
 
 <p align="center"><em>A local historical grand strategy sandbox, powered by AI.</em></p>
 
