@@ -32,7 +32,29 @@ pause
 exit /b 1
 
 :missing_dependencies
-echo First-time setup: open a terminal in this project's backend folder and run:
+echo First-time setup: backend dependencies not found. Installing now...
+echo Running: npm ci --omit=dev
+echo This can take a minute on first run.
+echo.
+where npm >nul 2>&1
+if errorlevel 1 goto :missing_npm
+call npm ci --omit=dev
+if errorlevel 1 goto :install_failed
+if not exist "node_modules\express\package.json" goto :install_failed
+echo.
+echo Install complete. Starting server...
+echo.
+goto :start
+
+:missing_npm
+echo.
+echo npm was not found even though Node.js was found. Reinstall Node.js 20 or newer from https://nodejs.org/, then run this launcher again.
+pause
+exit /b 1
+
+:install_failed
+echo.
+echo Automatic install failed. Try manually from the backend folder:
 echo   npm ci --omit=dev
 echo Then run server.bat again. See README.md for development setup.
 pause

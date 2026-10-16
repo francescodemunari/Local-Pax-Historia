@@ -447,7 +447,17 @@ textarea::placeholder {
     z-index: 2;
 }
 
+.brand-mark {
+    display: block;
+    flex: 0 0 auto;
+    object-fit: contain;
+}
+
 .loading-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.18em;
     font-family: var(--font-display);
     font-size: 4.5rem;
     font-weight: 700;
@@ -459,6 +469,11 @@ textarea::placeholder {
     margin-bottom: var(--spacing-sm);
     letter-spacing: 0.08em;
     animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+.loading-brand-mark {
+    width: 0.8em;
+    height: 0.8em;
 }
 
 @keyframes titleGlow {
@@ -625,6 +640,10 @@ textarea::placeholder {
 }
 
 .menu-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.18em;
     font-family: var(--font-display);
     font-size: 5.5rem;
     font-weight: 700;
@@ -637,6 +656,11 @@ textarea::placeholder {
     margin-bottom: var(--spacing-sm);
     letter-spacing: 0.08em;
     animation: menuTitleGlow 3.5s ease-in-out infinite alternate;
+}
+
+.menu-brand-mark {
+    width: 0.8em;
+    height: 0.8em;
 }
 
 @keyframes menuTitleGlow {
@@ -1292,6 +1316,11 @@ textarea::placeholder {
     align-items: center;
     gap: var(--spacing-sm);
     white-space: nowrap;
+}
+
+.header-brand-mark {
+    width: 32px;
+    height: 32px;
 }
 
 .header-status-dot {
@@ -3755,7 +3784,10 @@ textarea::placeholder {
 }
 @media (max-width: 520px) {
     .menu-content { padding: 28px 16px; }
-    .menu-title { margin-bottom: 28px; }
+    .menu-title { margin-bottom: 28px; font-size: clamp(2rem, 10vw, 3rem); gap: .12em; }
+    .menu-brand-mark, .loading-brand-mark { width: .68em; height: .68em; }
+    .loading-title { font-size: clamp(2rem, 10vw, 3rem); }
+    .header-brand-mark { width: 24px; height: 24px; }
     .scenario-library-heading { align-items: flex-start; }
     .scenario-library-heading p { line-height: 1.5; }
     .scenario-cards { grid-template-columns: 1fr; }
